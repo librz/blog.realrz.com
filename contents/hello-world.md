@@ -1,6 +1,5 @@
 ---
 title: My First blog
-slug: hello-world
 date: "03-11-2020"
 ---
 

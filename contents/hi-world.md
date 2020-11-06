@@ -1,6 +1,5 @@
 ---
 title: My Second blog
-slug: hi-world
 date: "04-11-2020"
 ---
 

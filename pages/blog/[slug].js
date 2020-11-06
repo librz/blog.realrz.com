@@ -1,11 +1,13 @@
 import React from "react";
 
-function BlogPostPage(props) {
-  const { title, content } = props.blog;
+function BlogPostPage({ title, date, htmlString }) {
   return (
     <div>
-      <h1>{title}</h1>
-      <section dangerouslySetInnerHTML={{ __html: content }} />
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h2>{title}</h2>
+        <div>{date}</div>
+      </div>
+      <section dangerouslySetInnerHTML={{ __html: htmlString }} />
     </div>
   );
 }
@@ -18,22 +20,16 @@ export async function getStaticProps(context) {
   const markdown = require("remark-parse");
   const matter = require("gray-matter");
 
-  const { slug } = context.params;
+  const { slug } = context.params; // params <- getStaticPaths
   const path = `${process.cwd()}/contents/${slug}.md`;
   const rawContent = fs.readFileSync(path, { encoding: "utf-8" });
-  const { data, content } = matter(rawContent);
-  const result = await unified()
-    .use(markdown)
-    .use(highlight)
-    .use(html)
-    .process(content);
+  const { data, content } = matter(rawContent); // transfer markdown into metadata and content
+  const result = await unified().use(markdown).use(highlight).use(html).process(content);
 
   return {
     props: {
-      blog: {
-        ...data,
-        content: result.toString(),
-      },
+      ...data,
+      htmlString: result.toString(),
     },
   };
 }
@@ -43,15 +39,13 @@ export async function getStaticPaths() {
   const path = `${process.cwd()}/contents`;
   const files = fs.readdirSync(path, "utf-8");
 
-  const markdownNames = files
-    .filter((fn) => fn.endsWith(".md"))
-    .map((fn) => fn.replace(".md", ""));
+  const slugs = files.filter(fn => fn.endsWith(".md")).map(fn => fn.replace(".md", ""));
 
   return {
-    paths: markdownNames.map((fn) => ({
-      params: { slug: fn },
+    paths: slugs.map(slug => ({
+      params: { slug },
     })),
-    fallback: false,
+    fallback: true,
   };
 }
 
