@@ -1,4 +1,6 @@
 import React from "react";
+// using default style from hightlight.js
+import "highlight.js/styles/vs2015.css";
 
 function BlogPostPage({ title, date, htmlString }) {
   return (
@@ -14,22 +16,31 @@ function BlogPostPage({ title, date, htmlString }) {
 
 export async function getStaticProps(context) {
   const fs = require("fs");
-  const html = require("remark-html");
-  const highlight = require("remark-highlight.js");
+  const matter = require("gray-matter"); // transfer markdown text into an object with data attr as metadata and content as the actually content
   const unified = require("unified");
-  const markdown = require("remark-parse");
-  const matter = require("gray-matter");
+  // a bunch of middlewares
+  const markdown = require("remark-parse"); // parsing markdown using remark
+  const remark2rehype = require("remark-rehype"); // bridge between remark and rehype
+  const doc = require("rehype-document"); // parse html using rehype
+  const html = require("rehype-stringify"); // stringify
+  const highlight = require("rehype-highlight"); // code highlighting by injecting class names into html
 
   const { slug } = context.params; // params <- getStaticPaths
   const path = `${process.cwd()}/contents/${slug}.md`;
   const rawContent = fs.readFileSync(path, { encoding: "utf-8" });
-  const { data, content } = matter(rawContent); // transfer markdown into metadata and content
-  const result = await unified().use(markdown).use(highlight).use(html).process(content);
+  const { data, content } = matter(rawContent);
+  const { contents: htmlString } = await unified()
+    .use(markdown)
+    .use(remark2rehype)
+    .use(doc, { title: data["title"] })
+    .use(html)
+    .use(highlight)
+    .process(content);
 
   return {
     props: {
       ...data,
-      htmlString: result.toString(),
+      htmlString,
     },
   };
 }
