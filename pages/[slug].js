@@ -1,19 +1,30 @@
 import React from "react";
-// using default style from hightlight.js
+// import theme from hightlight.js
 import "highlight.js/styles/vs2015.css";
 
-function BlogPostPage({ title, date, htmlString }) {
+// render using react
+function BlogPostPage({ title, htmlString }) {
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h2>{title}</h2>
-        <div>{date}</div>
-      </div>
+    <div
+      style={{
+        width: 1200,
+        maxWidth: "90vw",
+        margin: "3rem auto",
+        fontFamily: "Arial, Helvetica, sans-serif",
+        lineHeight: 1.6,
+        fontSize: "1.2em",
+        letterSpacing: 0.4,
+        textAlign: "justify",
+        wordBreak: "break-all",
+      }}
+    >
+      <h2>{title}</h2>
       <section dangerouslySetInnerHTML={{ __html: htmlString }} />
     </div>
   );
 }
 
+// grap the markdown file matching corresponding slug, parse it to html string
 export async function getStaticProps(context) {
   const fs = require("fs");
   const matter = require("gray-matter"); // transfer markdown text into an object with data attr as metadata and content as the actually content
@@ -45,15 +56,19 @@ export async function getStaticProps(context) {
   };
 }
 
+// grab all the slugs corresponding to markdown files
+// and render them all at build time
 export async function getStaticPaths() {
   const fs = require("fs");
   const path = `${process.cwd()}/contents`;
   const files = fs.readdirSync(path, "utf-8");
 
-  const slugs = files.filter(fn => fn.endsWith(".md")).map(fn => fn.replace(".md", ""));
+  const slugs = files
+    .filter((fn) => fn.endsWith(".md"))
+    .map((fn) => fn.replace(".md", ""));
 
   return {
-    paths: slugs.map(slug => ({
+    paths: slugs.map((slug) => ({
       params: { slug },
     })),
     fallback: true,
