@@ -22,7 +22,7 @@ function IndexPage({ blogs }) {
         );
       }}
       bordered
-      style={{ margin: "3rem auto", width: 1200, maxWidth: "90vw" }}
+      style={{ margin: "3rem auto", width: 700, maxWidth: "90vw" }}
     />
   );
 }

@@ -7,7 +7,7 @@ function BlogPostPage({ title, htmlString }) {
   return (
     <div
       style={{
-        width: 1200,
+        width: 700,
         maxWidth: "90vw",
         margin: "3rem auto",
         fontFamily: "Arial, Helvetica, sans-serif",
@@ -18,7 +18,7 @@ function BlogPostPage({ title, htmlString }) {
         wordBreak: "break-all",
       }}
     >
-      <h2>{title}</h2>
+      <h2 style={{ textAlign: "center", color: "royalblue" }}>{title}</h2>
       <section dangerouslySetInnerHTML={{ __html: htmlString }} />
     </div>
   );
