@@ -57,7 +57,7 @@ export async function getStaticProps(context) {
 }
 
 // grab all the slugs corresponding to markdown files
-// and render them all at build time
+// and pre-render them all at build time
 export async function getStaticPaths() {
   const fs = require("fs");
   const path = `${process.cwd()}/contents`;
