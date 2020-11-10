@@ -2,6 +2,7 @@
 title: Web 如何工作
 date: "2020-04-09"
 language: zh-CN
+category: other
 ---
 
 > 网络并不存在，当人们以某种方式联系起来就形成了网络
