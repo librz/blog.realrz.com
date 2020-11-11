@@ -1,15 +1,13 @@
 import React from "react";
+import AppWrapper from "../components/AppWrapper";
 // import theme from hightlight.js
 import "highlight.js/styles/vs2015.css";
 
 // render using react
 function BlogPostPage({ title, htmlString }) {
   return (
-    <div
+    <AppWrapper
       style={{
-        width: 700,
-        maxWidth: "90vw",
-        margin: "3rem auto",
         fontFamily: "Arial, Helvetica, sans-serif",
         lineHeight: 1.6,
         fontSize: "1.2em",
@@ -20,7 +18,7 @@ function BlogPostPage({ title, htmlString }) {
     >
       <h2 style={{ textAlign: "center", color: "royalblue" }}>{title}</h2>
       <section dangerouslySetInnerHTML={{ __html: htmlString }} />
-    </div>
+    </AppWrapper>
   );
 }
 
@@ -63,12 +61,10 @@ export async function getStaticPaths() {
   const path = `${process.cwd()}/contents`;
   const files = fs.readdirSync(path, "utf-8");
 
-  const slugs = files
-    .filter((fn) => fn.endsWith(".md"))
-    .map((fn) => fn.replace(".md", ""));
+  const slugs = files.filter(fn => fn.endsWith(".md")).map(fn => fn.replace(".md", ""));
 
   return {
-    paths: slugs.map((slug) => ({
+    paths: slugs.map(slug => ({
       params: { slug },
     })),
     fallback: true,
