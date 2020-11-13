@@ -106,6 +106,14 @@ console.log(num);
 num = 10;
 ```
 
+此外，你竟然被允许在同一个作用域内用 var 声明多个同名变量:
+
+```javascript
+var a = 10;
+var a = 20;
+console.log(a);
+```
+
 这显然会造成困惑，所以在 ES6 之前人们发明了一种补救方法：将 `'use strict';` 添加到代码首行会迫使编译器在遇上这种代码时报错：
 
 ```javascript
@@ -124,7 +132,14 @@ console.log(name); // 编译器会报错
 const name = "John";
 ```
 
-除此之外，let 和 const 还有点不同，let 声明的变量可以被 reassign 而 const 声明的变量不能：
+同一作用域可以声明多个同名变量的问题也解决了:
+
+```javascript
+let a = 10;
+let a = 20; // 抛出错误: Uncaught SyntaxError: identifier 'a' has already been declared
+```
+
+除此之外，let 和 const 还有点不同：let 声明的变量可以被 reassign 而 const 声明的变量不能：
 
 ```javascript
 let a = 10;
