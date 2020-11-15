@@ -29,25 +29,31 @@ function IndexPage({ blogs }) {
         <Tabs variant="fullWidth" value={value} onChange={handleChange}>
           <Tab label="所有博客" value={0} />
           <Tab label="JavaScript" value={1} />
-          <Tab label="UI/UX" value={2} />
+          <Tab label="Swift" value={2} />
           <Tab label="Linux" value={3} />
-          <Tab label="其他" value={4} />
+          <Tab label="UI/UX" value={4} />
+          <Tab label="其他" value={5} />
         </Tabs>
       </AppBar>
       <TabPanel show={value === 0}>
         <BlogList blogs={blogs} />
       </TabPanel>
       <TabPanel show={value === 1}>
-        <BlogList blogs={blogs.filter(item => item.category === "javascript")} />
+        <BlogList
+          blogs={blogs.filter((item) => item.category === "javascript")}
+        />
       </TabPanel>
       <TabPanel show={value === 2}>
-        <BlogList blogs={blogs.filter(item => item.category === "uiux")} />
+        <BlogList blogs={blogs.filter((item) => item.category === "swift")} />
       </TabPanel>
       <TabPanel show={value === 3}>
-        <BlogList blogs={blogs.filter(item => item.category === "linux")} />
+        <BlogList blogs={blogs.filter((item) => item.category === "linux")} />
       </TabPanel>
       <TabPanel show={value === 4}>
-        <BlogList blogs={blogs.filter(item => item.category === "other")} />
+        <BlogList blogs={blogs.filter((item) => item.category === "uiux")} />
+      </TabPanel>
+      <TabPanel show={value === 5}>
+        <BlogList blogs={blogs.filter((item) => item.category === "other")} />
       </TabPanel>
     </AppWrapper>
   );
@@ -61,8 +67,8 @@ export async function getStaticProps() {
 
   // get meta data of all blogs in contents folder
   const blogs = files
-    .filter(fn => fn.endsWith(".md"))
-    .map(fn => {
+    .filter((fn) => fn.endsWith(".md"))
+    .map((fn) => {
       const path = `${process.cwd()}/contents/${fn}`;
       const rawContent = fs.readFileSync(path, { encoding: "utf-8" });
       const { data } = matter(rawContent); // only get the meta data
