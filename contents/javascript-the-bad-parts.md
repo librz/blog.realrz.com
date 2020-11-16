@@ -5,9 +5,9 @@ language: zh-CN
 category: javascript
 ---
 
-> 不可否认，JavaScript 本身有许多缺点，很多时候令人困惑甚至恼怒。本文尝试列举 JavaScript 中那些差劲的特性
+> 不可否认，作为一个在 2 周内就设计完成的语言，JavaScript 本身有许多缺点。本文尝试列举 JavaScript 中那些差劲的特性
 
-#### 你可以不显示声明变量就进行初始化，而且这个变量将自动成为全局变量:
+#### 你可以不显式声明变量就进行初始化，而且这个变量将自动成为全局变量:
 
 ```javascript
 function doSth() {
