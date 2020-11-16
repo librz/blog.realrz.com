@@ -27,12 +27,11 @@ function IndexPage({ blogs }) {
     <AppWrapper>
       <AppBar position="static">
         <Tabs variant="fullWidth" value={value} onChange={handleChange}>
-          <Tab label="所有博客" value={0} />
+          <Tab label="所有" value={0} />
           <Tab label="JavaScript" value={1} />
           <Tab label="Swift" value={2} />
           <Tab label="Linux" value={3} />
-          <Tab label="UI/UX" value={4} />
-          <Tab label="其他" value={5} />
+          <Tab label="其他" value={4} />
         </Tabs>
       </AppBar>
       <TabPanel show={value === 0}>
@@ -50,9 +49,6 @@ function IndexPage({ blogs }) {
         <BlogList blogs={blogs.filter((item) => item.category === "linux")} />
       </TabPanel>
       <TabPanel show={value === 4}>
-        <BlogList blogs={blogs.filter((item) => item.category === "uiux")} />
-      </TabPanel>
-      <TabPanel show={value === 5}>
         <BlogList blogs={blogs.filter((item) => item.category === "other")} />
       </TabPanel>
     </AppWrapper>

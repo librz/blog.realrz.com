@@ -4,8 +4,8 @@ const AppWrapper = ({ children, style }) => {
   return (
     <div
       style={{
-        width: 800,
-        maxWidth: "86vw",
+        width: 780,
+        maxWidth: "88vw",
         margin: "2rem auto",
         ...style,
       }}

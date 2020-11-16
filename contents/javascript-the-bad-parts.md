@@ -50,7 +50,7 @@ if (Number.isNaN(a)) {
 }
 ```
 
-### 既有 null 又有 undefined
+#### 既有 null 又有 undefined
 
 在程序语言设计界，一直有争论是否该在编程语言中设置一个表示 “空” 的值。但没有争论的是是否该有 2 个这样的值，遗憾的是 JavaScript 在设计的时候做出了糟糕的决定！
 
@@ -61,7 +61,7 @@ let a; // 没有初始化就是 undefined
 let b = null; // null 一般是程序员有意设定的值, 表示空值; 这只是一个 common practice, 因为没人可以阻止你把一个变量显示初始化为 undefined
 ```
 
-# class 关键字
+#### class 关键字
 
 JavaScript 的继承机制是原型链（Prototype Chain），这和其他大多数语言中 class 作为实例的蓝图 (class as blueprint) 的机制有着根本的不同。然而在 ES6 中引入了 class 关键字，这么做完全是为了其他语言使用者能够在写 JavaScript 时“感到熟悉”。然而，这种语法糖掩盖了事情的本质，当使用者遇到了一些奇怪的现象时感到困惑却不知道怎么解决。
 

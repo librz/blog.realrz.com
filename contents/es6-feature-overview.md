@@ -7,7 +7,7 @@ category: javascript
 
 > ES6 也被称为 ES2015，是 ECMA(欧洲电脑制造协会) 在 2015 年推出的 JavaScript 版本。这个版本引入了很多重要的功能，可以说是现代 JavaScript 的标志。本文对其中主要的 feature 及其出现的背景进行介绍
 
-### Promise，革命性的异步 feature
+#### Promise，革命性的异步 feature
 
 如果你只能记住一个 ES6 feature，那就记住 Promise 吧。在 ES6 之前，JavaScript 处理异步的方式只能是回调函数（callback）。虽然理论上回调函可以完成一切异步任务，但却不能优雅的应对复杂场景。设想一种有多个回调函数且这些函数之间有依赖关系的场景：
 
@@ -52,7 +52,7 @@ Promise 具体的语法可以参见 [MDN 文档](https://developer.mozilla.org/z
 
 ```javascript
 function getCountry(name) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(function () {
       resolve(name);
     }, 1000);
@@ -60,7 +60,7 @@ function getCountry(name) {
 }
 
 function getCapital(country) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(function () {
       resolve("Beijing");
     }, 1000);
@@ -68,7 +68,7 @@ function getCapital(country) {
 }
 
 function getPopulation(city) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(function () {
       resolve("2153万");
     }, 1000);
@@ -78,14 +78,14 @@ function getPopulation(city) {
 getCountry("John")
   .then(getCapital)
   .then(getPopulation)
-  .then(population => {
+  .then((population) => {
     console.log("首都人口为" + population);
   });
 ```
 
 可以看到 Promise 用 .then 可以方便的进行链式调用，而且代码清晰易读，更关键的是这样的代码有很高的可拓展性（scalability）
 
-### let & const, 是时候和 var 说再见了
+#### let & const, 是时候和 var 说再见了
 
 在很长一段时间里，JavaScript 一直被以为是“玩具语言”而不受到重视。其中最为令人困惑的特性是提升（hoisting）：在代码被执行之前，所有的变量和函数声明都会被提升到他们所在的作用域的顶部。
 
@@ -157,7 +157,7 @@ person = { name: "John" }; // 编译器会报错，const 声明的变量不能 r
 person.name = "John"; // OK, 我们仍然可以改变对象的属性
 ```
 
-### 方便的语法 🙌
+#### 方便的语法 🙌
 
 - 字符模版 (Template Literals)
 
@@ -166,7 +166,9 @@ person.name = "John"; // OK, 我们仍然可以改变对象的属性
   let age = 10;
   let country = "UK";
   //用字符拼接（String Concatenation）
-  console.log("I am " + name + ", currently " + age + " years old, lives in " + country);
+  console.log(
+    "I am " + name + ", currently " + age + " years old, lives in " + country
+  );
   //用字符模板
   console.log(`I am ${name}, currently ${age} years old, lives in ${country}`);
   ```
@@ -218,7 +220,7 @@ person.name = "John"; // OK, 我们仍然可以改变对象的属性
    function add(num1, num2, ...rest) {
      // rest 是一个数组，代表剩下的所有参数
      let restSum = 0;
-     rest.forEach(item => (restSum += item));
+     rest.forEach((item) => (restSum += item));
      return num1 + num2 + restSum;
    }
 
@@ -229,7 +231,7 @@ person.name = "John"; // OK, 我们仍然可以改变对象的属性
    add(1, 2, 3, 4); // 10
    ```
 
-### 错误的决定
+#### 错误的决定
 
 遗憾的是，ES6 中还引入了一些差劲的特性，最著名的就是 class。
 
