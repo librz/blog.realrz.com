@@ -5,6 +5,8 @@ language: zh-CN
 category: javascript
 ---
 
+> 未完，会再写
+
 一道面试题，要求写一个 Add 函数，实现如下效果：
 
 ```javascript
