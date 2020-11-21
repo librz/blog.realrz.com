@@ -7,7 +7,7 @@ category: javascript
 
 > 不可否认，作为一个在 2 周内就设计完成的语言，JavaScript 本身有许多缺点。本文尝试列举 JavaScript 中那些差劲的特性
 
-#### typeof null === "object", typeof 函数 === "function
+#### typeof null === "object", typeof 函数 === "function"
 
 ```javascript
 typeof 1 === "number"; // true
