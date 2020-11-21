@@ -7,6 +7,42 @@ category: javascript
 
 > 不可否认，作为一个在 2 周内就设计完成的语言，JavaScript 本身有许多缺点。本文尝试列举 JavaScript 中那些差劲的特性
 
+#### typeof null === "object", typeof 函数 === "function
+
+```javascript
+typeof 1 === "number"; // true
+typeof {} === "object"; // true
+typeof undefined === "undefined"; // true
+typeof null === "null"; // false
+typeof null === "object"; // object
+```
+
+javascript 把值的类型分为两种：基本类型和对象。
+
+1. null 属于基本类型，但 typeof null === "object"
+
+2. typeof 函数 === "function", 虽然看起来合理，但函数也是对象，这扰乱了“类型可以简单分为基本类型和对象”的思维模型
+
+```javascript
+function isObject(param) {
+  if (param === null) return false;
+  const type = typeof param;
+  if (["function", "object"].includes(type)) return true;
+  else return false;
+}
+```
+
+JavaScript 已经提供了判断是否是函数的方法：instanceof
+
+```javascript
+function hi() {
+  console.log("hi");
+}
+if (hi instanceof Function) console.log("hi is a function");
+```
+
+既然 instanceof 提供了检测函数的方法，typeof 再去做这件事情显然不合理
+
 #### 你可以不显式声明变量就进行初始化，而且这个变量将自动成为全局变量:
 
 ```javascript
