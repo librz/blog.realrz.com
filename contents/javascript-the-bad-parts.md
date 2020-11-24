@@ -7,6 +7,65 @@ category: javascript
 
 > 不可否认，作为一个在 2 周内就设计完成的语言，JavaScript 本身有许多缺点。本文尝试列举 JavaScript 中那些差劲的特性
 
+#### typeof null === "object", typeof 函数 === "function"
+
+```javascript
+typeof 1 === "number"; // true
+typeof {} === "object"; // true
+typeof undefined === "undefined"; // true
+typeof null === "null"; // false
+typeof null === "object"; // object
+```
+
+javascript 把值的类型分为两种：基本类型和对象。
+
+1. null 属于基本类型，但 typeof null === "object"
+
+2. typeof 函数 === "function", 虽然看起来合理，但函数也是对象，这扰乱了“类型可以简单分为基本类型和对象”的思维模型
+
+```javascript
+function isObject(param) {
+  if (param === null) return false;
+  const type = typeof param;
+  if (["function", "object"].includes(type)) return true;
+  else return false;
+}
+```
+
+JavaScript 已经提供了判断是否是函数的方法：instanceof
+
+```javascript
+function hi() {
+  console.log("hi");
+}
+if (hi instanceof Function) console.log("hi is a function");
+```
+
+既然 instanceof 提供了检测函数的方法，typeof 再去做这件事情显得多余且令人困惑
+
+#### string primitive 有时会被隐式转为 string object
+
+还是这个简单的思维模型：javascript 把值的类型分为两种：基本类型和对象。
+
+用 string literal 来创建一个 string primitive：
+
+```javascript
+const name = "John Blake";
+console.log(typeof name); // string
+console.log(name instanceof String); // false
+// name 之所以能够调用 split 方法是因为 name 被 Javascript 隐式转换为了 String 对象！
+const firstName = name.split(" ")[0];
+console.log(firstName);
+```
+
+name 是 string literal (字符串字面量), 是个基本类型，不是对象。但却可以使用 split 方法，这是因为 Javascript 在遇到 name.split 时，会自动做这样的转换：String(name).split。因为 String.prototype.split 存在，所以我们得到了想要的结果。
+
+[MDN: String Primitives And String Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#String_primitives_and_String_objects)
+
+看起来好像 Javascript 为我们提供了方便，在“合适”的时候自动做这个转换。但如果程序员不知道这种隐式转换，会疑惑基本类型不是对象为什么也可以调用各种方法呢？
+
+当碰到隐式类型转换或者语法糖这种东西，我的第一反应是要提高警惕，他们在提供方便的同时掩盖了事物的本质。
+
 #### 你可以不显式声明变量就进行初始化，而且这个变量将自动成为全局变量:
 
 ```javascript
