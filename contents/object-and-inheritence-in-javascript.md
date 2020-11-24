@@ -7,6 +7,8 @@ category: javascript
 
 > JavaScript 是一门支持多种编程范式的语言，可以用它写出过程式函数式以及面向对象的代码。本文对 JavaScript 中面向对象的部分进行说明
 
+本文在写作过程中部分参考了[这篇文章](https://codeburst.io/how-to-do-object-oriented-programming-the-right-way-1339c1a25286)
+
 #### 面向对象的 2 种实现方式
 
 OOP 有 2 种基本的具体实现：
@@ -21,9 +23,9 @@ OOP 有 2 种基本的具体实现：
 
 #### 对象的创建和原型链
 
-在 JavaScript 中有 4 种创建对象的方式，下文在介绍这些方式的同时也用代码说明了 JavaScript 实现继承的方式：原型链
+在 JavaScript 中有多种创建对象的方式，下文在介绍这些方式的同时也用代码说明了 JavaScript 实现继承的方式：原型链
 
-1. 使用构造函数
+1. 使用函数
 
 ```javascript
 function Person(name, age) {
@@ -41,22 +43,24 @@ console.log("isHuman" in john); // true
 console.log(john.hasOwnProperty("isHuman")); // false
 ```
 
-这里和 class 很像，我们也是先写了一堆模板（Person 函数），然后用这个模板创建了对象实例。不同的是，我们在创建对象后似乎扩展了实例的属性：在代码的最后 `'isHuman' in john` 是 true, 但 `john.hasOwnProperty('isHuman')` 却是 false, 这说明 isHuman 不是 john 自己的属性，但 john 一定有某种方法追溯到 isHuman 属性。这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的构造函数的 prototype 属性是否有这个属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
+这里和 class 很像，我们也是先写了一堆模板（Person 函数），然后用这个模板创建了对象实例。不同的是，我们在创建对象后似乎扩展了实例的属性：在代码的最后 'isHuman' in john 是 true, 但 john.hasOwnProperty('isHuman') 却是 false, 这说明 isHuman 不是 john 自己的属性，但 john 一定有某种方法追溯到 isHuman 属性。john 自己没有定义 hasOwnProperty 方法却可以使用也是这种追溯的结果。这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的构造函数的 prototype 属性是否有这个属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
 
 ```javascript
-// 如果自己有就返回，否则一层一层向上追溯，直到 Object.prototype 为止
+// 如果自己有就返回，否则一层一层向上追溯
 function getPropValue(obj, prop) {
-  if (obj.hasOwnProperty(prop)) {
-    return obj[prop];
-  } else {
-    const proto = Object.getPrototypeOf(obj);
-    if (proto === Object.prototype) return undefined;
-    else return getPropValue(proto, prop);
-  }
+  if (!obj) return undefined;
+  if (obj.hasOwnProperty(prop)) return obj[prop];
+  const proto = Object.getPrototypeOf(obj);
+  return getPropValue(proto, prop);
 }
 ```
 
-可以看到，这个递归函数在 2 种情况下会终止并返回结果：`obj.hasOwnProperty(prop)` 或者追溯到 Object.prototype 还没有找到属性的时候。这是因为除非程序员显式指明了对象的原型，否则 Object.prototype 将默认是原型链的最后一环。`john.hasOwnProperty('isHuman')` 之所以能够运行也是因为 `Object.prototype.hasOwnProperty('hasOwnProperty')` 为 true
+可以看到，这个递归函数在 2 种情况下会终止并返回结果：
+
+- 对象本身拥有属性，或者对象本身没有但是原型链中某个对象有
+- 追溯到原型链顶层还没有匹配到属性的时候
+
+这里可以直接用 obj.hasOwnProperty 是因为除非显式指明，对象的原型链最后一环会默认是 Object.prototype，而 hasOwnProperty 存在于 Object.prototype 这个对象本身。这里的“最后一环”是因为 Object.getPrototypeOf(Object.prototype) 为 null, 也就是说如果找完了 Object.prototype 还没有找到对应的属性，那说明原型链已经到了尽头。
 
 2. 使用 class 关键字（不推荐）
 
@@ -92,20 +96,81 @@ const john = {
 };
 ```
 
-Again, 除非程序员显式指明，所有对象的原型链的最后一环都将是 Object.prototype。这里的 john 没有说明自己的原型是谁，那么它的原型应该就是 Object.prototype。也即 `Object.getPrototypeOf(john) === Object.prototype` 为 true。
-
-我们可以做一系列测试：
+Again, 除非程序员显式指明，所有对象的原型链的最后一环都将是 Object.prototype。我们可以做一系列测试：
 
 ```javascript
 console.log("name" in john); // true
 console.log("speed" in john); // false
-console.log(john.hasOwnProperty("String")); // false
+console.log(john.hasOwnProperty("toString")); // false
 console.log("toString" in john); // true
 ```
 
 4. 使用 Object.create 函数
 
 Object.create 允许我们在创建对象时就指定该对象的原型。
+
+```javascript
+const john = Object.create(null); // 显式指明对象的原型为 null, 所以不会追溯到 Object.prototype
+
+john.name = "John Blake";
+john.age = 14;
+
+console.log("name" in john); // true
+console.log(john.hasOwnProperty("name")); // 报错, hasOwnProperty 是 Object.prototype 的方法, john 不能追溯到 Object.prototype
+console.log("toString" in john); // false
+```
+
+#### 除了基础类型都是对象
+
+JavaScript 把一切类型简单分为 2 种：基本类型和对象。基本类型包括: Boolean, Number, Boolean, null, undefined 以及新加入的 Symbol 和 BigInt. 其他所有类型都可以看做是基本类型的复合类型，而且都是对象。
+
+简单直接，但这意味着类似数组和函数也是对象。
+
+- JavaScript 没有传统意义上的数组
+
+数组作为最常见的数据结构，一般的认知是某种特定类型的集合，在初始化时长度和元素类型就应该固定，通过下标来访问元素。而且由于元素类型固定，访问元素的性能很高，只需要知道第一个元素的内存地址和下标通过简单的数学计算就能知道某一个元素的地址。
+
+但 JavaScript 没有单独实现这种数据结构，而是直接用对象来表示数组。对象的底层实现是哈希表, 所以数组其实相当于其他语言中的哈希表！
+
+这也是为什么 JavaScript 中数组元素不需要是相同类型(不建议这样做)，而且我们可以动态改变数组的大小：
+
+```javascript
+const friends = ["John", "Alex", "Lisa", "Mike"];
+
+friends.pop();
+friends.push("Kate");
+friends.splice(1, 2, "Phil", "Joe", "Michael");
+
+for (let name of friends) {
+  console.log(name);
+}
+```
+
+以上代码调用了 pop | push | splice 方法，但数组本身没有这些方法，他们被定义在 Array.prototype 上. 这也是为什么我们查 API 的时候，最专业的方式是去搜索 "Array.prototype.push" 而不是 "数组 push"
+
+我们甚至可以通过扩展 Array.prototype 来动态扩展数组的能力：
+
+```javascript
+Array.prototype.partition = function (condition) {
+  const arr_1 = [];
+  const arr_2 = [];
+  this.forEach(item => {
+    if (condition(item)) arr_1.push(item);
+    else arr_2.push(item);
+  });
+  return [arr_1, arr_2];
+};
+
+const nums = [1, 3, 4, 10, 15, 35, 50];
+
+const [evenNums, oddNums] = nums.partition(num => num % 2 === 0);
+
+console.log(evenNums, oddNums);
+```
+
+- 函数的原型链
+
+除了基本类型都是对象，函数也不例外。
 
 JavaScript 在设计时参考了 Java 的语法，从 Scheme 那里借鉴了函数式编程的思想，而基于原型的 OOP 设计是向 Self 学习的结果。
 
