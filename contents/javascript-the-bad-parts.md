@@ -120,6 +120,58 @@ let a; // 没有初始化就是 undefined
 let b = null; // null 一般是程序员有意设定的值, 表示空值; 这只是一个 common practice, 因为没人可以阻止你把一个变量显示初始化为 undefined
 ```
 
+在进行类型转换（type casting）的时候，null 和 undefined 有时表现一致，有时不一致
+
+```javascript
+const num1 = Number(null); // 0
+const num2 = Number(undefined); // NaN
+
+const str1 = String(null); // 'null'
+const str2 = String(undefined); // 'undefined'
+
+const bool1 = Boolean(null); // false
+const bool2 = Boolean(undefined); // false
+```
+
+#### 默认参数之后可以有常规参数
+
+JavaScript 运行默认参数，这本身是个好的主意，使得函数可以更加灵活。但要想让这个主意不造成可能得 bug，需要加一条限制：默认参数之后不能有常规参数。很遗憾，JavaScript 没有自带这个限制。
+
+```javascript
+// add 函数的第二参数是默认参数，但后面有常规参数 c
+function add(a, b = 5, c) {
+  return a + b + c;
+}
+
+add(1, 2);
+// 这里的 1 是 形参 a 的实参, 2 是 哪个形参的实参呢?
+// 由于 b 是默认的，你可能以为这样传会跳过 b，这里的 2 是不是形参 c 的实参呢？
+```
+
+好的语言特性是确定的，不会让人感到惊讶和困惑。如果我们不在默认参数后面放常规参数，就不会产生上面的问题:
+
+```javascript
+function add(a, b, c = 5) {
+  return a + b + c;
+}
+
+add(1, 2); // 显而易见 1 是形参 a 的实参，2 是形参 b 的实参
+```
+
+遗憾的是 JavaScript 不强制执行这样的规则。如果你碰到一个差劲的程序员，可能就会出现默认参数后面有常规参数的情况。
+
+#### 默认参数传 undefined 相当于不传
+
+```javascript
+function isInt(val = 0) {
+  return Number.isInteger(val);
+}
+
+Number.isInterger(undefined); // false
+
+isInt(undefined); // true, 因为这相当于 getType()
+```
+
 #### class 关键字
 
 JavaScript 的继承机制是原型链（Prototype Chain），这和其他大多数语言中 class 作为实例的蓝图 (class as blueprint) 的机制有着根本的不同。然而在 ES6 中引入了 class 关键字，这么做完全是为了其他语言使用者能够在写 JavaScript 时“感到熟悉”。然而，这种语法糖掩盖了事情的本质，当使用者遇到了一些奇怪的现象时感到困惑却不知道怎么解决。
