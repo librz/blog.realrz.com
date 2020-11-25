@@ -1,6 +1,6 @@
 ---
 title: JavaScript 中的对象和继承
-date: "2020-11-09"
+date: "2020-10-03"
 language: zh-CN
 category: javascript
 ---

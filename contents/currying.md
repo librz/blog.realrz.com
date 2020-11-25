@@ -1,6 +1,6 @@
 ---
 title: 柯里化（Currying）
-date: "2020-12-09"
+date: "2020-11-25"
 language: zh-CN
 category: javascript
 ---

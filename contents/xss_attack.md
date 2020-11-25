@@ -1,6 +1,6 @@
 ---
 title: XSS 攻击
-date: "2021-01-09"
+date: "2020-10-24"
 language: zh-CN
 category: other
 ---
@@ -48,9 +48,7 @@ XSS 不直接对服务器进行攻击，而是利用 DOM 的特征和客户端 J
 userColor 是用户提交的自定义颜色，如果攻击者提交的是 `blue' onclick='alert("You are hacked again!")`，那么浏览器渲染的可能是：
 
 ```html
-<span style="color: blue" onclick='alert("You are hacked again")'>
-  king_of_the_world
-</span>
+<span style="color: blue" onclick='alert("You are hacked again")'> king_of_the_world </span>
 ```
 
 这里巧妙的利用了模板含有单引号，攻击者先补了一个单引号（blue'）强行关上了 style 属性，然后利用 onclick 事件添加行内 JavaScript，注意这里的 onclick 只有一个单引号，因为结尾的单引号模板会补上。
