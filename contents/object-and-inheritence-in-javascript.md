@@ -7,8 +7,6 @@ category: javascript
 
 > JavaScript 在设计时参考了 Java 的语法，从 Scheme 那里借鉴了函数式编程的思想，而基于原型的面向对象设计是向 Self 学习的结果。本文对 JavaScript 中面向对象的部分进行说明
 
-本文在写作过程中部分参考了[这篇文章](https://codeburst.io/how-to-do-object-oriented-programming-the-right-way-1339c1a25286)
-
 #### 面向对象(OOP)的 2 种实现方式
 
 _(1) 类作为实例的蓝图 (Class As Blueprint)_
@@ -271,6 +269,8 @@ console.log(john.constructor === Person); // true
 
 JavaScript 把一切类型简单分为 2 种：基本类型和对象。简单直接，这意味着类似数组和函数也是对象。
 
+JavaScript 有很多内置对象，这里对数组
+
 _(1) JavaScript 没有传统意义上的数组_
 
 数组作为最常见的数据结构，一般的认知是某种特定类型的集合，在初始化时长度和元素类型就应该固定，通过下标来访问元素。而且由于元素类型固定，访问元素的性能很高，只需要知道第一个元素的内存地址和下标通过简单的数学计算就能知道某一个元素的地址。
@@ -328,5 +328,7 @@ console.log(evenNums, oddNums);
 _(2) 函数的原型链_
 
 除了基本类型都是对象，函数也不例外。
+
+本文在写作过程中部分参考了[这篇文章](https://codeburst.io/how-to-do-object-oriented-programming-the-right-way-1339c1a25286)
 
 未完，会再写
