@@ -11,74 +11,72 @@ category: javascript
 
 #### 面向对象(OOP)的 2 种实现方式
 
-OOP 有 2 种基本的具体实现：
-
-1. 类作为实例的蓝图 (Class As Blueprint)
+_(1) 类作为实例的蓝图 (Class As Blueprint)_
 
 这种是当前最为普遍的实现方式，Java ｜ C++ ｜ C# 在内的绝大部分语言都采用了这种实现。为了创建对象，你必须先要创建类，类作为实例的模板或者蓝图规定了实例的数据(data property)以及行为(method)。从某种角度看，类其实是一种自定义的复合类型，本身没有实际意义，只作为实例的前提和规范。
 
-2. 对象作为原型 (Object As Prototype)
+_(2) 对象作为原型 (Object As Prototype)_
 
 在基于类的面向对象模型中，对象不能脱离类而存在，这要求程序员先创建一堆模版才能进行下一步工作。而基于原型的 OOP 设计则认为类是不必要的，可以直接 Reference 其他对象的属性来获取某种特性(属性或者方法)，这里的“其他对象”被称为“原型”。 采用这种设计的语言屈指可数，JavaScript 就是其中之一。
 
-#### function, function, function!
+#### 函数，函数，函数!
 
-在 JavaScript 中函数是一等公民，你可以把函数当成一个普通的值，把它赋给变量等。但函数如此重要，以至于你可以把它看作特等公民。
+在 JavaScript 中函数是一等公民，你可以把函数当成一个普通的值，把它赋给变量。但函数如此重要，以至于你可以把它看作特等公民。
 
-- 函数是对象
+_(1) 函数是对象_
 
-  在 JavaScript 中有个简单的思维模型：除了基本类型都是对象。基本类型包括 Number, Boolean, String, BigInt, Symbol, undefined, null，函数不在其中，这说明函数是个对象。对象可以有属性和方法，那函数也可以有属性和方法：
+在 JavaScript 中有个简单的思维模型：除了基本类型都是对象。基本类型包括 Number, Boolean, String, BigInt, Symbol, undefined, null，函数不在其中，这说明函数是个对象。对象可以有属性和方法，那函数也可以有属性和方法：
 
-  ```javascript
-  function hello() {
-    console.log("hello world");
-  }
-  // 给 hello 对象添加一个名为 hasParameters 的属性
-  hello.hasParameters = false;
+```javascript
+function hello() {
+  console.log("hello world");
+}
+// 给 hello 对象添加一个名为 hasParameters 的属性
+hello.hasParameters = false;
 
-  // 给 hello 对象添加一个名为 logPurpose 的方法
-  hello.logPurpose = function () {
-    console.log("Print out hello world");
+// 给 hello 对象添加一个名为 logPurpose 的方法
+hello.logPurpose = function () {
+  console.log("Print out hello world");
+};
+```
+
+_(2) 函数可以创造对象_
+
+在 “Class As Blueprint” 的语言中，类是面向对象的基础，构造函数依附于类而存在。而在 JavaScript 中构造函数只是个说法，它不是语言规范，只是一种主观意念：如果你用一个函数来创建对象，那么就可以认为它是构造函数。
+
+```javascript
+// 定义一个 Person 函数，之所以认为这是个构造函数，是因为它的作用是创建对象
+function Person(name, age) {
+  // this 是一个关键字，它相当于一个占位符，代表着当前函数作用的对象
+  this.name = name;
+  this.age = age;
+  this.sayHi = function () {
+    console.log(`Hi, I'm ${this.name}`);
   };
-  ```
+}
 
-- 构造函数：用函数构造对象
+// new 关键字把 Person 里面的 this 实例化并用变量 john 指向这个实例
+const john = new Person("John Blake", 24);
+john.sayHi(); // Hi, I'm John Blake
 
-  在 “Class As Blueprint” 的语言中，类是面向对象的基础，构造函数依附于类而存在。而在 JavaScript 中构造函数只是个说法，实际上只是个普通函数。
+// JavaScript 中指定函数中的 this 指向还可以用 bind, call, apply 方法，这里不做展开
+```
 
-  ```javascript
-  // 定义一个 Person 函数，我们之所以认为这是个构造函数，是因为它创建了一个 this 对象并定义了其属性
-  function Person(name, age) {
-    // this 是一个关键字，它相当于一个占位符，代表着当前函数作用的对象
-    this.name = name;
-    this.age = age;
-    this.sayHi = function () {
-      console.log(`Hi, I'm ${this.name}`);
-    };
-  }
+由于 Person 不单单自己是对象还能够创造对象，这也是说函数是特等公民的原因。就像蚁后是蚂蚁，但蚁后可以产卵创造蚂蚁，所以蚁后是特等蚂蚁一样。
 
-  // new 关键字把 Person 里面的 this 实例化并用变量 john 指向这个实例
-  const john = new Person("John Blake", 24);
-  john.sayHi(); // Hi, I'm John Blake
+Person 自己的属性和其创造的对象的属性无关：
 
-  // JavaScript 中指定函数中的 this 指向还可以用 bind, call, apply 方法，这里不做展开
-  ```
-
-  由于 Person 不单单自己是对象还能够创造对象，这也是说函数是特等公民的原因。就像蚁后是蚂蚁，但蚁后可以产卵创造蚂蚁，所以蚁后是特等蚂蚁一样。
-
-  Person 自己的属性和其创造的对象的属性无关：
-
-  ```javascript
-  Person.purpose = "创造实例，这个实例有 name, age 属性还有一个 sayHi 的方法"；
-  // Person 这个对象有 purpose 属性，但其创造的实例 john 和这个属性无关
-  console.log(john.purpose); // undefined
-  ```
+```javascript
+Person.purpose = "创造实例"；
+// Person 这个对象有 purpose 属性，但其创造的实例 john 和这个属性无关
+console.log(john.purpose); // undefined
+```
 
 #### 对象的创建和原型链
 
 在 JavaScript 中有多种创建对象的方式，下文在介绍这些方式的同时也用代码说明了 JavaScript 实现继承的方式：原型链
 
-1. 使用函数
+_A. 使用函数_
 
 ```javascript
 function Person(name, age) {
@@ -96,7 +94,9 @@ console.log(john.isHuman); // true
 console.log(john.hasOwnProperty("isHuman")); // false
 ```
 
-这里和 class 很像，我们也是先写了一堆模板（Person 函数），然后用这个模板创建了对象实例。不同的是，我们在创建对象后似乎扩展了实例的属性：在代码的最后 john.isHuman 是 true, 但 john.hasOwnProperty('isHuman') 却是 false, 这说明 isHuman 不是 john 自己的属性，但 john 一定有某种方法追溯到 isHuman 属性。john 自己没有定义 hasOwnProperty 方法却可以使用也是这种追溯的结果。这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的构造函数的 prototype 属性是否有这个属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
+这里和 class 很像，我们也是先写了一堆模板（Person 函数），然后用这个模板创建了对象实例。不同的是，我们在创建对象后似乎扩展了实例的属性：在代码的最后 john.isHuman 是 true, 但 john.hasOwnProperty('isHuman') 却是 false, 这说明 isHuman 不是 john 自己的属性，但 john 一定有某种方法追溯到 isHuman 属性。john 自己没有定义 hasOwnProperty 方法却可以使用也是这种追溯的结果。
+
+这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的构造函数的 prototype 属性是否有这个属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
 
 ```javascript
 // 如果自己有就返回，否则一层一层向上追溯
@@ -119,9 +119,11 @@ function getPropValue(obj, prop) {
 
 这里可以直接用 obj.hasOwnProperty 是因为除非显式指明，对象的原型链最后一环会默认是 Object.prototype，而 hasOwnProperty 方法存在于 Object.prototype 这个对象本身。这里的“最后一环”是因为 Object.getPrototypeOf(Object.prototype) 为 null, 也就是说如果找完了 Object.prototype 还没有找到对应的属性，那说明原型链已经到了尽头。
 
-2. 使用 class 关键字（不推荐）
+_B. 使用 class 关键字（不推荐）_
 
-在 2015 年推出的 JavaScript 版本 ES6 中引入了 class 关键字，这是种语法糖：语法上类似 Java 等传统面向对象语言，但实际底层还是"构造函数+原型链"。新写法完全是为了方便日常用其他语言的程序员能够获得一种“熟悉感”，但不可否认这种做法掩盖了事情的本质，遇到稍微复杂的情况就会让人感到困惑。JSON 的作者 Douglas Crockford 认为这是种差劲的特性，我也大致认同。实际上，大部分的语法糖都是在牺牲人们对事物本质了解的基础上带来一点便捷性。
+在 2015 年推出的 JavaScript 版本 ES6 中引入了 class 关键字，这是种语法糖：语法上类似 Java 等传统面向对象语言，但实际底层还是"构造函数+原型链"。
+
+新写法完全是为了方便日常用其他语言的程序员能够获得一种“熟悉感”，但不可否认这种做法掩盖了事情的本质，遇到稍微复杂的情况就会让人感到困惑。JSON 的作者 Douglas Crockford 认为这是种差劲的特性，我也大致认同。实际上，大部分的语法糖都是在牺牲人们对事物本质了解的基础上带来一点便捷性。
 
 用 class 创建对象：
 
@@ -139,7 +141,7 @@ const john = new Person("John Blake", 24);
 john.sayHi();
 ```
 
-3. 使用对象字面量(Object Literal):
+_C. 使用对象字面量(Object Literal):_
 
 “对象字面量”真是个糟糕的翻译，但我却毫无办法，因为这或许是最接近英文原意的翻法了。如果用代码来说明很容易理解，所谓“对象字面量”就是直接用“大括号+键值对”的方法直观的表示一个对象：
 
@@ -162,7 +164,7 @@ console.log(john.hasOwnProperty("toString")); // false
 console.log(john.toString()); // "[object Object]"
 ```
 
-4. 使用 Object.create 函数
+_D. 使用 Object.create 函数_
 
 Object.create 允许我们在创建对象时就指定该对象的原型。
 
@@ -179,7 +181,7 @@ console.log("toString" in john); // false
 
 #### 与原型链有关的操作符和方法
 
-下面对几个操作符和方法的介绍基于这个函数:
+还是以 Person 为例：
 
 ```javascript
 function Person(name, age) {
@@ -195,7 +197,7 @@ Person.prototype.isHuman = true;
 const john = new Person("John Blake", 24);
 ```
 
-1. instanceof 操作符
+_(1) instanceof 操作符_
 
 instanceof 操作符会追溯原型链上的所有构造函数，如果找到返回 true, 否则返回 false:
 
@@ -204,7 +206,7 @@ console.log(john instanceof Person); // true
 console.log(john instanceof Object); // true
 ```
 
-2. 属性操作符(英文句号或者方括号)
+_(2) 属性操作符(英文句号或者方括号)_
 
 如果对象本身拥有某种属性或者方法，用英文句号或者方括号可以访问它:
 
@@ -229,7 +231,7 @@ console.log(john.speed); // undefined
 console.log(john.speed()); // 报错: Uncaught TypeError: john.speed is not a function
 ```
 
-3. in 操作符
+_(3) in 操作符_
 
 和属性操作符很像，不过 in 只给出属性是否存在，而不是直接给出属性的值。 in 操作符同样会追溯原型链:
 
@@ -239,7 +241,7 @@ console.log("speed" in john); // false
 console.log("isHuman" in john); // true
 ```
 
-4. Object.prototype.hasOwnProperty 方法
+_(4) Object.prototype.hasOwnProperty 方法_
 
 判断某种属性或者方法是否是对象本身拥有的:
 
@@ -248,7 +250,7 @@ console.log(john.hasOwnProperty("name")); // true
 console.log(john.hasOwnProperty("isHuman")); // false
 ```
 
-5. Object.getPrototypeOf 方法
+_(5) Object.getPrototypeOf 方法_
 
 作用很简单: 得到对象的原型
 
@@ -257,11 +259,19 @@ const proto = Object.getPrototypeOf(john);
 console.log(proto.hasOwnProperty("isHuman")); // true
 ```
 
+_(6) Object.prototype.constructor_
+
+作用：得到对象的构造函数
+
+```javascript
+console.log(john.constructor === Person); // true
+```
+
 #### 常见的内置对象及其原型链
 
 JavaScript 把一切类型简单分为 2 种：基本类型和对象。简单直接，这意味着类似数组和函数也是对象。
 
-- JavaScript 没有传统意义上的数组
+_(1) JavaScript 没有传统意义上的数组_
 
 数组作为最常见的数据结构，一般的认知是某种特定类型的集合，在初始化时长度和元素类型就应该固定，通过下标来访问元素。而且由于元素类型固定，访问元素的性能很高，只需要知道第一个元素的内存地址和下标通过简单的数学计算就能知道某一个元素的地址。
 
@@ -270,12 +280,24 @@ JavaScript 把一切类型简单分为 2 种：基本类型和对象。简单直
 这也是为什么 JavaScript 中数组元素不需要是相同类型，而且我们可以动态改变数组的大小：
 
 ```javascript
+// 用数组字面量创建数组
 const friends = ["John", "Alex", "Lisa", "Mike"];
 
+// 用 Object.prototype.constructor 证明其构造函数是 Array
+console.log(friends.constructor === Array); // true
+
+// 在 JS 中，数组的下标其实是种语法糖，firends[0] 其实是 friends["0"]
+console.log(friends[0]); // John
+console.log(firends["0"]); // John
+console.log(Object.keys(friends)); // ["0", "1", "2", "3"]
+console.log(1 in frieds); // true
+
+// 利用原型链调用各种方法
 friends.pop();
 friends.push("Kate");
 friends.splice(1, 2, "Phil", "Joe", "Michael");
 
+// JS 提供了 for of 来遍历数组，或者更准确的说，来遍历数组对象
 for (let name of friends) {
   console.log(name);
 }
@@ -303,7 +325,7 @@ const [evenNums, oddNums] = nums.partition((num) => num % 2 === 0);
 console.log(evenNums, oddNums);
 ```
 
-- 函数的原型链
+_(2) 函数的原型链_
 
 除了基本类型都是对象，函数也不例外。
 
