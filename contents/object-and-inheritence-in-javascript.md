@@ -1,6 +1,6 @@
 ---
 title: JavaScript 中的对象和继承
-date: "2020-10-03"
+date: "2020-12-07"
 language: zh-CN
 category: javascript
 ---
@@ -15,7 +15,7 @@ _(1) 类作为实例的蓝图 (Class As Blueprint)_
 
 _(2) 对象作为原型 (Object As Prototype)_
 
-在基于类的面向对象模型中，对象不能脱离类而存在，这要求程序员先创建一堆模版才能进行下一步工作。而基于原型的 OOP 设计则认为类是不必要的，可以直接 Reference 其他对象的属性来获取某种特性(属性或者方法)，这里的“其他对象”被称为“原型”。 采用这种设计的语言屈指可数，JavaScript 就是其中之一。
+在基于类的面向对象模型中，对象不能脱离类而存在，这要求程序员先创建一堆模版才能进行下一步工作。而基于原型的 OOP 设计则认为类是不必要的，可以直接 Reference 其他对象的属性来获取某种特性(属性或者方法)，这里的“其他对象”被称为“原型”。有些人把这种直接 Reference 的方式称为借用或者委托(Delegation)。采用这种设计的语言屈指可数，JavaScript 就是其中之一。
 
 #### 函数，函数，函数!
 
@@ -141,7 +141,15 @@ john.sayHi();
 
 _C. 使用对象字面量(Object Literal):_
 
-“对象字面量”真是个糟糕的翻译，但我却毫无办法，因为这或许是最接近英文原意的翻法了。如果用代码来说明很容易理解，所谓“对象字面量”就是直接用“大括号+键值对”的方法直观的表示一个对象：
+字面量是一个广泛的编程术语，在代码中直接出现的值都是字面量：
+
+```javascript
+const num = 2; // 这里的 2 是字面量
+const name = "Alex Jones"; // "Alex Jones" 是字面量
+const numIsEven = true; // true 是字面量
+```
+
+对于 JS 中的对象来说用大括号直观的表示对象的属性和方法就是对象字面量：
 
 ```javascript
 const john = {
@@ -267,15 +275,13 @@ console.log(john.constructor === Person); // true
 
 #### 常见的内置对象及其原型链
 
-JavaScript 把一切类型简单分为 2 种：基本类型和对象。简单直接，这意味着类似数组和函数也是对象。
-
-JavaScript 有很多内置对象，这里对数组
+JavaScript 有很多内置对象，这里对 Array 和 Function 为例对其原型链进行说明。首先要明确一点：JavaScript 把一切类型简单分为 2 种：基本类型和对象。简单直接，这意味着类似数组和函数也是对象。
 
 _(1) JavaScript 没有传统意义上的数组_
 
 数组作为最常见的数据结构，一般的认知是某种特定类型的集合，在初始化时长度和元素类型就应该固定，通过下标来访问元素。而且由于元素类型固定，访问元素的性能很高，只需要知道第一个元素的内存地址和下标通过简单的数学计算就能知道某一个元素的地址。
 
-但 JavaScript 没有单独实现这种数据结构，而是直接用对象来表示数组。对象的底层实现是哈希表, 所以数组其实相当于其他语言中的哈希表！
+但 JavaScript 没有单独实现这种数据结构，在没有引擎优化的情况下，数组的底层实现一般是哈希表。
 
 这也是为什么 JavaScript 中数组元素不需要是相同类型，而且我们可以动态改变数组的大小：
 
@@ -286,7 +292,7 @@ const friends = ["John", "Alex", "Lisa", "Mike"];
 // 用 Object.prototype.constructor 证明其构造函数是 Array
 console.log(friends.constructor === Array); // true
 
-// 在 JS 中，数组的下标其实是种语法糖，firends[0] 其实是 friends["0"]
+// 在 JS 中 由于弱类型 firends["0"] 等价于 friends[0]
 console.log(friends[0]); // John
 console.log(firends["0"]); // John
 console.log(Object.keys(friends)); // ["0", "1", "2", "3"]
@@ -297,13 +303,13 @@ friends.pop();
 friends.push("Kate");
 friends.splice(1, 2, "Phil", "Joe", "Michael");
 
-// JS 提供了 for of 来遍历数组，或者更准确的说，来遍历数组对象
+// JS 提供了 for of 来遍历数组
 for (let name of friends) {
   console.log(name);
 }
 ```
 
-以上代码调用了 pop | push | splice 方法，但数组本身没有这些方法，他们被定义在 Array.prototype 上. 这也是为什么我们查 API 的时候，看到的是 Array.prototype.push 而不是 Array.push
+以上代码调用了 pop | push | splice 方法，但数组本身没有这些方法，他们被定义在 Array.prototype 上. 这也是为什么查 API 的时候，看到的是 Array.prototype.push 而不是 Array.push
 
 我们甚至可以通过扩展 Array.prototype 来扩展数组的能力：
 
@@ -327,8 +333,24 @@ console.log(evenNums, oddNums);
 
 _(2) 函数的原型链_
 
-除了基本类型都是对象，函数也不例外。
+除了基本类型都是对象，函数也不例外。为了便于描述，这里称函数为函数对象。
+
+所有的函数对象的构造函数都是 Function, 可以用 Object.prototype.constructor 来说明：
+
+```javascript
+function print(param) {
+  console.log(param);
+}
+
+print.constructor === Function; // true
+```
+
+Function 本身也是个函数对象, 且自己是自己的构造函数:
+
+```javascript
+Function instanceof Object; // true
+Function instanceof Function; // true
+Function.constructor === Function; // true
+```
 
 本文在写作过程中部分参考了[这篇文章](https://codeburst.io/how-to-do-object-oriented-programming-the-right-way-1339c1a25286)
-
-未完，会再写
