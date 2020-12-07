@@ -1,6 +1,6 @@
 ---
 title: 我喜欢的 Linux 程序
-date: "2020-09-09"
+date: "2020-11-09"
 language: zh-CN
 category: linux
 ---
@@ -9,7 +9,7 @@ category: linux
 
 #### tldr
 
-查找某个命令的用法时常用的做法是使用 man，但有些时候 man 给出的手册太长太详细了，使用者很难找到自己想要的。我就经常查看 man 手册不知不觉睡着了，失眠从此是路人。
+查找某个命令的用法时常用的做法是使用 man，但有些时候 man 给出的手册太长太详细了，使用者很难找到自己想要的。我就经常查看 man 手册不知不觉睡着了。
 
 [tldr](https://github.com/tldr-pages/tldr) 就用于解决这类问题，它以简洁的方式提供某个命令最常用的用法。比如想要查看 disown 的用法: `tldr disown` 即可
 
@@ -20,6 +20,10 @@ category: linux
 #### tree
 
 打印目录的树状结构
+
+#### pstree
+
+打印进程的树状结构，可以很方便看出进程之间的层级关系
 
 #### cron
 
