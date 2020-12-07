@@ -1,6 +1,6 @@
 ---
 title: JavaScript - 差劲的部分
-date: "2020-08-09"
+date: "2020-11-23"
 language: zh-CN
 category: javascript
 ---
@@ -171,6 +171,10 @@ Number.isInterger(undefined); // false
 
 isInt(undefined); // true, 因为这相当于 getType()
 ```
+
+#### arguments 对象
+
+arguments 提供了一种在函数体内部 reference 参数的方式。这本身是一个很好的想法
 
 #### class 关键字
 
