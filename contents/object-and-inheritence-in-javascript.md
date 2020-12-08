@@ -90,6 +90,8 @@ john.sayHi();
 Person.prototype.isHuman = true;
 console.log(john.isHuman); // true
 console.log(john.hasOwnProperty("isHuman")); // false
+
+// john 对象的原型链: john => Person.prototype => Object.prototype
 ```
 
 这里和 class 很像，我们也是先写了一堆模板（Person 函数），然后用这个模板创建了对象实例。不同的是，我们在创建对象后似乎扩展了实例的属性：在代码的最后 john.isHuman 是 true, 但 john.hasOwnProperty('isHuman') 却是 false, 这说明 isHuman 不是 john 自己的属性，但 john 一定有某种方法追溯到 isHuman 属性。john 自己没有定义 hasOwnProperty 方法却可以使用也是这种追溯的结果。
@@ -102,6 +104,9 @@ function getPropValue(obj, prop) {
   if (!obj) return undefined;
   if (obj.hasOwnProperty(prop)) return obj[prop];
   const proto = Object.getPrototypeOf(obj);
+  // Object 是一个内置函数对象，默认 Object 是对象的构造函数
+  // 它自身有一个 getPrototypeOf 方法，这种定义在构造函数上的方法被称为“静态方法”
+  // 这个方法用于找出对象的原型，也即构造函数的 prototype 属性
   return getPropValue(proto, prop);
 }
 
@@ -115,7 +120,7 @@ function getPropValue(obj, prop) {
 - 对象本身没有该属性但是原型链中某个对象有
 - 追溯到原型链顶层还没有匹配到属性的时候
 
-这里可以直接用 obj.hasOwnProperty 是因为除非显式指明，对象的原型链最后一环会默认是 Object.prototype，而 hasOwnProperty 方法存在于 Object.prototype 这个对象本身。这里的“最后一环”是因为 Object.getPrototypeOf(Object.prototype) 为 null, 也就是说如果找完了 Object.prototype 还没有找到对应的属性，那说明原型链已经到了尽头。
+这里可以直接用 obj.hasOwnProperty 是因为除非显式指明，对象的原型链最后一环会默认是 Object.prototype(对象的构造函数默认是 Object)，而 hasOwnProperty 方法存在于 Object.prototype 这个对象本身。这里的“最后一环”是因为 Object.getPrototypeOf(Object.prototype) 为 null, 也就是说如果找完了 Object.prototype 还没有找到对应的属性，那说明原型链已经到了尽头。
 
 _B. 使用 class 关键字（不推荐）_
 
@@ -317,7 +322,7 @@ for (let name of friends) {
 Array.prototype.partition = function (condition) {
   const arr_1 = [];
   const arr_2 = [];
-  this.forEach((item) => {
+  this.forEach(item => {
     if (condition(item)) arr_1.push(item);
     else arr_2.push(item);
   });
@@ -326,7 +331,7 @@ Array.prototype.partition = function (condition) {
 
 const nums = [1, 3, 4, 10, 15, 35, 50];
 
-const [evenNums, oddNums] = nums.partition((num) => num % 2 === 0);
+const [evenNums, oddNums] = nums.partition(num => num % 2 === 0);
 
 console.log(evenNums, oddNums);
 ```
