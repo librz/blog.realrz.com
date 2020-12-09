@@ -5,6 +5,8 @@ language: zh-CN
 category: javascript
 ---
 
+> 柯里化是函数编程中一个著名的模式，通过对函数的封装可以很方便得到新的函数，是实现函数代码复用的一种手段。
+
 #### 什么是柯里化
 
 要求: 写一个 Add 函数，实现如下效果：
@@ -28,7 +30,7 @@ function Add(num1) {
 }
 
 // 简洁形式
-const Add = num1 => num2 => num3 => num1 + num2 + num3;
+const Add = (num1) => (num2) => (num3) => num1 + num2 + num3;
 ```
 
 以上代码是“相加”这个操作的柯里化：函数嵌套函数并返回下一级函数，最里层函数进行实际的“加法”操作并返回结果
@@ -42,7 +44,7 @@ const Add = num1 => num2 => num3 => num1 + num2 + num3;
 同理，实现“相乘”的柯里化：
 
 ```javascript
-const multiply = num1 => num2 => num3 => num1 * num2 * num3;
+const multiply = (num1) => (num2) => (num3) => num1 * num2 * num3;
 ```
 
 和相加的柯里化对比发现：前面都一样，只是最里层函数的操作由相加变为了相乘
@@ -52,7 +54,7 @@ const multiply = num1 => num2 => num3 => num1 * num2 * num3;
 我们可以把柯里化单拿出来写成一个函数：
 
 ```javascript
-const curry = f => num1 => num2 => num3 => f(num1, num2, num3);
+const curry = (f) => (num1) => (num2) => (num3) => f(num1, num2, num3);
 
 function add(a, b, c) {
   return a + b + c;

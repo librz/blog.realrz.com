@@ -5,7 +5,7 @@ language: zh-CN
 category: javascript
 ---
 
-> 高级语言中函数的概念来自于汇编中 Subroutine, 通过对功能进行语义上的切割让代码更加模块化。本文是对 JavaScript 中函数参数的介绍
+> 高级语言中函数的概念来自于汇编中的 Subroutine, 通过对功能进行切割让代码更加模块化，实现了代码复用。本文是对 JavaScript 中函数参数的介绍
 
 #### 函数的原型链
 
@@ -103,7 +103,7 @@ add(10, 20, 30); // 依次打印 3 10 20 30 Object
 
 arguments 作为一个 Array-Like 对象一直被人们诟病。程序员必须把它当做一个特殊对象来看，不能直接看做是普通数组，这显然加大了心智负担。而且 JavaScript 允许通过下标设置其中的元素, 这有时会生效有时又不会，造成了各种难以理解的 bug, 这里不做展开，只建议不要对 arguments 进行写入操作，把它看成只读对象。
 
-#### rest operator: 在一定程度上可以替代 arguments
+#### rest operator: 天下苦 arguments 久矣
 
 和 arguments 一样，rest operator 也提供已一种 reference 参数的方式。但它确比 arguments 对象更加容易使用。
 
