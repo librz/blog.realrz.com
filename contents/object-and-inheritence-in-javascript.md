@@ -60,9 +60,9 @@ john.sayHi(); // Hi, I'm John Blake
 // JavaScript 中指定函数中的 this 指向还可以用 bind, call, apply 方法，这里不做展开
 ```
 
-由于 Person 不单单自己是对象还能够创造对象，这也是说函数是特等公民的原因。就像蚁后是蚂蚁，但蚁后可以产卵创造蚂蚁，所以蚁后是特等蚂蚁一样。
+Person 自己是对象还能够创造对象，这也是说函数是特等公民的原因。就像蚁后是蚂蚁，但蚁后可以产卵创造蚂蚁，所以蚁后是特等蚂蚁一样。
 
-Person 自己的属性和其创造的对象的属性无关：
+注意：Person 自己的属性和其创造的对象的属性无关，这是两个完全不同的对象:
 
 ```javascript
 Person.purpose = "创造实例"；
@@ -72,7 +72,7 @@ console.log(john.purpose); // undefined
 
 #### 对象的创建和原型链
 
-在 JavaScript 中有多种创建对象的方式，下文在介绍这些方式的同时也用代码说明了 JavaScript 实现继承的方式：原型链
+在 JavaScript 中有多种创建对象的方式，下文在介绍这些方式的同时也解释了什么是原型链。
 
 _A. 使用函数_
 
@@ -87,8 +87,16 @@ function Person(name, age) {
 const john = new Person("John Blake", 24);
 john.sayHi();
 
+// 函数都自带一个名为 prototype 的属性，该属性本身是个对象，代表被函数创建的实例的原型
 Person.prototype.isHuman = true;
+
+// john 是 Person 创建的实例，它的原型是 Person.prototype
+// john 自己有 isHuman 属性吗？没有。它的原型 Person.prototype 有吗？有。那好，返回 Person.prototype.isHuman 的值！
 console.log(john.isHuman); // true
+
+// Person.prototype 本身是对象，对象默认的构造函数是 Object 函数，所以它的原型是 Object.prototype
+// Object.prototype 有 hasOwnProperty 方法，用于判断某个属性是存在于对象自身
+// john 自己有 hasOwnProperty 方法吗？没有。它的原型 Person.prototype 有吗？没有。它的原型的原型 Object.prototype 有吗？有。那好，返回 Object.prototype.hasOwnProperty 方法。
 console.log(john.hasOwnProperty("isHuman")); // false
 
 // john 对象的原型链: john => Person.prototype => Object.prototype
@@ -96,22 +104,22 @@ console.log(john.hasOwnProperty("isHuman")); // false
 
 这里和 class 很像，我们也是先写了一堆模板（Person 函数），然后用这个模板创建了对象实例。不同的是，我们在创建对象后似乎扩展了实例的属性：在代码的最后 john.isHuman 是 true, 但 john.hasOwnProperty('isHuman') 却是 false, 这说明 isHuman 不是 john 自己的属性，但 john 一定有某种方法追溯到 isHuman 属性。john 自己没有定义 hasOwnProperty 方法却可以使用也是这种追溯的结果。
 
-这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的构造函数的 prototype 属性是否有这个属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
+这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的的原型是否能这个属性，有的话就返回，没有的话继续追溯。什么是原型呢？该对象的构造函数的 prototype 属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
 
 ```javascript
-// 如果自己有就返回，否则一层一层向上追溯
+// 如果自己有就返回，否则沿着原型链，一层一层的问原型是否有这个属性
 function getPropValue(obj, prop) {
   if (!obj) return undefined;
   if (obj.hasOwnProperty(prop)) return obj[prop];
   const proto = Object.getPrototypeOf(obj);
   // Object 是一个内置函数对象，默认 Object 是对象的构造函数
-  // 它自身有一个 getPrototypeOf 方法，这种定义在构造函数上的方法被称为“静态方法”
+  // 它自身有一个 getPrototypeOf 方法，这种直接定义在构造函数上的方法被称为“静态方法”
   // 这个方法用于找出对象的原型，也即构造函数的 prototype 属性
   return getPropValue(proto, prop);
 }
 
-// 可以认为以上代码是伪代码
-// 因为这个方法对于使用 Object.create 创建的对象可能会失效, 下文会说明
+// 可以认为以上代码是伪代码, 因为这个方法对于使用 Object.create 创建的对象可能会失效
+// 但现在应该把关注点放在原型链的追溯上
 ```
 
 可以看到，这个递归函数在 3 种情况下会终止并返回结果：
@@ -120,7 +128,7 @@ function getPropValue(obj, prop) {
 - 对象本身没有该属性但是原型链中某个对象有
 - 追溯到原型链顶层还没有匹配到属性的时候
 
-这里可以直接用 obj.hasOwnProperty 是因为除非显式指明，对象的原型链最后一环会默认是 Object.prototype(对象的构造函数默认是 Object)，而 hasOwnProperty 方法存在于 Object.prototype 这个对象本身。这里的“最后一环”是因为 Object.getPrototypeOf(Object.prototype) 为 null, 也就是说如果找完了 Object.prototype 还没有找到对应的属性，那说明原型链已经到了尽头。
+可以直接用 obj.hasOwnProperty 是因为除非显式指明，对象的原型链最后一环会默认是 Object.prototype(对象的构造函数默认是 Object)，而 hasOwnProperty 方法存在于 Object.prototype 这个对象本身。这里的“最后一环”是因为 Object.getPrototypeOf(Object.prototype) 为 null, 也就是说 Object.prototype 没有合法的原型，是原型链的终点。
 
 _B. 使用 class 关键字（不推荐）_
 
@@ -146,7 +154,7 @@ john.sayHi();
 
 _C. 使用对象字面量(Object Literal):_
 
-字面量是一个广泛的编程术语，在代码中直接出现的值都是字面量：
+字面量是一个使用广泛的编程术语，在代码中直接出现的值都是字面量：
 
 ```javascript
 const num = 2; // 这里的 2 是字面量
@@ -185,9 +193,9 @@ const john = Object.create(null); // 显式指明对象的原型为 null, 所以
 john.name = "John Blake";
 john.age = 14;
 
-console.log("name" in john); // true
+console.log(john.name); // "John Blake"
 console.log(john.hasOwnProperty("name")); // 报错, hasOwnProperty 是 Object.prototype 的方法, john 不能追溯到 Object.prototype
-console.log("toString" in john); // false
+console.log(john.toString()); // 报错，toString 是 Object.prototype 的方法，john 不能追溯到 Object.prototype
 ```
 
 #### 与原型链有关的操作符和方法
@@ -208,16 +216,7 @@ Person.prototype.isHuman = true;
 const john = new Person("John Blake", 24);
 ```
 
-_(1) instanceof 操作符_
-
-instanceof 操作符会追溯原型链上的所有构造函数，如果找到返回 true, 否则返回 false:
-
-```javascript
-console.log(john instanceof Person); // true
-console.log(john instanceof Object); // true
-```
-
-_(2) 属性操作符(英文句号或者方括号)_
+_(1) 属性操作符(英文句号或者方括号)_
 
 如果对象本身拥有某种属性或者方法，用英文句号或者方括号可以访问它:
 
@@ -242,9 +241,18 @@ console.log(john.speed); // undefined
 console.log(john.speed()); // 报错: Uncaught TypeError: john.speed is not a function
 ```
 
+_(2) instanceof 操作符_
+
+和属性操作符不一样，instanceof 操作符追溯的不是原型链上的原型，而是原型链上的原型的构造函数（有点绕）：
+
+```javascript
+console.log(john instanceof Person); // true
+console.log(john instanceof Object); // true
+```
+
 _(3) in 操作符_
 
-和属性操作符很像，不过 in 只给出属性是否存在，而不是直接给出属性的值。 in 操作符同样会追溯原型链:
+和属性操作符很像，不过 in 只给出属性是否存在，而不是直接给出属性的值。 in 操作符同样会追溯原型链的原型:
 
 ```javascript
 console.log("name" in john); // true
@@ -261,21 +269,25 @@ console.log(john.hasOwnProperty("name")); // true
 console.log(john.hasOwnProperty("isHuman")); // false
 ```
 
-_(5) Object.getPrototypeOf 方法_
-
-作用很简单: 得到对象的原型
-
-```javascript
-const proto = Object.getPrototypeOf(john);
-console.log(proto.hasOwnProperty("isHuman")); // true
-```
-
-_(6) Object.prototype.constructor_
+_(5) Object.prototype.constructor_
 
 作用：得到对象的构造函数
 
 ```javascript
 console.log(john.constructor === Person); // true
+
+// 也可以用它得到原型
+const proto = john.constructor.prototype;
+console.log(proto.isHuman); // true
+```
+
+_(6) Object.getPrototypeOf 方法_
+
+作用很简单: 直接得到对象的原型。
+
+```javascript
+const proto = Object.getPrototypeOf(john);
+console.log(proto === Person.prototype); // true
 ```
 
 #### 常见的内置对象及其原型链
@@ -322,7 +334,7 @@ for (let name of friends) {
 Array.prototype.partition = function (condition) {
   const arr_1 = [];
   const arr_2 = [];
-  this.forEach(item => {
+  this.forEach((item) => {
     if (condition(item)) arr_1.push(item);
     else arr_2.push(item);
   });
@@ -331,7 +343,7 @@ Array.prototype.partition = function (condition) {
 
 const nums = [1, 3, 4, 10, 15, 35, 50];
 
-const [evenNums, oddNums] = nums.partition(num => num % 2 === 0);
+const [evenNums, oddNums] = nums.partition((num) => num % 2 === 0);
 
 console.log(evenNums, oddNums);
 ```
