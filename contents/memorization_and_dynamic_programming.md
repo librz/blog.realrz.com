@@ -1,6 +1,6 @@
 ---
 title: 记忆化和动态编程
-date: "2020-11-29"
+date: "2020-12-12"
 language: zh-CN
 category: other
 ---
