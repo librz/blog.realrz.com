@@ -60,9 +60,9 @@ john.sayHi(); // Hi, I'm John Blake
 // JavaScript 中指定函数中的 this 指向还可以用 bind, call, apply 方法，这里不做展开
 ```
 
-Person 自己是对象还能够创造对象，这也是说函数是特等公民的原因。就像蚁后是蚂蚁，但蚁后可以产卵创造蚂蚁，所以蚁后是特等蚂蚁一样。
+Person 自己是对象还能够创造对象，这也是说函数是特等公民的原因。就像蚁后是蚂蚁，蚁后还可以产卵创造蚂蚁，所以蚁后是特等蚂蚁一样。
 
-注意：Person 自己的属性和其创造的对象的属性无关，这是两个完全不同的对象:
+注意：除了 prototype 属性作为实例的原型外，Person 自己的属性和其创造的对象的属性无关，这是两个完全不同的对象:
 
 ```javascript
 Person.purpose = "创造实例"；
@@ -87,7 +87,7 @@ function Person(name, age) {
 const john = new Person("John Blake", 24);
 john.sayHi();
 
-// 函数都自带一个名为 prototype 的属性，该属性本身是个对象，代表被函数创建的实例的原型
+// 函数都自带一个名为 prototype 的属性，该属性本身是个对象，该对象作为被函数创建的实例的原型而存在
 Person.prototype.isHuman = true;
 
 // john 是 Person 创建的实例，它的原型是 Person.prototype
@@ -104,7 +104,7 @@ console.log(john.hasOwnProperty("isHuman")); // false
 
 这里和 class 很像，我们也是先写了一堆模板（Person 函数），然后用这个模板创建了对象实例。不同的是，我们在创建对象后似乎扩展了实例的属性：在代码的最后 john.isHuman 是 true, 但 john.hasOwnProperty('isHuman') 却是 false, 这说明 isHuman 不是 john 自己的属性，但 john 一定有某种方法追溯到 isHuman 属性。john 自己没有定义 hasOwnProperty 方法却可以使用也是这种追溯的结果。
 
-这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的的原型是否能这个属性，有的话就返回，没有的话继续追溯。什么是原型呢？该对象的构造函数的 prototype 属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
+这种追溯的过程就是原型链：当一个属性不属于对象本身时，JS 会寻找该对象的的原型是否有这个属性，有的话就返回，没有的话继续追溯。什么是原型呢？该对象的构造函数的 prototype 属性（有点绕）。可以认为 JS 内部追溯原型链的过程如下：
 
 ```javascript
 // 如果自己有就返回，否则沿着原型链，一层一层的问原型是否有这个属性
@@ -134,7 +134,7 @@ _B. 使用 class 关键字（不推荐）_
 
 在 2015 年推出的 JavaScript 版本 ES6 中引入了 class 关键字，这是种语法糖：语法上类似 Java 等传统面向对象语言，但实际底层还是"构造函数+原型链"。
 
-新写法完全是为了方便日常用其他语言的程序员能够获得一种“熟悉感”，但不可否认这种做法掩盖了事情的本质，遇到稍微复杂的情况就会让人感到困惑。JSON 的作者 Douglas Crockford 认为这是种差劲的特性，我也大致认同。实际上，大部分的语法糖都是在牺牲人们对事物本质了解的基础上带来一点便捷性。
+新写法完全是为了方便日常用其他语言的程序员能够获得一种“熟悉感”，但不可否认这种做法掩盖了事情的本质，遇到稍微复杂的情况就会让人感到困惑。JSON 的作者 Douglas Crockford 认为这是种差劲的特性，我也大致认同。实际上，大部分的语法糖都是在牺牲人们对事物本质的理解的基础上带来一点便捷性。
 
 用 class 创建对象：
 
@@ -179,6 +179,14 @@ const john = {
 ```javascript
 console.log(john.name); // "John Blake"
 console.log(john.speed); // undefined
+
+// Object.prototype.constructor 能够给出对象的构造函数
+console.log(john.constructor === Object); // true
+
+// Object.getPrototypeOf 用于直接得到函数的原型
+console.log(Object.getPrototypeOf(john) === Object.prototype); // true
+
+// 以下代码不报错，说明 john 有办法追溯并使用 Object.prototype.hasOwnProperty 和 Object.prototype.toString 方法
 console.log(john.hasOwnProperty("toString")); // false
 console.log(john.toString()); // "[object Object]"
 ```
@@ -252,7 +260,7 @@ console.log(john instanceof Object); // true
 
 _(3) in 操作符_
 
-和属性操作符很像，不过 in 只给出属性是否存在，而不是直接给出属性的值。 in 操作符同样会追溯原型链的原型:
+和属性操作符很像，不过 in 只给出属性是否存在，而不是直接给出属性的值。 in 操作符同样会追溯原型链:
 
 ```javascript
 console.log("name" in john); // true
@@ -276,7 +284,7 @@ _(5) Object.prototype.constructor_
 ```javascript
 console.log(john.constructor === Person); // true
 
-// 也可以用它得到原型
+// 也可以用它得到原型, 稍微麻烦点
 const proto = john.constructor.prototype;
 console.log(proto.isHuman); // true
 ```
@@ -315,7 +323,7 @@ console.log(firends["0"]); // John
 console.log(Object.keys(friends)); // ["0", "1", "2", "3"]
 console.log(1 in frieds); // true
 
-// 利用原型链调用各种方法
+// 利用原型链调用定义在 Array.prototype 上的各种方法
 friends.pop();
 friends.push("Kate");
 friends.splice(1, 2, "Phil", "Joe", "Michael");
