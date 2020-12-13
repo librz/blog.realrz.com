@@ -54,6 +54,7 @@ const name = "John Blake";
 console.log(typeof name); // string
 console.log(name instanceof String); // false
 // name 之所以能够调用 split 方法是因为 name 被 Javascript 隐式转换为了 String 对象！
+// 这种由基本类型转为对象的操作也被称为装箱(Boxing), 其本质是在基本类型的基础上做了一层 wrapping
 const firstName = name.split(" ")[0];
 console.log(firstName);
 ```
@@ -158,7 +159,7 @@ function add(a, b, c = 5) {
 add(1, 2); // 显而易见 1 是形参 a 的实参，2 是形参 b 的实参
 ```
 
-遗憾的是 JavaScript 不强制执行这样的规则。如果你碰到一个差劲的程序员，可能就会出现默认参数后面有常规参数的情况。
+遗憾的是 JavaScript 不会强制执行这样的规则。
 
 #### 默认参数传 undefined 相当于不传
 
