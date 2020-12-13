@@ -93,4 +93,4 @@ function printFirstName(friends) {
 
 使用 ?. 允许读取在属性链上很靠后的属性值而不用考虑该属性链是否有效。它的机制是如果发现其中一环为 nullish (null 或者 undefined)，那么就停止追溯属性链并返回 undefined.
 
-关于 optinal-chaining 的详细说明可以参见 (MDN 文档)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining]
+关于 optinal-chaining 的详细说明可以参见 [MDN 文档](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)
