@@ -1,6 +1,6 @@
 ---
 title: 常见排序算法（JavaScript实现）
-date: "2020-12-02"
+date: "2020-10-02"
 language: zh-CN
 category: other
 ---
