@@ -7,7 +7,7 @@ category: javascript
 
 > JavaScript 在设计时参考了 Java 的语法，从 Scheme 那里借鉴了函数式编程的思想，而基于原型的面向对象设计是向 Self 学习的结果。本文对 JavaScript 中面向对象的部分进行说明
 
-#### 面向对象(OOP)的 2 种实现方式
+#### 面向对象(OOP)的 2 种实现思路
 
 _(1) 类作为实例的蓝图 (Class As Blueprint)_
 
@@ -62,13 +62,63 @@ john.sayHi(); // Hi, I'm John Blake
 
 Person 自己是对象还能够创造对象，这也是说函数是特等公民的原因。就像蚁后是蚂蚁，蚁后还可以产卵创造蚂蚁，所以蚁后是特等蚂蚁一样。
 
-注意：除了 prototype 属性作为实例的原型外，Person 自己的属性和其创造的对象的属性无关，这是两个完全不同的对象:
+注意：除了 prototype 属性作为实例的原型外(后面会谈到)，Person 自己的属性和其创造的对象的属性无关，这是两个完全不同的对象:
 
 ```javascript
 Person.purpose = "创造实例"；
-// Person 这个对象有 purpose 属性，但其创造的实例 john 和这个属性无关
+// Person 有 purpose 属性，但其创造的实例 john 和这个属性无关
 console.log(john.purpose); // undefined
 ```
+
+#### 内置对象 Object 及 Object.prototype
+
+到底什么是一门编程语言呢？在王垠的[如何掌握所有的程序语言](http://www.yinwang.org/blog-cn/2017/07/06/master-pl)一文中, 他把语言比做组装机，其部件是语言特性：
+
+> 很多人盲目的崇拜语言设计者，只要听到有人设计（或者美其名曰“发明”）了一个语言，就热血沸腾，佩服的五体投地。他们却没有理解，其实所有的程序语言，不过是像 Dell，联想一样的“组装机”。语言特性的设计者，才是像 Intel，AMD，ARM，Qualcomm 那样核心技术的创造者。
+
+通用的语言特性比如：流程控制(if, else, switch), 循环(for, while, do-while), 类型系统, expression 和 statement, 变量声明和赋值，手动/自动垃圾回收，范型，错误处理(try-catch)...
+
+JavaScript 通过原型链这种语言特性来支持面向对象，并且提供了很多内置对象。最基本的对象是 Object 和 Object.prototype，不了解这两个对象，原型链也无从谈起。
+
+_(1) 对 Object 的认识_
+
+Object 是一个构造函数，函数是对象，因此它也是对象，并且提供了一些非常基本的方法：
+
+```javascript
+const obj = new Object();
+// 使用 Object.defineProperty 方法定义 obj 的 name 属性
+// 并不允许用赋值运算符进行修改
+Object.defineProperty(obj, "name", {
+  value: "Alex",
+  writable: false,
+});
+console.log(obj.name); // "Alex"
+obj.name = "Joe"; // 在严格模式下会报错，不可以用 "=" 给其赋值
+```
+
+你可能使用过 Object.assign 来做浅拷贝，或者 Object.is 来判断是不是同一个对象，这些都是定义在 Object 本身的静态方法。上面介绍了 [Object.define](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty) 方法，这个方法虽然在实际使用中没那么常见，但其提供了非常底层的能力，远比 Object.assign 或者 Object.is 重要。
+
+_(2) 对 Object.prototype 的认识_
+
+这也是个内置对象，和 Object 不同，它不是一个函数对象。
+
+Object.prototype 提供了一些非常重要的属性和方法:
+
+```javascript
+const obj = new Object();
+Object.defineProperty(obj, "name", {
+  value: "Alex",
+  writable: false,
+});
+// 通过 Object.prototype.constructor 可以得到对象的构造函数
+// 通过 Object.prototype.hasOwnProperty 可以测试属性是否定义在对象自身
+console.log(obj.constructor === Object); // true
+console.log(obj.hasOwnProperty("constructor")); // false
+```
+
+obj.constructor 其实 reference 了 Object.prototype.constructor 属性，obj.hasOwnProperty reference 了 Object.prototype.hasOwnProperty 方法。
+
+这种 reference 其实就是原型链的追溯，下文会展开。现在只要知道 Object.prototype.constructor 和 Object.protoype.hasOwnProperty 存在及其作用。
 
 #### 对象的创建和原型链
 
@@ -91,12 +141,17 @@ john.sayHi();
 Person.prototype.isHuman = true;
 
 // john 是 Person 创建的实例，它的原型是 Person.prototype
-// john 自己有 isHuman 属性吗？没有。它的原型 Person.prototype 有吗？有。那好，返回 Person.prototype.isHuman 的值！
+// john 自己有 isHuman 属性吗？
+// 没有。它的原型 Person.prototype 有吗？
+// 有。返回 Person.prototype.isHuman 的值
 console.log(john.isHuman); // true
 
 // Person.prototype 本身是对象，对象默认的构造函数是 Object 函数，所以它的原型是 Object.prototype
 // Object.prototype 有 hasOwnProperty 方法，用于判断某个属性是存在于对象自身
-// john 自己有 hasOwnProperty 方法吗？没有。它的原型 Person.prototype 有吗？没有。它的原型的原型 Object.prototype 有吗？有。那好，返回 Object.prototype.hasOwnProperty 方法。
+// john 自己有 hasOwnProperty 方法吗？
+// 没有。它的原型 Person.prototype 有吗？
+// 没有。它的原型的原型 Object.prototype 有吗？
+// 有。返回 Object.prototype.hasOwnProperty 方法
 console.log(john.hasOwnProperty("isHuman")); // false
 
 // john 对象的原型链: john => Person.prototype => Object.prototype
@@ -117,9 +172,6 @@ function getPropValue(obj, prop) {
   // 这个方法用于找出对象的原型，也即构造函数的 prototype 属性
   return getPropValue(proto, prop);
 }
-
-// 可以认为以上代码是伪代码, 因为这个方法对于使用 Object.create 创建的对象可能会失效
-// 但现在应该把关注点放在原型链的追溯上
 ```
 
 可以看到，这个递归函数在 3 种情况下会终止并返回结果：
@@ -298,7 +350,7 @@ const proto = Object.getPrototypeOf(john);
 console.log(proto === Person.prototype); // true
 ```
 
-#### 常见的内置对象及其原型链
+#### 更多例子：数组和函数的原型链
 
 JavaScript 有很多内置对象，这里对 Array 和 Function 为例对其原型链进行说明。首先要明确一点：JavaScript 把一切类型简单分为 2 种：基本类型和对象。简单直接，这意味着类似数组和函数也是对象。
 
@@ -328,10 +380,7 @@ friends.pop();
 friends.push("Kate");
 friends.splice(1, 2, "Phil", "Joe", "Michael");
 
-// JS 提供了 for of 来遍历数组
-for (let name of friends) {
-  console.log(name);
-}
+// 原型链: friends => Array.prototype => Object.prototype
 ```
 
 以上代码调用了 pop | push | splice 方法，但数组本身没有这些方法，他们被定义在 Array.prototype 上. 这也是为什么查 API 的时候，看到的是 Array.prototype.push 而不是 Array.push
@@ -368,6 +417,8 @@ function print(param) {
 }
 
 print.constructor === Function; // true
+
+//原型链: print => Function.prototype => Object.prototype
 ```
 
 Function 本身也是个函数对象, 且自己是自己的构造函数:
@@ -376,6 +427,8 @@ Function 本身也是个函数对象, 且自己是自己的构造函数:
 Function instanceof Object; // true
 Function instanceof Function; // true
 Function.constructor === Function; // true
+
+//原型链: Function => Function.prototype => Object.prototype
 ```
 
 本文在写作过程中部分参考了[这篇文章](https://codeburst.io/how-to-do-object-oriented-programming-the-right-way-1339c1a25286)
