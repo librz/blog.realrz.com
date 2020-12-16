@@ -96,7 +96,7 @@ console.log(obj.name); // "Alex"
 obj.name = "Joe"; // 在严格模式下会报错，不可以用 "=" 给其赋值
 ```
 
-你可能使用过 Object.assign 来做浅拷贝，或者 Object.is 来判断是不是同一个对象，这些都是定义在 Object 本身的静态方法。上面介绍了 [Object.define](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty) 方法，这个方法虽然在实际使用中没那么常见，但其提供了非常底层的能力，远比 Object.assign 或者 Object.is 重要。
+你可能使用过 Object.assign 来做浅拷贝，或者 Object.is 来判断是不是同一个对象，这些都是定义在 Object 本身的静态方法。上面介绍了 [Object.defineProperty](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty) 方法，这个方法虽然在实际使用中没那么常见，但其提供了非常底层的能力，远比 Object.assign 或者 Object.is 重要。
 
 _(2) 对 Object.prototype 的认识_
 

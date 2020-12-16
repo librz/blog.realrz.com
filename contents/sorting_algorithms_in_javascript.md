@@ -1,6 +1,6 @@
 ---
 title: 常见排序算法（JavaScript实现）
-date: "2020-10-02"
+date: "2020-12-17"
 language: zh-CN
 category: other
 ---
@@ -57,9 +57,36 @@ function insertionSort(arr) {
 }
 ```
 
-注意插入的机制是不断把要插入元素与前一个元素进行比较，如果小于前一个元素就互换位置，直到前面一个元素比要插入元素大为止。
+注意插入的机制是不断把要插入元素与前一个元素进行比较，如果小于前一个元素就互换位置，直到前面一个元素比要插入元素小或者到达数组最左边为止。
+
+参考视频: [Insertion sort in 2 mins](https://www.youtube.com/watch?v=JU767SDMDvA)
 
 时间复杂度: O(n^2)
+
+#### 选择排序 (selection sort)
+
+_将数组分为两部分，一部分是已经排序，一部分是未排序。不断扩充已排序数组，直到没有未排序的数组为止。通过 2 层循环实现，内层循环记录未排序数组中最小的值，在外层循环中进行 swap 和遍历。_
+
+```javascript
+function selectionSort(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let minIndex = i;
+    for (let j = i; j < arr.length; j++) {
+      if (arr[j] < arr[minIndex]) {
+        minIndex = j;
+      }
+    }
+    // swap arr[i] with arr[minIndex]
+    const temp = arr[i];
+    arr[i] = arr[minIndex];
+    arr[minIndex] = temp;
+  }
+}
+```
+
+参考视频: [selectino sort in 3 mins](https://www.youtube.com/watch?v=g-PGLbMth_g)
+
+时间复杂度：O(n^2)
 
 #### 冒泡排序 (bubble sort)
 
@@ -84,8 +111,6 @@ function bubbleSort(arr) {
 虽然这个算法写起来简单，但个人感觉解决方式和问题本身没有很明显的联系，要经过一番思考才能明白为什么相邻元素互换能够达到目的。
 
 时间复杂度：O(n^2)
-
-#### 选择排序 (slection sort)
 
 #### 归并排序 (merge sort)
 
