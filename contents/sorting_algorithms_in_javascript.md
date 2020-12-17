@@ -65,11 +65,12 @@ function insertionSort(arr) {
 
 #### 选择排序 (selection sort)
 
-_将数组分为两部分，一部分是已经排序，一部分是未排序。不断扩充已排序数组，直到没有未排序的数组为止。通过 2 层循环实现，内层循环记录未排序数组中最小的值，在外层循环中进行 swap 和遍历。_
+_将数组分为两部分，一部分是已经排序，一部分是未排序。不断扩充已排序数组，直到没有未排序的数组为止。通过 2 层循环实现，内层循环用于寻找未排序数组中最小的值，在外层循环中进行 swap 和遍历。_
 
 ```javascript
 function selectionSort(arr) {
   for (let i = 0; i < arr.length; i++) {
+    // 寻找未排序数组中的最小值的下标
     let minIndex = i;
     for (let j = i; j < arr.length; j++) {
       if (arr[j] < arr[minIndex]) {
