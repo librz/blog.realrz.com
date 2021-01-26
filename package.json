@@ -1,12 +1,12 @@
 {
-  "name": "blog",
+  "name": "blog.realrz.com",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "next dev -p 9001",
     "build": "next build",
-    "start": "next start -p 9001",
+    "serve": "nohup next start -p 9001",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

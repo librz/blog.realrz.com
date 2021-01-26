@@ -7,7 +7,7 @@ category: linux
 
 > Unix 编程的哲学是 Do One Thing And Do It Well。每个程序的目的都应该很简单明确，不同的程序通过组合就可以完成那些看起来很复杂的工作。以下是一个列表，他们都是我喜欢的 Linux 程序
 
-_(1) tldr_
+_ tldr_
 
 查找某个命令的用法时常用的做法是使用 man，但有些时候 man 给出的手册太长太详细了，使用者很难找到自己想要的。我就经常查看 man 手册不知不觉睡着了。
 
@@ -40,6 +40,10 @@ _(7) scp_
 _(8) curl_
 
 灵活强大的网络请求工具，可以用来替换 Postman 还可以用来下载 Web 上的资源。
+
+\_(9) shellcheck
+
+如果你写 shell 脚本的话，[shellcheck](https://github.com/koalaman/shellcheck) 会检查脚本的语法和可能的错误并给出提示。官方的介绍很简单: ShellCheck, a static analysis tool for shell scripts
 
 _(9) filebrowser_
 
