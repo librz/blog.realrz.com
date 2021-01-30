@@ -20,6 +20,8 @@ git clone git@github.com:librz/blog.realrz.com.git
 
 npm install
 
+note: to use npm, you should have node installed
+
 ### dev
 
 - start dev server: npm run dev
@@ -42,6 +44,14 @@ server {
 
 nginx, upon receiving a request will proxy it to port 9001
 
-### get updates
+### serve
 
 npm run serve
+
+#### upate
+
+npm run update
+
+update workflow: get the latest code, build it, kill the old process and start a new one
+
+note: this only works on Ubuntu server, running this on mac or windows will throw errors
