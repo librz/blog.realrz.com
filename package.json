@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 9001",
     "build": "next build",
-    "serve": "nohup next start -p 9001",
+    "serve": "nohup next start -p 9001 &>/dev/null &",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
