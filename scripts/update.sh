@@ -7,17 +7,30 @@ result=$(bash <(curl -sL https://raw.githubusercontent.com/librz/shell_scripts/m
 
 if [[ "$?" -eq 0 ]]; then
     # get pid & kill it
-    pid=$(echo $result | awk 'NR>1{print $2}')
-    kill "$pid"
+    pid=$(echo "$result" | awk 'NR>1{print $2}')
+		echo "found process with pid $pid already running on port 9001"
+		echo "killing it..."
+    if kill "$pid"; then
+			echo "killing success"
+		else
+			echo "killing process $pid failed"
+			exit 1
+		fi
 fi
 
 # get the latest code
+echo "----"
+echo "pulling the latest change from github..."
 git pull
 
 # build it
+echo "----"
+echo "building..."
 npm run build
 
 # serve it
+echo "----"
+echo "serving..."
 npm run serve
 
 
