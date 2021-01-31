@@ -7,7 +7,7 @@ result=$(bash <(curl -sL https://raw.githubusercontent.com/librz/shell_scripts/m
 
 if [[ "$?" -eq 0 ]]; then
     # get pid & kill it
-    pid=$(echo $result | awk '{print $2}' | cut -d':' -f2)
+    pid=$(echo $result | awk 'NR>1{print $2}')
     kill "$pid"
 fi
 
