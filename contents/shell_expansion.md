@@ -1,6 +1,6 @@
 ---
 title: Shell Expansion
-date: "2021-02-17"
+date: "2021-02-06"
 language: zh-CN
 category: linux
 ---
@@ -56,9 +56,9 @@ echo $(whoami)
 
 如果当前用户名为 john, 那么这行命令会被 expand 为 echo john
 
-#### 大括号扩展 (brace expansion)
+#### 花括号扩展 (brace expansion)
 
-大括号扩展常常用于批处理，用的熟练可以节时提效
+花括号扩展常常用于批处理，用的熟练可以节时提效
 
 ```console
 touch a{1,2,3}.txt
@@ -83,3 +83,7 @@ cd ~/code
 ```
 
 进入到 home directory 底下的 code 文件夹
+
+#### 注意: 单引号和双引号
+
+单引号内的内容不会被 shell 做任何处理，字面上是什么就是什么(literal)。shell expansion 也不例外，只有在没有引号或者双引号内才会生效。
