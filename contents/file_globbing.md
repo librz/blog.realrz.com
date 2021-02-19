@@ -13,7 +13,7 @@ category: linux
 
 #### wildcard
 
-wildcard 是一个特殊的字符，可以用它当做占位符，用在 File Globbing 里表示一定数量的任意字符:
+wildcard 是一个特殊的字符，可以用它当做占位符，可以表示任意字符:
 
 1. \* 表示 0 个或多个任意字符
 2. ? 表示一个任意字符

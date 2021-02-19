@@ -17,9 +17,9 @@ cat user_p
 
 一般只需要输入文件名的一部分就可以了，点击 tab 键 shell 会自动补全剩下的文件名。
 
-自动补全的背后其实是 shell expansion, 上面的例子其实是最简单的 expansion: filename expansion
+自动补全的背后其实是 shell expansion, 上面的例子其实是 expansion 的一种: filename expansion
 
-关于 filename expansion 你可能会想到 fiel globbing, 我将在单独的博客中进行介绍
+filename expansion 的高级用法是 file globbing, 我在 [这篇博客](https://www.blog.realrz.com/file_globbing) 中进行了单独介绍
 
 #### 变量求值 (variable evaluation)
 
