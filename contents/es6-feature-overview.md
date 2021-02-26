@@ -1,6 +1,6 @@
 ---
 title: An Overview Of ES6 Features
-date: "2020-05-09"
+date: "2020-05-23"
 language: zh-CN
 category: javascript
 ---

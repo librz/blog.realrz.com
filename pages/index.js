@@ -5,6 +5,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import AppWrapper from "../components/AppWrapper";
 import BlogList from "../components/BlogList";
+import Head from "next/head";
 import "antd/dist/antd.css";
 
 function TabPanel({ children, show }) {
@@ -25,11 +26,15 @@ function IndexPage({ blogs }) {
 
   return (
     <AppWrapper>
+      <Head>
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <title>Have Fun Coding</title>
+      </Head>
       <AppBar position="static">
         <Tabs variant="fullWidth" value={value} onChange={handleChange}>
           <Tab label="所有" value={0} />
-          <Tab label="JavaScript" value={1} />
-          <Tab label="Swift" value={2} />
+          <Tab label="JS" value={1} />
+          <Tab label="React" value={2} />
           <Tab label="Linux" value={3} />
           <Tab label="其他" value={4} />
         </Tabs>
@@ -43,7 +48,7 @@ function IndexPage({ blogs }) {
         />
       </TabPanel>
       <TabPanel show={value === 2}>
-        <BlogList blogs={blogs.filter((item) => item.category === "swift")} />
+        <BlogList blogs={blogs.filter((item) => item.category === "react")} />
       </TabPanel>
       <TabPanel show={value === 3}>
         <BlogList blogs={blogs.filter((item) => item.category === "linux")} />

@@ -1,21 +1,24 @@
 import React from "react";
 import AppWrapper from "../components/AppWrapper";
+import Head from "next/head";
 // import theme from hightlight.js
 import "highlight.js/styles/vs2015.css";
 
 // render using react
 function BlogPostPage({ title, htmlString }) {
+  const style = {
+    fontFamily: "Arial, Helvetica, sans-serif",
+    lineHeight: 1.6,
+    fontSize: "1.2em",
+    letterSpacing: 0.4,
+    textAlign: "justify",
+    wordBreak: "break-all",
+  };
   return (
-    <AppWrapper
-      style={{
-        fontFamily: "Arial, Helvetica, sans-serif",
-        lineHeight: 1.6,
-        fontSize: "1.2em",
-        letterSpacing: 0.4,
-        textAlign: "justify",
-        wordBreak: "break-all",
-      }}
-    >
+    <AppWrapper style={style}>
+      <Head>
+        <title>{title}</title>
+      </Head>
       <h2 style={{ textAlign: "center", color: "royalblue" }}>{title}</h2>
       <section dangerouslySetInnerHTML={{ __html: htmlString }} />
     </AppWrapper>
@@ -55,16 +58,18 @@ export async function getStaticProps(context) {
 }
 
 // grab all the slugs corresponding to markdown files
-// and pre-render them all at build time
+// and pre-render them at build time
 export async function getStaticPaths() {
   const fs = require("fs");
   const path = `${process.cwd()}/contents`;
   const files = fs.readdirSync(path, "utf-8");
 
-  const slugs = files.filter(fn => fn.endsWith(".md")).map(fn => fn.replace(".md", ""));
+  const slugs = files
+    .filter((fn) => fn.endsWith(".md"))
+    .map((fn) => fn.replace(".md", ""));
 
   return {
-    paths: slugs.map(slug => ({
+    paths: slugs.map((slug) => ({
       params: { slug },
     })),
     fallback: true,

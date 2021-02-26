@@ -115,10 +115,4 @@ function bubbleSort(arr) {
 
 #### 归并排序 (merge sort)
 
-#### 桶排序 (bucket sort)
-
-#### 计数排序 (counting sort)
-
-#### 基数排序 (radix sort)
-
 > 未完，会再写

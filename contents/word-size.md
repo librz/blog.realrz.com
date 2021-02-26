@@ -1,6 +1,6 @@
 ---
 title: 字长和内存上限
-date: "2020-11-15"
+date: "2020-07-15"
 language: zh-CN
 category: other
 ---

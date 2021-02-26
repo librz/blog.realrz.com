@@ -1,6 +1,6 @@
 ---
 title: 动态编程：造表和记忆化
-date: "2020-12-12"
+date: "2020-11-12"
 language: zh-CN
 category: other
 ---

@@ -1,6 +1,6 @@
 ---
 title: File Globbing
-date: "2021-02-11"
+date: "2020-09-11"
 language: zh-CN
 category: linux
 ---

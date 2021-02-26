@@ -1,8 +1,8 @@
 ---
 title: React 性能优化之代码分割
-date: "2020-07-09"
+date: "2020-12-09"
 language: zh-CN
-category: other
+category: react
 ---
 
 > 相信大家都有打开一个网站，加载十几秒还没看到任何有意义内容的经历，要不是白屏，要不是一直在 Loading。使用 React 构建应用时，很容易出现这种情况，本文介绍如何用代码分割解决这类问题。

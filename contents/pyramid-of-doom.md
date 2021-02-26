@@ -1,6 +1,6 @@
 ---
 title: 厄运金字塔
-date: "2020-12-08"
+date: "2020-10-08"
 language: zh-CN
 category: javascript
 ---

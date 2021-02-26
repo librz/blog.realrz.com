@@ -1,6 +1,6 @@
 ---
 title: Shell Expansion
-date: "2021-02-06"
+date: "2020-08-06"
 language: zh-CN
 category: linux
 ---
