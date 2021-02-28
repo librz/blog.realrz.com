@@ -8,7 +8,7 @@ function err {
 # if there is, kill it
 
 if result=$(
-	bash <(curl -sL https://raw.githubusercontent.com/librz/shell_scripts/main/3p.sh) --port 9001
+	bash <(curl -sL https://raw.githubusercontent.com/librz/shell-scripts/main/3p.sh) --port 9001
 ); then
     # get pid & kill it
     pid=$(echo "$result" | awk 'NR>1{print $2}')
