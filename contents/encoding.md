@@ -30,7 +30,7 @@ category: other
 
 如果某个像素图片的二进制表示是 `01101` 那么它就会被程序渲染为 `绿黄` 这 2 个像素; 如果二进制序列是 `11101` 那么渲染的结果就是 `红蓝` 这 2 个像素。
 
-上面的 2 个例子虽然实际像素的二进制序列都是 `1101`, 由于采用了不同的编码，结果解析出的颜色信息完全不同!
+上面的 2 个例子虽然实际像素的二进制序列都是 `1101`, 但由于采用了不同的编码，结果解析出的颜色信息完全不同!
 
 #### Character Encoding
 
@@ -52,7 +52,7 @@ ASCII 码是比较早的一种字符编码, 全称是 Amercian Standard Code for
 
 [这里](https://www.rapidtables.com/code/text/ascii-table.html) 是一张完整的 ASCII 表
 
-请注意，ASCII 表中前 32 个最后 1 个字符(DEL)属于控制字符所以是不可打印的(non-printable)， 中间 95 个字符是可打印的(printable)。这 33 个控制字符大部分都已经过时了，只有 tab, carriage return, line feed 等少数还被我们使用着。
+请注意: ASCII 表中前 32 个最后 1 个字符(DEL)属于控制字符所以是不可打印的(non-printable)， 中间 95 个字符是可打印的(printable)。这 33 个控制字符大部分都已经过时了，只有 tab, carriage return, line feed 等少数还被我们使用着。[这里](http://ascii-table.com/control-chars.php) 单独列出了 ASCII 表中的 33 个控制字符，可以发现这些控制字符大多数都可以用键盘上的 Ctrl 键加一个普通字符来进行输入，比如 Ctrl + M 既可以产生一个 Carriage Return
 
 ASCII 使用一个字节(8 bits)表示一个字符，而 ASCII 只需包含 128 个字符，因此也就只使用了 7 个比特(2^7=128)。
 
@@ -125,23 +125,29 @@ _Dominence: 截止本文发表(2021 年), UTF-8 已经占据了绝对优势, 97%
 
 #### We all ❤️ Emoji
 
-2000s 左右，欧美公司开始大批进入日本，发现日本人更喜欢用本国的电子产品。经过调研发现他们选择本国产品的原因之一是这些产品内置了 "絵文字", 写作英文就是 Emoji。但当时 Emoji 的实现简单粗暴: 直接使用图片。
+2000s 左右，欧美公司开始大批进入日本，发现日本人更喜欢用本国的电子产品。经过调研发现他们选择本国产品的原因之一是这些产品内置了 "絵文字", 日式读音写作英文就是 Emoji。但当时 Emoji 的实现简单粗暴: 直接使用图片。
 
-由于当时流量很贵，即使 Emoji 用的图片很小也远比字符消耗的流量多。人们就提出建议能不能 Unicode 中加入 Emoji, 提案刚开始并不受欢迎, Unicode 是字符编码，而当时人们普遍认为 Emoji 是小尺寸图片而已。
+为了节省流量，人们提出建议能不能 Unicode 中加入 Emoji, 提案刚开始并不受欢迎, Unicode 是字符编码，而当时人们普遍认为 Emoji 是小尺寸图片而已。
 
-不过资本再一次证明了自己力量, Emoji 最终被加入到 Unicode 中。由于加入的时间比较晚, 分配给 Emoij 的 Unicode Block 叫 [Emoticons](<https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)>), 占用的 Code Point Range 为 U+1F600 ~ U+1F64F, Unicode Code Point 的值比较大，使用 UTF-8 时单个 Emoji 需要占用 4 个字节。即使这样，也远比图片小多了。
+不过 Emoji 最终被加入到 Unicode 中。由于加入的时间比较晚, 分配给 Emoij 的 Unicode Block 叫 [Emoticons](<https://en.wikipedia.org/wiki/Emoticons_(Unicode_block)>), 占用的 Code Point Range 为 U+1F600 ~ U+1F64F, Unicode Code Point 的值比较大，使用 UTF-8 时单个 Emoji 需要占用 4 个字节。即使这样，也远比图片小多了。
 
-以下是 A 发送一个 😁 给 B 的流程(假定双方都使用 UTF-8):
+以下是 A 发送一个 👌 给 B 的流程(假定双方都使用 UTF-8):
 
 ```console
 1. A 打开输入法，输入法本地加载 Emoji 对应的图片
-2. A 选中 😁 并点击发送
-注: 😁 在 UTF-8 对应的二进制实际是 11110000:10011111:10011000:10000001
-3. 网络开始传输 11110000:10011111:10011000:10000001
+2. A 选中 👌 并点击发送
+注: 👌 在 UTF-8 对应的二进制实际是 	11110000:10011111:10010001:100011001
+3. 网络开始传输二进制流
 4. B 收到这 4 个字节并用 UTF-8 解码，知道这是个 Emoji 并本地加载该 Emoji 对应的图片
 ```
 
-_由于 Emoji 被 "字符化"，网络传输效率大大提高。除此之外，你甚至可以在记事本里直接输入 Emoji_
+由于 Emoji 被 "字符化"，网络传输效率大大提高。除此之外，你甚至可以这样写代码:
+
+```javascript
+["😎", "😀", "😅", "🤐"].forEach(console.log);
+```
+
+注意: 虽然 Emoji 被加入 Unicode, 但是不同设备实际渲染出的图像却可能不同，这是因为不同的厂商有不同的 Emoji 设计风格。你可以试一下在苹果生态和微软生态查看这篇博客中的 Emoji, 观察一下是否有区别
 
 #### Fonts
 
@@ -151,7 +157,7 @@ _由于 Emoji 被 "字符化"，网络传输效率大大提高。除此之外，
 
 Helvetica 是种常见的拉丁字体，只负责 200 多个拉丁字符的样式对应。而 Microsoft Yahei 包含了许多其他字符, 比如 CJK (Chinese, Japanese, Korean) 字符，加起来一共将近 30,000 字符。由于 Microsoft Yahei 的字符集是 Helvetica 的 15 倍左右，而且通常非拉丁文字符的样式定义比较复杂，所以通常 Microsoft Yahei 的字体文件也比 Helvetica 的要大很多。
 
-我做过一个测试，在网络上下载了这 2 种字体文件，Microsoft Yahei.ttf 大约是 14 MB, 而 Helvetica.ttf 只有 311 KB。之前有在油管看到视频，谈及中国和外国的 Web 开发有什么区别，其中一点是中国的 Web 开发者没有引入字体文件的习惯，我想中文字体的体积相对较大也是原因之一。
+我做过一个测试，在网络上下载了这 2 种字体文件，Microsoft Yahei.ttf 大约是 14 MB, 而 Helvetica.ttf 只有 311 KB。之前有在油管看到视频，谈及中国和国外的 Web 开发有什么区别，其中一点是国内的 Web 开发者没有引入字体文件的习惯，我想中文字体的体积相对较大也是原因之一。
 
 #### 参考资料
 

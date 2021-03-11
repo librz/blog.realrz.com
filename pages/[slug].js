@@ -63,13 +63,10 @@ export async function getStaticPaths() {
   const fs = require("fs");
   const path = `${process.cwd()}/contents`;
   const files = fs.readdirSync(path, "utf-8");
-
-  const slugs = files
-    .filter((fn) => fn.endsWith(".md"))
-    .map((fn) => fn.replace(".md", ""));
+  const slugs = files.filter(fn => fn.endsWith(".md")).map(fn => fn.replace(".md", ""));
 
   return {
-    paths: slugs.map((slug) => ({
+    paths: slugs.map(slug => ({
       params: { slug },
     })),
     fallback: true,
