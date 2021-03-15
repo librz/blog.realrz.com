@@ -8,19 +8,20 @@ function err {
 }
 
 echo "----"
-echo "checking new commits in remote repo"
-if fetchResult=$(git fetch origin); then
-	if [[ -z "$fetchResult" ]]; then
-		echo "already the latest code, no need to update"
-		exit 0
-	else 
-		echo "merging with origin/main"
-		git merge origin/main
-	fi
-else
+echo "checking to see if local code if up to date"
+if ! git fetch origin; then
 	err "faile to run git fetch, check your network connectivity"
 	exit 1
 fi
+
+if [[ -z $(git diff origin/main) ]]; then
+	echo "you already have the latest code"	
+	exit
+else
+	echo "merging with origin/main"
+	git merge origin/main
+fi
+echo -e "\n\n\n"
 
 # check whether there's a process running on port 9001
 # if there is, kill it
