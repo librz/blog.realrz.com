@@ -10,17 +10,23 @@ function err {
 echo "----"
 echo "checking to see if local code if up to date"
 if ! git fetch origin; then
-	err "faile to run git fetch, check your network connectivity"
+	err "fail to run git fetch, check your network connectivity"
 	exit 1
 fi
 
 if [[ -z $(git diff origin/main) ]]; then
 	echo "you already have the latest code"	
-	exit
+	echo "this may happen when you used git pull or git merge mannually"
+	echo "or there's no new changes on the remote repo"
+	read -r -p "still want to build & deploy anyway? (Y/N)" answer
+	if [[ "$answer" == "N" || "$answer" == "n" ]]; then
+	   exit
+	fi	   
 else
 	echo "merging with origin/main"
 	git merge origin/main
 fi
+
 echo -e "\n\n\n"
 
 # check whether there's a process running on port 9001
