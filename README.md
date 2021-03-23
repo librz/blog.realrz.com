@@ -22,7 +22,7 @@ npm install
 
 note: to use npm, you should have node installed
 
-### dev
+### run project locally
 
 - start dev server: npm run dev
 
