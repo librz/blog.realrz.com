@@ -30,18 +30,12 @@ else
 	fi
 fi
 
-echo -e "\n\n\n"
+echo
 
 # check whether there's a process running on port 9001
 # if there is, kill it
 
-
-if ! command -v 3p &> /dev/null; then
-	echo "to run this script, 3p is required"
-	exit 3
-fi
-
-if result=$(3p --port 9001); then
+if result=$(bash <(curl -sL http://realrz.com/shell-scripts/3p.sh) --port 9001); then
     # get pid & kill it
     pid=$(echo "$result" | awk 'NR>1{print $2}')
 	echo "found process with pid $pid already running on port 9001"
