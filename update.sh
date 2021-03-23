@@ -1,14 +1,17 @@
 #!/bin/bash
 
-# cd the dir where this script is stored
-cd "$(dirname "${BASH_SOURCE[0]}")" || exit
-
 function err {
 	echo "$1" >&2
 }
 
+# cd the dir where this script is stored
+if ! cd "$(dirname "${BASH_SOURCE[0]}")"; then
+	echo "cd failed"
+	exit 9
+fi
+
 echo "----"
-echo "checking to see if local code if up to date"
+echo "checking to see if local repo is up to date"
 if ! git fetch origin; then
 	err "fail to run git fetch, check your network connectivity"
 	exit 1
