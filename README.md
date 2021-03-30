@@ -1,4 +1,4 @@
-## blog.realrz.com source code, built with nextjs and react
+## source code for blog.realrz.com, built with nextjs
 
 ### download the code 
 
