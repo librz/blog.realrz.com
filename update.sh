@@ -11,7 +11,7 @@ if ! cd "$(dirname "${BASH_SOURCE[0]}")"; then
 fi
 
 echo "----"
-echo "checking to see if local repo is up to date"
+echo "check to see if local repo is up to date"
 if ! git fetch origin; then
 	err "fail to run git fetch, check your network connectivity"
 	exit 1
