@@ -1,6 +1,6 @@
 ## blog.realrz.com source code, built with nextjs and react
 
-### first-time setup
+### download the code 
 
 1. git clone
 

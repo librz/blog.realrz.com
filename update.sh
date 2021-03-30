@@ -22,7 +22,7 @@ if [[ -z $(git diff origin/main) ]]; then
 	echo "this may happen when you used 'git pull' or 'git merge' mannually"
 	echo "or simply there's nothing new on the remote repo"
 	read -r -p "still want to build & deploy anyway? (Y/N) " answer
-	if [[ "$answer" =~ [nN][oO]* ]]; then
+	if [[ "$answer" =~ ^[nN][oO]? ]]; then
 	   exit
 	fi	   
 else
