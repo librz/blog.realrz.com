@@ -4,13 +4,13 @@
 
 1. git clone
 
-- using http (for anyone other than owner of this repo)
+- using http (if you are not owner of this repo)
 
 ```sh
 git clone https://github.com/librz/blog.realrz.com.git
 ```
 
-- using ssh (for the owner of this repo)
+- using ssh (if you are the owner of this repo)
 
 ```sh
 git clone git@github.com:librz/blog.realrz.com.git
