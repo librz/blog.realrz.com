@@ -54,4 +54,4 @@ npm run update
 
 update workflow: get the latest code, build it, kill the old process and start a new one
 
-note: this only works on Ubuntu server, running this on mac or windows will throw errors
+note: this only works on Ubuntu server, running on mac or windows will throw errors
