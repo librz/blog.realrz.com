@@ -86,6 +86,18 @@ box.addEventListener("wheel", function(e) {
 
 What is this `deltaY` thing? It turns out to be a parameter associated with your mouse that indicates how much the mouse wheel(not the page) has scrolled vertically. It comes in handy for direction detection: the value is positive if scroll down, negative if scroll up. 
 
+#### About scroll-chain & overscroll-behavior
+
+Think of a scenario where a box and it's container are both scrollable.
+
+If you scroll insdie the box, by default, when it hasn't scrolled to bottom, only the box will scroll, it's container won't. However, if you scrolled to the bottom and keep scrolling, it's container will start to scroll. This is called scroll-chain.
+
+But sometimes, you don't want this default behavior, that is, when the box has scrolled to the bottom, do not scoll it's container when keep scrolling.
+
+Well, we could set `overscroll-behavior` to `contain` to do this. (till 2021-08-24, safari still doesn't support this)
+
+For details, see [MDN overscroll-behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior)
+
 ####  Style scrollbar
 
 You may have noticed on different platforms, default scrollbar style differs. This inconsistency could harm UI experience.
@@ -120,12 +132,4 @@ Firefox's Gecko offers fewer but simpler css props for scrollbar styling, named 
   scrollbar-color: #C1C1C1 #F5F5F7; // thumb bgcolor & track bgcolor
 }
 ```
-
-
-
-
-
-
-
-
 
