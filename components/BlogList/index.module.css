@@ -1,0 +1,40 @@
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.blog-item {
+  cursor: pointer;
+  padding: 12px 16px;
+  line-height: 1.2;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.blog-item .blog-date {
+  display: block;
+  color: var(--text-clickable-light);
+  font-size: 16px;
+  opacity: .8;
+  margin-bottom: 8px;
+}
+
+.blog-item .blog-title {
+  font-size: 20px;
+  text-decoration: none;
+  font-weight: 700;
+  color: #000;
+}
+
+.blog-item:hover {
+  background-color: royalblue;
+}
+
+.blog-item:hover .blog-date {
+  color: whitesmoke;
+}
+
+.blog-item:hover .blog-title {
+  color: #fff;
+}
