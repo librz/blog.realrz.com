@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev -p 9001",
     "build": "next build",
-    "serve": "nohup next start -p 9001 &",
+    "serve": "next build && nohup next start -p 9001 &",
     "update": "bash update.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
