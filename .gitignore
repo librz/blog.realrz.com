@@ -1,5 +1,4 @@
 node_modules
 .next
-nohup.out
 temp*
 test.*
