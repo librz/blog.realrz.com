@@ -44,9 +44,11 @@ server {
 
 nginx, upon receiving a request will proxy it to port 9001
 
-### serve
+### deployment 
 
-npm run serve
+```sh
+pm2 start npm --name "blog.realrz.comk" -- run serve
+```
 
 #### upate
 
