@@ -2,3 +2,4 @@ node_modules
 .next
 temp*
 test.*
+.yarn

@@ -47,7 +47,7 @@ nginx, upon receiving a request will proxy it to port 9001
 ### deployment 
 
 ```sh
-pm2 start npm --name "blog.realrz.comk" -- run serve
+pm2 start yarn --name "blog.realrz.com" -- serve
 ```
 
 #### upate
