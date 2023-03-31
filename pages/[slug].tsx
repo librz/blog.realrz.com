@@ -1,4 +1,12 @@
-import React, { CSSProperties } from "react";
+import { CSSProperties } from "react";
+const fs = require("fs");
+import matter from "gray-matter"; // transfer markdown text into an object with data attr as metadata and content as the actually content
+import { unified } from "unified";
+import markdown from "remark-parse"; // parsing markdown using remark
+import remark2rehype from "remark-rehype"; // bridge between remark and rehype
+import doc from "rehype-document"; // parse html using rehype
+import html from "rehype-stringify"; // stringify
+import highlight from "rehype-highlight"; // code highlighting by injecting class names into html
 import AppWrapper from "../components/AppWrapper";
 import Head from "next/head";
 // import theme from hightlight.js
@@ -27,21 +35,13 @@ function BlogPostPage({ title, htmlString }) {
 
 // grap the markdown file matching corresponding slug, parse it to html string
 export async function getStaticProps(context) {
-  const fs = require("fs");
-  const matter = require("gray-matter"); // transfer markdown text into an object with data attr as metadata and content as the actually content
-  const unified = require("unified");
   // a bunch of middlewares
-  const markdown = require("remark-parse"); // parsing markdown using remark
-  const remark2rehype = require("remark-rehype"); // bridge between remark and rehype
-  const doc = require("rehype-document"); // parse html using rehype
-  const html = require("rehype-stringify"); // stringify
-  const highlight = require("rehype-highlight"); // code highlighting by injecting class names into html
 
   const { slug } = context.params; // params <- getStaticPaths
   const path = `${process.cwd()}/contents/${slug}.md`;
   const rawContent = fs.readFileSync(path, { encoding: "utf-8" });
   const { data, content } = matter(rawContent);
-  const { contents: htmlString } = await unified()
+  const result = await unified()
     .use(markdown)
     .use(remark2rehype)
     .use(doc, { title: data["title"] })
@@ -52,7 +52,7 @@ export async function getStaticProps(context) {
   return {
     props: {
       ...data,
-      htmlString,
+      htmlString: result.value
     },
   };
 }
@@ -60,7 +60,6 @@ export async function getStaticProps(context) {
 // grab all the slugs corresponding to markdown files
 // and pre-render them at build time
 export async function getStaticPaths() {
-  const fs = require("fs");
   const path = `${process.cwd()}/contents`;
   const files = fs.readdirSync(path, "utf-8");
   const slugs = files.filter(fn => fn.endsWith(".md")).map(fn => fn.replace(".md", ""));
