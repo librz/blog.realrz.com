@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import AppWrapper from "../components/AppWrapper";
 import BlogList from "../components/BlogList";
 import Head from "next/head";

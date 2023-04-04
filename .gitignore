@@ -3,3 +3,4 @@ node_modules
 temp*
 test.*
 .yarn
+yarn-error.log

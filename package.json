@@ -7,6 +7,7 @@
     "dev": "next dev -p 9001",
     "build": "next build",
     "serve": "next build && next start -p 9001",
+    "lint": "next lint",
     "update": "bash update.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +31,8 @@
   "devDependencies": {
     "@types/node": "18.15.11",
     "@types/react": "18.0.31",
+    "eslint": "8.37.0",
+    "eslint-config-next": "13.2.4",
     "typescript": "5.0.3"
   }
 }
