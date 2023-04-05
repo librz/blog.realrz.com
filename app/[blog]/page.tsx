@@ -32,7 +32,7 @@ const Blog = async (props) => {
     .process(content);
 
   return (
-    <article className='prose lg:prose-xl'>
+    <article className='prose lg:prose-lg my-4'>
       <h2 style={{ textAlign: "center", color: "royalblue" }}>{data["title"]}</h2>
       <section dangerouslySetInnerHTML={{ __html: htmlString as string }} />
     </article>

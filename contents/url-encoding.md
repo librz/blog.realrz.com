@@ -7,7 +7,7 @@ category: other
 
 > 在 [Encoding](https://blog.realrz.com/encoding) 这篇博客里面我对 Encoding 进行了介绍，介绍了常见的字符编码，比如 ASCII 和 UTF-8。另一个常见的例子是 URL Encoding, 在 Web 开发中很常见。可是为什么需要对 URL 进行编码呢？具体怎么实现？
 
-#### URL Encoding
+### URL Encoding
 
 URL 中含有一些特殊字符表达特殊的含义，比如 ? 表示 URL Parameter(s) 的开始, = 用于连接属性和值，& 用于连接多个键值对:
 
@@ -41,7 +41,7 @@ http://example.com?name=jo&h=n&age=10
 
 这样以来 URL 就可以正确解析了，解析之后对属性值再进行解码就得到了它们原本的样子
 
-#### application/x-www-form-urlencoded
+### application/x-www-form-urlencoded
 
 从 Web 页面发起 http 请求的实现方式大体可以分为 2 种: 直接使用 form 表单 & 手动使用 JS 做 XHR 请求
 
@@ -83,7 +83,7 @@ name=John+Williams&email=john%40gmail.com
 
 编码方面, 邮件中的 @ 号按照 Percent Encoding 被编码为 %40, 但 John 和 Williasm 之间的空格被编码为了 + 号而不是标准 Percent Encoding 中的 %20, 这个是因为 x-www-form-urlencoded 用了比较早的 Percent Encoding 标准, 可以认为是个历史遗留问题
 
-#### 参考资料
+### 参考资料
 
 1. [MDN: HTTP POST Request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST)
 2. [MDN: Percent Encoding](https://developer.mozilla.org/en-US/docs/Glossary/percent-encoding)

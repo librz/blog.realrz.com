@@ -7,7 +7,7 @@ category: other
 
 > IDEs come and go, vim will always stay
 
-#### an overview of vim
+### an overview of vim
 
 说起 vim 你会想起什么?
 

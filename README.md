@@ -50,7 +50,7 @@ nginx, upon receiving a request will proxy it to port 9001
 pm2 start yarn --name "blog.realrz.com" -- serve
 ```
 
-#### upate
+### upate
 
 npm run update
 

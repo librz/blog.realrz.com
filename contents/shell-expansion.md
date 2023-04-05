@@ -7,7 +7,7 @@ category: linux
 
 > Shell 在执行命令之前会检查命令中是否有特殊的语法。如果有，这些语法会被解析，其所修饰的部分会被替换为具有实际意义的字符串，这个过程被称为 shell expansion
 
-#### tab 补全 (tab completion)
+### tab 补全 (tab completion)
 
 很多人知道点击 tab 键可以进行自动补全。比如当前文件夹下有个名为 user_payment_data.txt 的文件，而我们想打印其中的内容:
 
@@ -21,7 +21,7 @@ cat user_p
 
 filename expansion 的高级用法是 file globbing, 我在 [这篇博客](https://www.blog.realrz.com/file_globbing) 中进行了单独介绍
 
-#### 变量求值 (variable evaluation)
+### 变量求值 (variable evaluation)
 
 无论是 shell 的环境变量，还可以是用户自定义的变量，都会经历被求值的过程
 
@@ -38,7 +38,7 @@ echo $age
 
 age 是用户自定义的变量，它会被替换为 20
 
-#### 子命令执行 (sub-command execution)
+### 子命令执行 (sub-command execution)
 
 还记得 shell 获取子命令执行结果的语法吗？
 
@@ -56,7 +56,7 @@ echo $(whoami)
 
 如果当前用户名为 john, 那么这行命令会被 expand 为 echo john
 
-#### 花括号扩展 (brace expansion)
+### 花括号扩展 (brace expansion)
 
 花括号扩展常常用于批处理，用的熟练可以节时提效
 
@@ -74,7 +74,7 @@ touch a{1..99}.txt
 
 这将创建 a1.txt a2.txt ... a99.txt 这 99 个文件
 
-#### 波浪扩展 (tilde expansion)
+### 波浪扩展 (tilde expansion)
 
 这个可以认为是个特例，在 shell 里波浪符(~)会被替换为用户的 home directory
 
@@ -84,6 +84,6 @@ cd ~/code
 
 进入到 home directory 底下的 code 文件夹
 
-#### 注意: 单引号和双引号
+### 注意: 单引号和双引号
 
 单引号内的内容不会被 shell 做任何处理，字面上是什么就是什么(literal)。shell expansion 也不例外，只有在没有引号或者双引号内才会生效。

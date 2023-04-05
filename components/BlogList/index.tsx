@@ -25,7 +25,7 @@ const BlogList: FC<IProps> = ({ blogs }) => {
             className="group cursor-pointer px-4 py-2 rounded-md hover:bg-gradient-to-r from-violet-500 to-fuchsia-500"
           >
             <span className="text-sm text-gray-600 group-hover:text-gray-200">{date}</span>
-            <div className="text-lg text-neutral-700 group-hover:text-white">{title}</div>
+            <div className="text-lg text-zinc-700 group-hover:text-white">{title}</div>
           </Link>
         );
       })}

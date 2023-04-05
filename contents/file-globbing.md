@@ -7,18 +7,18 @@ category: linux
 
 > File Globbing 是 shell 提供的一种简单字符匹配机制，用于匹配文件名
 
-#### 很像正则但不是正则
+### 很像正则但不是正则
 
 说起字符匹配很多人第一反应可能是正则表达式(regular expression)。诚然，正则表达式是最常用的机制，但其只是字符匹配的一种实现方式，可以认为 File Globbing 是正则的一种简化形式。
 
-#### wildcard
+### wildcard
 
 wildcard 是一个特殊的字符，可以用它当做占位符，可以表示任意字符:
 
 1. \* 表示 0 个或多个任意字符
 2. ? 表示一个任意字符
 
-#### 字符集合 (character set)
+### 字符集合 (character set)
 
 用于匹配时，一般使用方括号 [] 表示字符集合, e.g.
 

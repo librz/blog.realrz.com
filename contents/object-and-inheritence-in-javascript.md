@@ -7,7 +7,7 @@ category: javascript
 
 > JavaScript 在设计时参考了 Java 的语法，从 Scheme 那里借鉴了函数式编程的思想，而基于原型的面向对象设计是向 Self 学习的结果。本文对 JavaScript 中面向对象的部分进行说明
 
-#### 面向对象(OOP)的 2 种实现思路
+### 面向对象(OOP)的 2 种实现思路
 
 _(1) 类作为实例的蓝图 (Class As Blueprint)_
 
@@ -17,7 +17,7 @@ _(2) 对象作为原型 (Object As Prototype)_
 
 在基于类的面向对象模型中，对象不能脱离类而存在，这要求程序员先创建一堆模版才能进行下一步工作。而基于原型的 OOP 设计则认为类是不必要的，可以直接 Reference 其他对象的属性来获取某种特性(属性或者方法)，这里的“其他对象”被称为“原型”。有些人把这种直接 Reference 的方式称为借用或者委托(Delegation)。采用这种设计的语言屈指可数，JavaScript 就是其中之一。
 
-#### 函数，函数，函数!
+### 函数，函数，函数!
 
 在 JavaScript 中函数是一等公民，你可以把函数当成一个普通的值，把它赋给变量。但函数如此重要，以至于你可以把它看作特等公民。
 
@@ -70,7 +70,7 @@ Person.purpose = "创造实例"；
 console.log(john.purpose); // undefined
 ```
 
-#### 内置对象 Object 及 Object.prototype
+### 内置对象 Object 及 Object.prototype
 
 到底什么是一门编程语言呢？在王垠的 [如何掌握所有的程序语言](http://www.yinwang.org/blog-cn/2017/07/06/master-pl) 一文中, 他把语言比做组装机，其部件是语言特性：
 
@@ -121,7 +121,7 @@ obj.hasOwnProperty reference 了 Object.prototype 的 hasOwnProperty 方法: `Ob
 
 这种 reference 其实就是原型链的追溯，下文会展开。现在只要知道 Object.prototype.constructor 和 Object.protoype.hasOwnProperty 存在及其作用。
 
-#### 对象的创建和原型链
+### 对象的创建和原型链
 
 在 JavaScript 中有多种创建对象的方式，下文在介绍这些方式的同时也解释了什么是原型链。
 
@@ -259,7 +259,7 @@ console.log(john.hasOwnProperty("name")); // 报错, hasOwnProperty 是 Object.p
 console.log(john.toString()); // 报错，toString 是 Object.prototype 的方法，john 不能追溯到 Object.prototype
 ```
 
-#### 与原型链有关的操作符和方法
+### 与原型链有关的操作符和方法
 
 还是以 Person 为例：
 
@@ -349,7 +349,7 @@ console.log(proto === Person.prototype); // true
 
 注意: 你可能使用过 `john.__proto__` 的方式来获取实例 john 的原型, 但 MDN 推荐使用 Object.getPrototypeOf 方法
 
-#### 更多例子：数组和函数的原型链
+### 更多例子：数组和函数的原型链
 
 JavaScript 有很多内置对象，这里对 Array 和 Function 为例对其原型链进行说明。首先要明确一点：JavaScript 把一切类型简单分为 2 种：基本类型和对象。简单直接，这意味着类似数组和函数也是对象。
 

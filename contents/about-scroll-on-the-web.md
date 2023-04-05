@@ -5,7 +5,7 @@ language: en-US
 category: other
 ---
 
-#### overflow
+### overflow
 
 When a box doesn't have engough space to hold its content, it has a few choices, the most common ones are:
 
@@ -23,7 +23,7 @@ Sometimes, dimension of content could be dynamic, when content container has eno
 
 PS: you can also specify overflow direction using `overflow-x` and `overflow-y`
 
-#### Track Scroll Position
+### Track Scroll Position
 
 When tracking element scroll position, those props come in handy (suppose we are talking about vertical scrolling)
 
@@ -48,7 +48,7 @@ function scrolledToBottom(box) {
 }
 ```
 
-#### Detect scroll direction
+### Detect scroll direction
 
 This task on itself is quite simple, all we need to do is record last scroll position, and compare it with current scroll position:
 
@@ -86,7 +86,7 @@ box.addEventListener("wheel", function(e) {
 
 What is this `deltaY` thing? It turns out to be a parameter associated with your mouse that indicates how much the mouse wheel(not the page) has scrolled vertically. It comes in handy for direction detection: the value is positive if scroll down, negative if scroll up. 
 
-#### About scroll-chain & overscroll-behavior
+### About scroll-chain & overscroll-behavior
 
 Think of a scenario where a box and it's container are both scrollable.
 
@@ -98,7 +98,7 @@ Well, we could set `overscroll-behavior` to `contain` to do this. (till 2021-08-
 
 For details, see [MDN overscroll-behavior](https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior)
 
-####  Style scrollbar
+###  Style scrollbar
 
 You may have noticed on different platforms, default scrollbar style differs. This inconsistency could harm UI experience.
 

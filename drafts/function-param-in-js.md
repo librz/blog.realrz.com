@@ -7,7 +7,7 @@ category: javascript
 
 > 高级语言中函数的概念来自于汇编中的 Subroutine, 通过对功能进行切割让代码更加模块化，实现了代码复用。本文是对 JavaScript 中函数参数的介绍
 
-#### 函数的原型链
+### 函数的原型链
 
 为了能深入了解函数，首先要清晰函数的原型链。
 
@@ -22,7 +22,7 @@ console.log(param.constructor === Function); // true
 console.log(Function.constructor === Function); // true
 ```
 
-#### length 属性: 函数期待的参数数量
+### length 属性: 函数期待的参数数量
 
 函数对象本身都有 length 属性:
 
@@ -67,7 +67,7 @@ add(10, 20); // 打印 2
 add(10, 20, 30); // 打印 2
 ```
 
-#### arguments: 函数运行时才有效
+### arguments: 函数运行时才有效
 
 arguments 提供了一种 reference 参数的方式, 只有在函数内部才有意义:
 
@@ -103,7 +103,7 @@ add(10, 20, 30); // 依次打印 3 10 20 30 Object
 
 arguments 作为一个 Array-Like 对象一直被人们诟病。程序员必须把它当做一个特殊对象来看，不能直接看做是普通数组，这显然加大了心智负担。而且 JavaScript 允许通过下标设置其中的元素, 这有时会生效有时又不会，造成了各种难以理解的 bug, 这里不做展开，只建议不要对 arguments 进行写入操作，把它看成只读对象。
 
-#### rest operator: 天下苦 arguments 久矣
+### rest operator: 天下苦 arguments 久矣
 
 和 arguments 一样，rest operator 也提供已一种 reference 参数的方式。但它确比 arguments 对象更加容易使用。
 

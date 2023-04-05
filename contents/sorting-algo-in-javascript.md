@@ -5,40 +5,41 @@ language: zh-CN
 category: other
 ---
 
-#### 快排 (quick sort)
+### 快排 (quick sort)
 
-_递归型算法。随便从数组中选个数作为标准（pivot），对数组进行遍历，遍历过程中将当前元素和标准进行大小比较，这样就能把数组分为 3 组。利用递归一直分，分到不能再分为止。如果熟悉递归，这个思考模型简单直接。_
+_递归型算法。随便从数组中选个数作为标准（pivot），对数组进行遍历，遍历过程中将当前元素和 `pivot` 进行大小比较，这样就能把数组分为 3 组。利用递归一直分，分到不能再分为止。如果熟悉递归，这个思考模型简单直接。_
 
 ```javascript
 function quickSort(arr) {
   if (arr.length < 2) return arr;
   const pivot = arr[0];
   // pivot is just a number, you can use any number in the array as pivot
-  const low = [];
-  const middle = [];
-  const high = [];
+  // I'm using the first element as pivot because it's guaranteed to exist
+  const lows = [];
+  const equals = [];
+  const highs = [];
   for (let i = 0; i < arr.length; i++) {
     if (arr[i] < pivot) {
-      low.push(arr[i]);
+      lows.push(arr[i]);
     } else if (arr[i] === pivot) {
-      middle.push(arr[i]);
+      equals.push(arr[i]);
     } else {
-      high.push(arr[i]);
+      highs.push(arr[i]);
     }
   }
-  const sortedLow = quickSort(low);
-  const sortedHigh = quickSort(high);
-  return [...sortedLow, ...middle, ...sortedHigh];
+  const sortedLows = quickSort(lows);
+  const sortedHighs = quickSort(highs);
+  return sortedLows.concat(equals).concat(sortedHighs);
 }
 ```
 
-pivot 用作动词是改变方向或旋转的意思，用作名词可以译为转折点：He's the pivot of my life. 他是我人生的转折点。
+`pivot` 用作动词是改变方向或旋转的意思，用作名词可以译为转折点：`He's the pivot of my life`. 他是我人生的转折点。
 
-上面代码中用 pivot 表示那个选中的标准非常形象，拿数组中的其他元素和这个 pivot 进行大小比较，根据结果分到 low, middle, high 这 3 个数组中去，这个过程其实就是 pivot (动词)。
+上面代码中用 `pivot` 表示那个选中的标准非常形象，拿数组中的其他元素和这个 `pivot` 进行大小比较，根据结果分到 `lows, equals, highs` 这 3 个数组中去，这个过程其实就是 `pivot` (动词)。
 
 时间复杂度: O(n \* log n)
 
-#### 插入排序 (insertion sort)
+### 插入排序 (insertion sort)
 
 _不断把未排序的元素插入到已经排好序的数组中。通过 2 层循环实现，外层循环进行简单遍历，内层循环负责插入操作。_
 
@@ -63,7 +64,7 @@ function insertionSort(arr) {
 
 时间复杂度: O(n^2)
 
-#### 选择排序 (selection sort)
+### 选择排序 (selection sort)
 
 _将数组分为两部分，一部分是已经排序，一部分是未排序。不断扩充已排序数组，直到没有未排序的数组为止。通过 2 层循环实现，内层循环用于寻找未排序数组中最小的值，在外层循环中进行 swap 和遍历。_
 
@@ -89,7 +90,7 @@ function selectionSort(arr) {
 
 时间复杂度：O(n^2)
 
-#### 冒泡排序 (bubble sort)
+### 冒泡排序 (bubble sort)
 
 _2 层循环，外层循环进行简单的遍历；内层循环是关键，遍历数组，在遍历的过程中对数组中相邻元素进行比较，如果发现右边的元素比左边的小，就互换位置。_
 
@@ -113,6 +114,6 @@ function bubbleSort(arr) {
 
 时间复杂度：O(n^2)
 
-#### 归并排序 (merge sort)
+### 归并排序 (merge sort)
 
 > 未完，会再写

@@ -7,13 +7,13 @@ category: other
 
 > Web 被构建之初没有把安全放在首要位置，导致出现了很多安全漏洞。跨站脚步攻击（XSS）是最常见的攻击方式之一。
 
-#### 原理
+### 原理
 
 攻击者向服务器发送含有 JavaScript 脚本的文本，如果服务器不对用户提交的文本进行检测和清洗，当有需要在 HTML 中展示这些文本时，含在其中的 JavaScript 脚本就会被执行。
 
 XSS 不直接对服务器进行攻击，而是利用 DOM 的特征和客户端 JavaScript 来攻击使用网站的用户，可以简单认为 XSS 的原理是客户端 JavaScript 注入。比如通过 JavaScript 脚本获取用户的 Cookie，LocalStorage 内存储的信息，重定向到恶意网站等。根据脚本是否被存储在服务器上，XSS 可以分为反射型和存储型。
 
-#### 存储型（Stored XSS）
+### 存储型（Stored XSS）
 
 存储型 XSS 的攻击脚本会被服务器（通常是服务器上数据库）持久存储，所以又叫持久 XSS（Persistent XSS）。
 
@@ -55,7 +55,7 @@ userColor 是用户提交的自定义颜色，如果攻击者提交的是 `blue'
 
 其他用户点击攻击者的用户名 king_of_the_world 就会触发恶意脚本。这样的攻击就稍微复杂了点，一种简单的防御策略是检测 onclick 关键字，但 DOM 事件远不止这一个，需要遍历所有事件名才能比较好的防止这种攻击。
 
-#### 反射型（Reflected XSS）
+### 反射型（Reflected XSS）
 
 反射型 XSS 不像存储型一样通过将含有恶意脚本存储到服务器上，所以也叫非持久型 XSS（Non-Persistent XSS）。
 

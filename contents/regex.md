@@ -7,7 +7,7 @@ category: other
 
 > 字符串是单个字符排列组合的结果，当我们做字符串匹配的时候就需要一种描述这种排列组合关系的工具或者语言，这就是正则表达式诞生的背景
 
-#### DSL
+### DSL
 
 DSL 是 Domain Specific Language 的缩写，它不是一种通用的语言，而是为了解决某一类特殊领域的问题而发明的专用语言。SQL 和 AWK 这种语言都是 DSL，不能解决通用的问题，但是在自己的领域能够大大提升工作效率。
 
@@ -15,11 +15,11 @@ DSL 是 Domain Specific Language 的缩写，它不是一种通用的语言，�
 
 注意：正则表达式本身并不能解决字符匹配问题，只是一种描述匹配目标的语言，执行环境会对正则表达式进行解析，并使用相关的算法进行实际的字符匹配。
 
-#### 标志 (indicator)
+### 标志 (indicator)
 
 正则表达式本身也是一个字符串, 一般用斜杠(/)进行标记: /正则表达式内容/，这告诉执行环境：这是一个正则表达式，你应该按照相关的规则去进行解析。
 
-#### 元字符和字面字符 (meta & literal characters)
+### 元字符和字面字符 (meta & literal characters)
 
 正则表达式中的所有字符可以分为两类：元字符(meta character) 和字面字符(literal character)
 
@@ -37,7 +37,7 @@ DSL 是 Domain Specific Language 的缩写，它不是一种通用的语言，�
 
 `/abc/` 要求目标中含有 "abc" 这串字符
 
-#### 锚定 (Anchoring)
+### 锚定 (Anchoring)
 
 可以将要匹配的字符的称为目标, 正则表达式其实就是在描述目标的模式(pattern), 通俗一点说就是目标长的样子。
 
@@ -55,7 +55,7 @@ DSL 是 Domain Specific Language 的缩写，它不是一种通用的语言，�
 
 `/^cat$/` 只会匹配 cat
 
-#### 通配符(wildcard)
+### 通配符(wildcard)
 
 通配符表示任意一个字符，在正则表达式里用点(.)来标记:
 
@@ -63,7 +63,7 @@ DSL 是 Domain Specific Language 的缩写，它不是一种通用的语言，�
 
 注意: 通配符并不能表示终止字符(terminators): line feed(\n), carriage return (\r)
 
-#### 数词 (numeral)
+### 数词 (numeral)
 
 自然语言中的数词用于描述名词的数量，一般有“数词 + 名词”这样的语法，比如 "一张桌子"。
 
@@ -85,7 +85,7 @@ e.g.
 
 `/colou?r/` 表示 color 或者 colour
 
-#### 字符集合 (character set)
+### 字符集合 (character set)
 
 有的时候需要对某个位置的字符进行限定，比如规定某个位置的字符只能是 a 或者 b 或者 c, 这时候就需要用到字符集合。
 
@@ -104,7 +104,7 @@ e.g.
 - [^2-6] 表示一个字符，这个字符不是数字 2,3,4,5,6
 - [^2-6a-z] 表示一个字符，这个字符不是数字 2,3,4,5,6 也不是小写字母
 
-#### 使用数词修饰字符集合 (combine character set with numerals)
+### 使用数词修饰字符集合 (combine character set with numerals)
 
 字符集合本身其实带有默认的数词，也就是是 1。比如 [a-z] 表示任意“一个”小写英文字母。我们可以用数词来修饰字符集合：
 
@@ -112,7 +112,7 @@ e.g.
 
 `/[ \t]*/` 表示目标为任意长度的 space 和 tab 以任意方式进行排列组合
 
-#### 子表达式 (sub-expression)
+### 子表达式 (sub-expression)
 
 有的时候一个正则表达式可能不足以描述要匹配目标，这时可以创建 2 个或多个子表达式，通过组装子表达式来解决问题。e.g.
 
@@ -120,7 +120,7 @@ e.g.
 
 为了更清晰区分子表达式还可以用括号把子表达式括起来: `/(^ +)|( +$)/`
 
-#### 转义字符 (escaping characters)
+### 转义字符 (escaping characters)
 
 转义就是通过修饰字符，使字符不表示原来的含义，从而表示新的含义。一般把反斜杠(`\`)放在字符前面进行转义:
 
@@ -146,7 +146,7 @@ e.g.
 
 3. 表示字符组 (下文会讲到)
 
-#### 字符组 (character class)
+### 字符组 (character class)
 
 要表示一个阿拉伯数字时会使用 `[0-9]`, 由于“阿拉伯数字”如此常用，为了方便，人们专门规定了它的简洁形式: `\d`
 
@@ -162,7 +162,7 @@ d 表示 digit, 此外，`\D` 可以用来表示"非阿拉伯数字"
 
 `\W` 和 `\w` 正好相反，表示一个不是 word character 的字符
 
-#### 标准: BRE, ERE 以及 PCRE
+### 标准: BRE, ERE 以及 PCRE
 
 BRE(Basic Regular Expression) 和 ERE(Extended Regular Expression) 是 POSIX 规定的两种正则表达式标准。根据 Wikipedia:
 
@@ -174,7 +174,7 @@ PCRE (Perl Compatible Regular Expression) 是被很多编程语言(Java, JavaScr
 
 ERE 是更加现代的标准，PCRE 使用了 ERE 标准并在其之上添加了一些功能，本文使用的是 ERE 标准
 
-#### 例子
+### 例子
 
 重要: 下面的例子中使用了 grep (linux 下一种命令行程序), 它会扫描输入中的每一行，如果该行符合搜索条件(正则表达式)就打印否则不做任何处理。grep 不使用斜杠(/)来标记正则表达式，因为 grep 基于正则表达式已经是个共识，没必要再进行标记。此外，-E 选项表示使用 ERE 标准。
 

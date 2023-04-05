@@ -7,7 +7,7 @@ category: other
 
 > 对小巧轻便的制品总是很喜欢，在众多数据库中 sqlite 把简单轻量诠释到了极致。本文是在学习 sqlite3 过程中记下的一些笔记，我不是专家，仅供参考。
 
-#### 环境设置
+### 环境设置
 
 sqlite 只需要安装，不需要任何配置即可使用。
 
@@ -15,7 +15,7 @@ sqlite 只需要安装，不需要任何配置即可使用。
 
 在 Linux 上安装: apt install sqlite3。检查 sqlite3 是否存在：which sqlite3
 
-#### 熟悉 sqlite 的命令行
+### 熟悉 sqlite 的命令行
 
 sqlite3 是一个命令行程序，在终端输入 sqlite3, 可以看到 prompt 变成了 sqlite>
 
@@ -26,7 +26,7 @@ sqlite3 是一个命令行程序，在终端输入 sqlite3, 可以看到 prompt 
 3. 清空 screen buffer：CTRL + L
 4. sqlite3 的命令行界面支持 tab completion
 
-#### 数据库级别的操作
+### 数据库级别的操作
 
 - 创建/打开 数据库
 
@@ -42,7 +42,7 @@ sqlite3 example.db
 .tables
 ```
 
-#### table 级别的 CRUD
+### table 级别的 CRUD
 
 - Create Table
 
@@ -69,7 +69,7 @@ alter table users add column phone text;
 drop table users;
 ```
 
-#### record 级别的 CRUD
+### record 级别的 CRUD
 
 - Create Record(s):
 

@@ -7,7 +7,7 @@ category: javascript
 
 > 不可否认，作为一个在 2 周内就设计完成的语言，JavaScript 本身有许多缺点。本文尝试列举 JavaScript 中那些差劲的特性
 
-#### typeof null === "object", typeof 函数 === "function"
+### typeof null === "object", typeof 函数 === "function"
 
 ```javascript
 typeof 1 === "number"; // true
@@ -43,7 +43,7 @@ if (hi instanceof Function) console.log("hi is a function");
 
 既然 instanceof 提供了检测函数的方法，typeof 再去做这件事情显得多余且令人困惑
 
-#### string primitive 有时会被隐式转为 string object
+### string primitive 有时会被隐式转为 string object
 
 还是这个简单的思维模型：javascript 把值的类型分为两种：基本类型和对象。
 
@@ -67,7 +67,7 @@ name 是 string literal (字符串字面量), 是个基本类型，不是对象�
 
 当碰到隐式类型转换或者语法糖这种东西，我的第一反应是要提高警惕，他们在提供方便的同时掩盖了事物的本质。
 
-#### 你可以不显式声明变量就进行初始化，而且这个变量将自动成为全局变量:
+### 你可以不显式声明变量就进行初始化，而且这个变量将自动成为全局变量:
 
 ```javascript
 function doSth() {
@@ -79,7 +79,7 @@ console.log(a);
 
 以上代码不会报错，而会正常打印出 10，这说明 a 跳出了函数 doSth 这个作用域成为了全局变量！这显然污染了全局作用域。
 
-#### 用 var 声明的变量会出现提升（hoisting）
+### 用 var 声明的变量会出现提升（hoisting）
 
 1. 用 var 声明的变量在代码执行前会被提到声明变量所在作用域顶部，造成变量没有声明就可以使用的假象
 
@@ -99,7 +99,7 @@ console.log(a);
 
 尽管 ES6 引入了 let 和 var 关键字，不会出现 hoisting 的问题。但是为了兼容性，var 关键字被留了下来。每次我看到代码里面有 var，就会不自主的提高警惕。
 
-#### NaN === NaN 是 false
+### NaN === NaN 是 false
 
 这个是最为人知的缺点之一，好在有补救方法, 可以使用 Number.isNaN 判断一个变量是不是 NaN
 
@@ -110,7 +110,7 @@ if (Number.isNaN(a)) {
 }
 ```
 
-#### 既有 null 又有 undefined
+### 既有 null 又有 undefined
 
 在程序语言设计界，一直有争论是否该在编程语言中设置一个表示 “空” 的值。但没有争论的是是否该有 2 个这样的值，遗憾的是 JavaScript 在设计的时候做出了糟糕的决定！
 
@@ -134,7 +134,7 @@ const bool1 = Boolean(null); // false
 const bool2 = Boolean(undefined); // false
 ```
 
-#### 默认参数之后可以有常规参数
+### 默认参数之后可以有常规参数
 
 JavaScript 运行默认参数，这本身是个好的主意，使得函数可以更加灵活。但要想让这个主意不造成可能得 bug，需要加一条限制：默认参数之后不能有常规参数。很遗憾，JavaScript 没有自带这个限制。
 
@@ -161,7 +161,7 @@ add(1, 2); // 显而易见 1 是形参 a 的实参，2 是形参 b 的实参
 
 遗憾的是 JavaScript 不会强制执行这样的规则。
 
-#### 默认参数传 undefined 相当于不传
+### 默认参数传 undefined 相当于不传
 
 ```javascript
 function isInt(val = 0) {
@@ -173,11 +173,11 @@ Number.isInterger(undefined); // false
 isInt(undefined); // true, 因为这相当于 getType()
 ```
 
-#### arguments 对象
+### arguments 对象
 
 arguments 提供了一种在函数体内部 reference 参数的方式。这本身是一个很好的想法
 
-#### class 关键字
+### class 关键字
 
 JavaScript 的继承机制是原型链（Prototype Chain），这和其他大多数语言中 class 作为实例的蓝图 (class as blueprint) 的机制有着根本的不同。然而在 ES6 中引入了 class 关键字，这么做完全是为了其他语言使用者能够在写 JavaScript 时“感到熟悉”。然而，这种语法糖掩盖了事情的本质，当使用者遇到了一些奇怪的现象时感到困惑却不知道怎么解决。
 
