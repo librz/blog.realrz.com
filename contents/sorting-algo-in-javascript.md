@@ -7,7 +7,7 @@ category: other
 
 ### 快排 (quick sort)
 
-_递归型算法。随便从数组中选个数作为标准（pivot），对数组进行遍历，遍历过程中将当前元素和 `pivot` 进行大小比较，这样就能把数组分为 3 组。利用递归一直分，分到不能再分为止。如果熟悉递归，这个思考模型简单直接。_
+递归型算法。从数组中选出任意一个元素作为**基准(pivot)**，对数组进行遍历，每次将当前元素和基准进行比较，这样就能把数组分为 3 组。使用递归一直分，分到不能再分为止。如果熟悉递归，这个思考模型简单直接。
 
 ```javascript
 function quickSort(arr) {
@@ -33,36 +33,40 @@ function quickSort(arr) {
 }
 ```
 
-`pivot` 用作动词是改变方向或旋转的意思，用作名词可以译为转折点：`He's the pivot of my life`. 他是我人生的转折点。
+**pivot** 用作动词是改变方向或转折的意思，用作名词可以译为转折点。那件事情是我人生的转折点可以说: *That event is the pivot of my life*
 
-上面代码中用 `pivot` 表示那个选中的标准非常形象，拿数组中的其他元素和这个 `pivot` 进行大小比较，根据结果分到 `lows, equals, highs` 这 3 个数组中去，这个过程其实就是 `pivot` (动词)。
+代码中用 **pivot** 表示选中的基准非常形象，拿数组中的其他元素和其进行比较，结果分到 *lows, equals, highs* 这 3 个数组中去。仔细想想，基准的作用其实就是**转折**。
 
-时间复杂度: O(n \* log n)
+时间复杂度: **O(n \* log n)**
 
 ### 插入排序 (insertion sort)
 
-_不断把未排序的元素插入到已经排好序的数组中。通过 2 层循环实现，外层循环进行简单遍历，内层循环负责插入操作。_
+认为数组中的第一个元素已经排好序，要做的工作是把其他元素 **插入** 到已排序数组中的合适位置。通过 2 层循环实现，外层循环遍历 **未排序元素**，内层循环遍历 **已排序数组** 以进行插入操作。
 
 ```javascript
 function insertionSort(arr) {
+  if (arr.length < 2) return arr;
   for (let i = 1; i < arr.length; i++) {
-    for (let j = i; j > 0; j++) {
-      // arr[j] is the number to be inserted
+    // arr[i] is the number to be inserted
+    for (let j = i; j > 0; j--) {
       if (arr[j] >= arr[j - 1]) break;
       // swap with the number before it
-      const temp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = temp;
+      const temp = arr[j];
+      arr[j] = arr[j - 1];
+      arr[j - 1] = temp;
     }
   }
 }
 ```
 
-注意插入的机制是不断把要插入元素与前一个元素进行比较，如果小于前一个元素就互换位置，直到前面一个元素比要插入元素小或者到达数组最左边为止。
+注意
+
+* 外层循环的 *index order* 是 *ascending* 的，而内层循环的 *index order* 是 *descending* 的
+* 插入的过程是不断和已排序数组中的前一个数值进行比较，如果小于就互换位置
 
 参考视频: [Insertion sort in 2 mins](https://www.youtube.com/watch?v=JU767SDMDvA)
 
-时间复杂度: O(n^2)
+时间复杂度: **O(n^2)**
 
 ### 选择排序 (selection sort)
 
