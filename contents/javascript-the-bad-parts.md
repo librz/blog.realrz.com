@@ -5,99 +5,7 @@ language: zh-CN
 category: javascript
 ---
 
-> 不可否认，作为一个在 2 周内就设计完成的语言，JavaScript 本身有许多缺点。本文尝试列举 JavaScript 中那些差劲的特性
-
-### typeof null === "object", typeof 函数 === "function"
-
-```javascript
-typeof 1 === "number"; // true
-typeof {} === "object"; // true
-typeof undefined === "undefined"; // true
-typeof null === "null"; // false
-typeof null === "object"; // object
-```
-
-javascript 把值的类型分为两种：基本类型和对象。
-
-1. null 属于基本类型，但 typeof null === "object"
-
-2. typeof 函数 === "function", 虽然看起来合理，但函数也是对象，这扰乱了“类型可以简单分为基本类型和对象”的思维模型
-
-```javascript
-function isObject(param) {
-  if (param === null) return false;
-  const type = typeof param;
-  if (["function", "object"].includes(type)) return true;
-  else return false;
-}
-```
-
-JavaScript 已经提供了判断是否是函数的方法：instanceof
-
-```javascript
-function hi() {
-  console.log("hi");
-}
-if (hi instanceof Function) console.log("hi is a function");
-```
-
-既然 instanceof 提供了检测函数的方法，typeof 再去做这件事情显得多余且令人困惑
-
-### string primitive 有时会被隐式转为 string object
-
-还是这个简单的思维模型：javascript 把值的类型分为两种：基本类型和对象。
-
-用 string literal 来创建一个 string primitive：
-
-```javascript
-const name = "John Blake";
-console.log(typeof name); // string
-console.log(name instanceof String); // false
-// name 之所以能够调用 split 方法是因为 name 被 Javascript 隐式转换为了 String 对象！
-// 这种由基本类型转为对象的操作也被称为装箱(Boxing), 其本质是在基本类型的基础上做了一层 wrapping
-const firstName = name.split(" ")[0];
-console.log(firstName);
-```
-
-name 是 string literal (字符串字面量), 是个基本类型，不是对象。但却可以使用 split 方法，这是因为 Javascript 在遇到 name.split 时，会自动做这样的转换：String(name).split。因为 String.prototype.split 存在，所以我们得到了想要的结果。
-
-[MDN: String Primitives And String Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#String_primitives_and_String_objects)
-
-看起来好像 Javascript 为我们提供了方便，在“合适”的时候自动做这个转换。但如果程序员不知道这种隐式转换，会疑惑基本类型不是对象为什么也可以调用各种方法呢？
-
-当碰到隐式类型转换或者语法糖这种东西，我的第一反应是要提高警惕，他们在提供方便的同时掩盖了事物的本质。
-
-### 你可以不显式声明变量就进行初始化，而且这个变量将自动成为全局变量:
-
-```javascript
-function doSth() {
-  a = 10;
-}
-doSth();
-console.log(a);
-```
-
-以上代码不会报错，而会正常打印出 10，这说明 a 跳出了函数 doSth 这个作用域成为了全局变量！这显然污染了全局作用域。
-
-### 用 var 声明的变量会出现提升（hoisting）
-
-1. 用 var 声明的变量在代码执行前会被提到声明变量所在作用域顶部，造成变量没有声明就可以使用的假象
-
-```javascript
-console.log(num); // 这不会报错，而会打印 undefined
-var num = 10;
-```
-
-2. 在同一个作用域内可以用 var 多次声明同名变量：
-
-```javascript
-var a = 10;
-var a = 20;
-console.log(a);
-// 是的，代码竟然能成功运行
-```
-
-尽管 ES6 引入了 let 和 var 关键字，不会出现 hoisting 的问题。但是为了兼容性，var 关键字被留了下来。每次我看到代码里面有 var，就会不自主的提高警惕。
+> 作为一个在 2 周内就设计完成的语言，JavaScript 远远称不上完美。本文尝试列举 JavaScript 中那些差劲的特性
 
 ### NaN === NaN 是 false
 
@@ -118,7 +26,9 @@ if (Number.isNaN(a)) {
 
 ```javascript
 let a; // 没有初始化就是 undefined
-let b = null; // null 一般是程序员有意设定的值, 表示空值; 这只是一个 common practice, 因为没人可以阻止你把一个变量显示初始化为 undefined
+// null 一般是程序员有意设定的值, 表示空值; 
+// 这只是一个 common practice, 因为没人可以阻止你把一个变量显示初始化为 undefined
+let b = null;
 ```
 
 在进行类型转换（type casting）的时候，null 和 undefined 有时表现一致，有时不一致
@@ -133,6 +43,118 @@ const str2 = String(undefined); // 'undefined'
 const bool1 = Boolean(null); // false
 const bool2 = Boolean(undefined); // false
 ```
+
+### typeof
+
+*typeof* 是 JavaScript 内置关键字，用于获得变量类型。它既可以当做一个操作符(operator)也可以当做一个函数(function)来使用:
+
+```javascript
+console.log(typeof 1); // number
+console.log(typeof("hi")); // string
+console.log(typeof {}); // object
+```
+
+可惜该功能至少有 2 个缺陷。
+
+在指出问题之前，请先回顾一下 JavaScript 中关于类型的心智模型, 它想当简单:
+
+1. 值的类型可以分为**基本类型(primitives)**和**对象(object)**
+2. 基本类型包括: number, string, boolean, null, undefined, Symbol, BigInt
+
+一个显而易见的问题是 **typeof null** 给出了让人意想不到的答案:
+
+```javascript
+console.log(typeof null); // object
+```
+
+另外一个问题稍微隐晦些:
+
+```javascript
+console.log(typeof console.log)
+```
+
+以上代码的输出会是什么呢？一个很自然的推断是: console.log 是一个函数而函数并不属于基本类型，那它的类型只可能是对象
+
+然而实际的输出却是 *function*
+
+好吧，看起来也没那么出乎意料，毕竟 console.log 确实是个函数。问题点在于这扰乱了“类型可以简单分为基本类型和对象”的思维模型，创造了一个特例! 当想要判断一个值是不是对象的时候，你需要时刻注意这个特例的存在:
+
+```javascript
+function isObject(param) {
+  if (param === null) return false; // 特例: typeof null
+  const type = typeof param;
+  if (type === "function") return true; // 特例: typeof function
+  return type === "object";
+}
+```
+
+那如果我真的想要知道某个值是不是一个函数该怎么办呢? 答案是使用 *instanceof*:
+
+```javascript
+function isFunction(param) {
+  return param instanceof Function;
+}
+console.log(isFunction({})); // false
+console.log(isFunction(console.log)); // true
+```
+
+### 隐式类型转换
+
+还是这个简单的思维模型：javascript 把值的类型分为两种：基本类型和对象。
+
+有如下代码:
+
+```javascript
+const name = "John Blake";
+console.log(typeof name); // string
+console.log(name instanceof String); // false
+// name 之所以能够调用 split 方法是因为 name 被 Javascript 隐式转换为了 String 对象！
+// 这种由基本类型转为对象的操作也被称为装箱(Boxing)
+const firstName = name.split(" ")[0];
+console.log(firstName);
+```
+
+name 是 *string literal*(字符串字面量), 属于基本类型，不是对象。但却可以使用 *split* 方法，这是因为 Javascript 在遇到 *name.split* 时，会自动做这样的转换：*String(name).split*。因为 *String.prototype.split* 存在，所以我们得到了想要的结果。
+
+[MDN: String Primitives And String Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#String_primitives_and_String_objects)
+
+看起来好像 Javascript 为我们提供了方便，在“合适”的时候自动做这个转换。但如果程序员不知道这种隐式转换，会疑惑基本类型不是对象为什么也可以调用各种方法呢？
+
+当碰到隐式类型转换或者语法糖这种东西，我的第一反应是要提高警惕，他们在提供方便的同时掩盖了事物的本质。
+
+### 你可以不显式声明变量就进行初始化，而且这个变量将自动成为全局变量:
+
+```javascript
+function doSth() {
+  a = 10;
+}
+doSth();
+console.log(a);
+```
+
+以上代码不会报错，而会正常打印出 10，这说明 a 跳出了函数 doSth 这个作用域成为了全局变量！这显然污染了全局作用域。
+
+### var 相关的问题
+
+1. 用 var 声明的变量在代码执行前会被提到声明变量所在作用域顶部，造成变量没有声明就可以使用的假象
+
+```javascript
+console.log(num); // 这不会报错，而会打印 undefined
+var num = 10;
+```
+
+2. 在同一个作用域内可以用 var 多次声明同名变量：
+
+```javascript
+var a = 10;
+var a = 20;
+console.log(a);
+// 是的，代码竟然能成功运行
+```
+
+2015 年推出的 JavaScript 版本(ES6)引入了 *let* 和 *const* 关键字, 解决了 var 的这些问题。
+
+但是为了兼容性，var 关键字被留了下来。每次我看到代码里面有 var，就会不自主的提高警惕。
 
 ### 默认参数之后可以有常规参数
 
@@ -182,3 +204,7 @@ arguments 提供了一种在函数体内部 reference 参数的方式。这本�
 JavaScript 的继承机制是原型链（Prototype Chain），这和其他大多数语言中 class 作为实例的蓝图 (class as blueprint) 的机制有着根本的不同。然而在 ES6 中引入了 class 关键字，这么做完全是为了其他语言使用者能够在写 JavaScript 时“感到熟悉”。然而，这种语法糖掩盖了事情的本质，当使用者遇到了一些奇怪的现象时感到困惑却不知道怎么解决。
 
 > 未完，有时间会再写
+
+### 参考资料
+
+1. [JavaScript data types and data structures](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures)

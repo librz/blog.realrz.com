@@ -62,7 +62,7 @@ function insertionSort(arr) {
 注意
 
 * 外层循环的 *index order* 是 *ascending* 的，而内层循环的 *index order* 是 *descending* 的
-* 插入的过程是不断和已排序数组中的前一个数值进行比较，如果小于就互换位置
+* 插入的过程是不断和已排序数组中的前一个数值进行比较，如果小于就互换位置，如果大于或者等于就说明插入到了合适位置
 
 参考视频: [Insertion sort in 2 mins](https://www.youtube.com/watch?v=JU767SDMDvA)
 
