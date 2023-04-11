@@ -7,23 +7,57 @@ category: other
 
 > 在 [Encoding](https://blog.realrz.com/encoding) 这篇博客里面我对 Encoding 进行了介绍，介绍了常见的字符编码，比如 ASCII 和 UTF-8。另一个常见的例子是 URL Encoding, 在 Web 开发中很常见。可是为什么需要对 URL 进行编码呢？具体怎么实现？
 
-### URL Encoding
+### URL Parameters 中的特殊字符
 
-URL 中含有一些特殊字符表达特殊的含义，比如 ? 表示 URL Parameter(s) 的开始, = 用于连接属性和值，& 用于连接多个键值对:
+URL 中含有一些特殊字符表达特殊的含义，比如 **?** 表示 URL Parameter(s) 的开始, **=** 用于连接属性和值，**&** 用于连接多个键值对:
 
 ```console
 http://example.com?name=john&age=10
 ```
 
-现在试想 name 是 "jo&h=n"会怎么样:
+现在试想 name 的值是 jo&h=n 会怎么样:
 
 ```console
 http://example.com?name=jo&h=n&age=10
 ```
 
-这样的话不知不觉就多个一个参数出来 h=n, 这种还算幸运，更多的时候甚至会导致 URL 无法被解析
+由于 **&** 具有特殊含义, 会被解析成 3 个键值对:
 
-为了规避这些可能造成麻烦的特殊字符，URL 都要经过一个编码的过程，由于这个编码使用了 % 符号，所以 URL Encoding 又叫 Percent Encoding.
+- name=jo
+- h=n
+- age=10
+
+这显然不是我们想要的。
+
+### 转义 - An Example
+
+如何规避这些可能造成麻烦的特殊字符呢？最常见的方法是对字面量(literal)中含有的特殊字符进行 **转义(escape)**
+
+转义一般会使用这个特殊符号来标记转义的开始, 这个特殊符号被称为转义符(escape character)。最常见的转义符是 **\\**
+
+你可能知道 **\n** 可以用来换行，**\t** 可以用来打印制表符(tab)。这里的 n 和 t 经过 \ 的转义之后都不再代表字母 n 和字母 t 
+
+```javascript
+console.log("Hi John,\n\tHow are you?\nBest Wishes");
+```
+
+关于转义有一个规律：要打印转义符号本身，需要对转义符号本身进行转义
+
+听着有点绕，让我们看一个例子:
+
+```javascript
+console.log("\");
+```
+
+如果你运行上面的代码会发现运行环境报错。问题在于 **\\** 被认为是转义符用于转义其后的 **"** 符号。要打印转义符本身我们必须对其进行转义:
+
+```javascript
+console.log("\\");
+```
+
+### Percent Encoding
+
+URL Encoding 有点特殊，并没有使用 **\\** 作为转义符号，而使用了 **%** 符号，所以 URL Encoding 又被称为 **Percent Encoding**，他的编码规则如下：
 
 在 URL 这个 Context 下需要规避的特殊字符有 20 个, 包括空格和 % 本身:
 
@@ -32,7 +66,7 @@ http://example.com?name=jo&h=n&age=10
 %3A  %2F  %3F  %23  %5B  %5D  %40  %21  %24  %26  %27  %28  %29  %2A  %2B  %2C  %3B  %3D  %25  %20 or +
 ```
 
-接着之前的例子: 试想 name 是 "jo&h=n"会怎么样
+接着之前的例子: 试想 name 是 jo&h=n 通过 URL Encoding 之后会怎么样
 
 ```console
 编码前: http://example.com?name=jo&h=n&age=10
