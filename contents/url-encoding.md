@@ -33,9 +33,9 @@ http://example.com?name=jo&h=n&age=10
 
 如何规避这些可能造成麻烦的特殊字符呢？最常见的方法是对字面量(literal)中含有的特殊字符进行 **转义(escape)**
 
-转义一般会使用这个特殊符号来标记转义的开始, 这个特殊符号被称为转义符(escape character)。最常见的转义符是 **\\**
+转义一般会使用某个特殊符号来标记转义的开始, 这个特殊符号被称为转义符(escape character)。最常见的转义符是 **\\**
 
-你可能知道 **\n** 可以用来换行，**\t** 可以用来打印制表符(tab)。这里的 n 和 t 经过 \ 的转义之后都不再代表字母 n 和字母 t 
+你可能知道 **\n** 可以用来换行，**\t** 可以用来打印制表符(tab)。这里的 n 和 t 经过 \ 的转义之后都不再代表字母 n 和字母 t, 下面是一个例子:
 
 ```javascript
 console.log("Hi John,\n\tHow are you?\nBest Wishes");
@@ -57,9 +57,9 @@ console.log("\\");
 
 ### Percent Encoding
 
-URL Encoding 有点特殊，并没有使用 **\\** 作为转义符号，而使用了 **%** 符号，所以 URL Encoding 又被称为 **Percent Encoding**，他的编码规则如下：
+URL Encoding 有点特殊，并没有使用 **\\** 作为转义符号，而使用了 **%** 符号，所以 URL Encoding 又被称为 **Percent Encoding**。
 
-在 URL 这个 Context 下需要规避的特殊字符有 20 个, 包括空格和 % 本身:
+在 URL 这个 Context 下需要规避的特殊字符有 20 个, 包括空格和 % 本身, 具体编码规则如下:
 
 ```console
 ':'  '/'  '?'  '#'  '['  ']'  '@'  '!'  '$'  '&'  "'"  '('  ')'  '*'  '+'  ','  ';'  '='  '%'  ' '
@@ -73,13 +73,23 @@ URL Encoding 有点特殊，并没有使用 **\\** 作为转义符号，而使�
 编码后: http://example.com?name=jo%26h%3Dn&age=10
 ```
 
-这样以来 URL 就可以正确解析了，解析之后对属性值再进行解码就得到了它们原本的样子
+这样以来 URL 就可以被解析为:
+
+```console
+name=jo%26h%3Dn
+age=10
+```
+
+对属性值再进行解码就得到了它们原本的样子。由于 **%26** 解码后是 **&**, **%3D** 解码后是 **=**, 所以 name 的值是 **jo&h=n**
 
 ### application/x-www-form-urlencoded
 
-从 Web 页面发起 http 请求的实现方式大体可以分为 2 种: 直接使用 form 表单 & 手动使用 JS 做 XHR 请求
+从 Web 页面发起 http 请求的实现方式大体可以分为 2 种: 
 
-XHR (XmlHttpRequest) 一般使用 JSON 来作为 request body, http 请求头 Content-Type 是 application/json. 这种方式非常灵活，开发者可以用 JS 在任意时刻发出格式化的请求, request body 里的数据可以任意进行组装
+1. 直接使用 JS 做 **XHR/Fetch** 请求
+2. 利用浏览器对 **form** 元素的原生支持，通过 html 的 form 元素间接发请求
+
+XHR(XmlHttpRequest)/Fetch 一般使用 JSON 来作为 request body, http 请求头 **Content-Type** 是 **application/json**. 这种方式非常灵活，开发者可以用 JS 在任意时刻发出格式化的请求, request body 里的数据可以任意进行组装
 
 但有的时候发请求就是为了提交一个表单，request body 里的数据都从表单项里来，点击提交按钮时发送请求即可，没必要像 XHR 那样灵活。这时候就可以使用 form 元素，指定 API Endpoint 和 http 方法，确保表单项的 name 属性和 API 的参数一致, 只要配置好这些，浏览器自然就知道如何发送请求。
 
