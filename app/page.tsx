@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import { IBlog } from '../interface';
+import { IBlog } from 'interface';
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter';
-import BlogList from '../components/BlogList';
+import BlogList from 'components/BlogList';
 
 const App: FC = () => {
   const contentsPath = path.join(process.cwd(), 'contents')

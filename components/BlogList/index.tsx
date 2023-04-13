@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Link from "next/link";
-import { IBlog } from "../../interface";
+import { IBlog } from "interface";
 
 interface IProps {
   blogs: IBlog[];
