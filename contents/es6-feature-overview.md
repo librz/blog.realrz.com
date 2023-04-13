@@ -9,7 +9,7 @@ category: javascript
 
 ### Promise，革命性的异步 feature
 
-如果你只能记住一个 ES6 feature，那就记住 Promise 吧。在 ES6 之前，JavaScript 处理异步的方式只能是回调函数（callback）。虽然理论上回调函可以完成一切异步任务，但却不能优雅的应对复杂场景。设想一种有多个回调函数且这些函数之间有依赖关系的场景：
+如果你只能记住一个 ES6 feature，那就记住 Promise 吧。在 ES6 之前，JavaScript 处理异步的方式只能是**回调函数(callback)**。虽然理论上回调函可以完成一切异步任务，但却不能优雅的应对复杂场景。设想一种有多个回调函数且这些函数之间有嵌套关系的场景：
 
 ```javascript
 function getCountry(name, callback) {
@@ -30,7 +30,7 @@ function getPopulation(city, callback) {
   }, 1000);
 }
 
-// 要找到某人所在国家的首都人口
+// 打印某人所在国家的首都的人口数量
 getCountry("John", function (country) {
   getCapital(country, function (capital) {
     getPopulation(capital, function (population) {
@@ -44,11 +44,9 @@ getCountry("John", function (country) {
 
 以上代码会在大约 3 秒后打印：首都人口为 2153 万
 
-使用回调事情是办到了，任务是完成了，但办事儿的方式显然不优雅：一直嵌套导致可读性很差。试想如果场景更加复杂，情况很快就会失控。代码会无比难以阅读，人们为这种情况起了个名字：回掉地狱 (callback hell)
+使用回调事情是办到了，任务是完成了，但办事儿的方式显然不优雅：一直嵌套导致可读性很差。试想如果场景更加复杂，情况很快就会失控。代码会变得难以阅读，人们为这种情况起了个名字：**回调地狱 (callback hell)**
 
-这就是 Promise 被引入 JavaScript 的背景，聪明的开发者尝试以一种“链式调用”的方式解决嵌套造成的代码可读性问题。如果说回调就是俄罗斯套娃的话，Promise 就是一条平整的锁链，显然更加清晰易懂。
-
-Promise 具体的语法可以参见 [MDN 文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise), 用 Promise 解决以上问题的代码如下:
+这就是 Promise 被引入 JavaScript 的背景，聪明的开发者尝试以一种“链式调用”的方式解决嵌套造成的代码可读性问题。如果说回调就是俄罗斯套娃的话，Promise 就是一条平整的锁链，显然更加清晰易懂。用 Promise 解决以上问题的代码如下:
 
 ```javascript
 function getCountry(name) {

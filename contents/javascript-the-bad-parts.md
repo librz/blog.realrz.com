@@ -9,7 +9,7 @@ category: javascript
 
 ### NaN === NaN 是 false
 
-这个是最为人知的缺点之一，好在有补救方法, 可以使用 Number.isNaN 判断一个变量是不是 NaN
+这个是最为人知的缺点之一，好在有补救方法, 可以使用 **Number.isNaN** 判断一个变量是不是 NaN
 
 ```javascript
 let a = Number("hello");
@@ -31,7 +31,7 @@ let a; // 没有初始化就是 undefined
 let b = null;
 ```
 
-在进行类型转换（type casting）的时候，null 和 undefined 有时表现一致，有时不一致
+在进行 **类型转换(type casting)** 的时候，null 和 undefined 有时表现一致，有时不一致
 
 ```javascript
 const num1 = Number(null); // 0
@@ -46,7 +46,7 @@ const bool2 = Boolean(undefined); // false
 
 ### typeof
 
-*typeof* 是 JavaScript 内置关键字，用于获得变量类型。它既可以当做一个操作符(operator)也可以当做一个函数(function)来使用:
+*typeof* 是 JavaScript 内置关键字，用于获得变量类型。它既可以当做一个 **操作符(operator)** 也可以当做一个 **函数(function)** 来使用:
 
 ```javascript
 console.log(typeof 1); // number
@@ -59,7 +59,7 @@ console.log(typeof {}); // object
 在指出问题之前，请先回顾一下 JavaScript 中关于类型的心智模型, 它想当简单:
 
 1. 值的类型可以分为**基本类型(primitives)**和**对象(object)**
-2. 基本类型包括: number, string, boolean, null, undefined, Symbol, BigInt
+2. 基本类型包括: **number, string, boolean, null, undefined, Symbol, BigInt**
 
 一个显而易见的问题是 **typeof null** 给出了让人意想不到的答案:
 
@@ -73,9 +73,9 @@ console.log(typeof null); // object
 console.log(typeof console.log)
 ```
 
-以上代码的输出会是什么呢？一个很自然的推断是: console.log 是一个函数而函数并不属于基本类型，那它的类型只可能是对象
+以上代码的输出会是什么呢？一个很自然的推断是: console.log 是一个函数, 由于函数并不属于基本类型，那它的类型只可能是对象
 
-然而实际的输出却是 *function*
+然而实际的输出却是: function
 
 好吧，看起来也没那么出乎意料，毕竟 console.log 确实是个函数。问题点在于这扰乱了“类型可以简单分为基本类型和对象”的思维模型，创造了一个特例! 当想要判断一个值是不是对象的时候，你需要时刻注意这个特例的存在:
 
@@ -88,7 +88,7 @@ function isObject(param) {
 }
 ```
 
-那如果我真的想要知道某个值是不是一个函数该怎么办呢? 答案是使用 *instanceof*:
+那如果我真的想要知道某个值是不是一个函数该怎么办呢? 答案是使用 **instanceof**:
 
 ```javascript
 function isFunction(param) {
@@ -114,7 +114,7 @@ const firstName = name.split(" ")[0];
 console.log(firstName);
 ```
 
-name 是 *string literal*(字符串字面量), 属于基本类型，不是对象。但却可以使用 *split* 方法，这是因为 Javascript 在遇到 *name.split* 时，会自动做这样的转换：*String(name).split*。因为 *String.prototype.split* 存在，所以我们得到了想要的结果。
+name 是 **string literal(字符串字面量)**, 属于基本类型，不是对象。但却可以使用 *split* 方法，这是因为 Javascript 在遇到 *name.split* 时，会自动做这样的转换：*String(name).split*。因为 *String.prototype.split* 存在，所以我们得到了想要的结果。
 
 [MDN: String Primitives And String Objects](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String#String_primitives_and_String_objects)
 

@@ -5,7 +5,7 @@ language: zh-CN
 category: other
 ---
 
-> 在 [Encoding](https://blog.realrz.com/encoding) 这篇博客里面我对 Encoding 进行了介绍，介绍了常见的字符编码，比如 ASCII 和 UTF-8。另一个常见的例子是 URL Encoding, 在 Web 开发中很常见。可是为什么需要对 URL 进行编码呢？具体怎么实现？
+> 在 [Character Encoding](https://blog.realrz.com/character-encoding) 这篇博客里面我对 Encoding 进行了介绍，介绍了常见的字符编码，比如 ASCII 和 UTF-8。另一个常见的例子是 URL Encoding, 在 Web 开发中很常见。可是为什么需要对 URL 进行编码呢？具体怎么实现？
 
 ### URL Parameters 中的特殊字符
 
