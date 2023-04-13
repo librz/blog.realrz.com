@@ -91,12 +91,10 @@ age=10
 
 从 Web 页面发起 http 请求的实现方式大体可以分为 2 种: 
 
-1. 直接使用 JS 做 **XHR/Fetch** 请求
-2. 利用浏览器对 **form** 元素的原生支持，通过 html 的 form 元素间接发请求
+1. 使用 JS 做 **XHR/Fetch** 请求 (编程式)
+2. 利用浏览器对 **form** 元素的原生支持，通过配置 html form 元素发送请求 (配置式)
 
-XHR(XmlHttpRequest)/Fetch 非常灵活，开发者可以用 JavaScript 在任意时刻发出请求
-
-但有的时候发请求就是为了提交一个表单，request body 里的数据都从表单项里来，点击提交按钮时发送请求即可，没必要像 XHR/Fetch 那样灵活。这时候就可以使用 form 元素，指定 API Endpoint 和 http 方法，确保表单项的 **name** 属性和 API 的参数一致, 只要配置好这些，浏览器自然就知道如何发送请求。
+XHR(XmlHttpRequest)/Fetch 非常灵活，开发者可以用 JavaScript 在任意时刻发出请求。但如果通过配置 form 元素就能满足需求，可能会省下不少代码。
 
 一个简单的 form 表单如下:
 
@@ -112,23 +110,21 @@ XHR(XmlHttpRequest)/Fetch 非常灵活，开发者可以用 JavaScript 在任意
 </form>
 ```
 
-form 的 method 属性可以选择 GET 或者 POST。语义化的 http 要求 GET 类型的接口只应该查询而不应创建或修改数据，POST 用于创建数据，GET 接口没有专门的 request body 因为 payload 追加到 URL 本身了，而 POST 接口一般都有 request body，因为 URL 有长度限制，所以如果表单中有很多数据的话一般都会使用 POST
+**action** 属性是 API 的地址, **method** 是 HTTP 方法, **enctype** 用于设置 **Content-Type** 请求头的值(只有 method 为 post 时才有效)。此外 form fields 的 **name** 属性就是发送 HTTP 请求时的参数名。
 
-用 GET 还是 POST 并不是本文的讨论重点，下面将假设 form 的 method 被设为 POST
+需要注意的是 form 的 method 属性只能是 **GET** 或 **POST**。因为相对来说限制少, 使用 POST 的情况要比 GET 常见的多, 这时数据会被放到 http body 里进行传送, 发出的 HTTP 请求中的 **Content-Type** 请求头支持 3 种类型:
 
-如果 form 的 method 为 POST, 那么可以通过 **enctype** 属性来设置 request body 的格式。enctype 常用的值有 **application/x-www-form-urlencoded** 和 **multipart/form-data**。如果表单需要提交二进制数据(比如文件)的话则只能使用 **multipart/form-data**, 否则的话这两者都可以.
+1. application/x-www-form-urlencoded
+2. application/form-data
+3. text/plain
 
-**enctype** 是 **application/x-www-form-urlencoded**, 这告诉浏览器：发送请求时 request header 中的 **Content-Type** 需要被设为 **application/x-www-form-urlencoded**, request payload 需要先使用 URL Encoding 进行编码再发送。
+你可以通过设置 form 的 **enctype** 属性来决定具体使用哪个。唯一的限制是: 如果表单需要提交二进制数据(比如文件)的话则只能使用 **multipart/form-data**
 
-假设用户在页面上填写 name 为 *John Williams*, email 为 *john@williams.com*, 那么该请求的 payload 应该是
+如果 **enctype** 设置为 **application/x-www-form-urlencoded** 那么在发送数据前会先使用 **URL Encoding** 进行编码。假设用户在页面上填写 name 为 *John Williams*, email 为 *john@williams.com*, 那么该请求的 raw payload 会是:
 
 ```console
 name=John+Williams&email=john%40gmail.com
 ```
-
-可以看出使用了像 URL 一样的格式, 属性和值之间用 **=** 号联系, 键值对之间用 **&** 号来连接
-
-编码方面, 邮件中的 **@** 号按照 Percent Encoding 被编码为 **%40**, 但 John 和 Williasm 之间的空格被编码为了 **+** 号而不是标准 Percent Encoding 中的 **%20**, 这个是因为 x-www-form-urlencoded 用了比较早的 Percent Encoding 标准, 可以认为是个历史遗留问题
 
 ### 参考资料
 
