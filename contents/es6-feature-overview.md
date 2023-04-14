@@ -1,5 +1,5 @@
 ---
-title: An Overview Of ES6 Features
+title: An Overview Of ES6+ Features
 date: "2020-05-23"
 language: zh-CN
 category: javascript
@@ -7,9 +7,9 @@ category: javascript
 
 > ES6 也被称为 ES2015，是 ECMA(欧洲电脑制造协会) 在 2015 年推出的 JavaScript 版本。这个版本引入了很多重要的功能，可以说是现代 JavaScript 的标志。本文对其中主要的 feature 及其出现的背景进行介绍
 
-### Promise，革命性的异步 feature
+### Promise
 
-如果你只能记住一个 ES6 feature，那就记住 Promise 吧。在 ES6 之前，JavaScript 处理异步的方式只能是**回调函数(callback)**。虽然理论上回调函可以完成一切异步任务，但却不能优雅的应对复杂场景。设想一种有多个回调函数且这些函数之间有嵌套关系的场景：
+如果你只能记住一个 ES6 feature，那就记住 Promise 吧。在 ES6 之前，JavaScript 处理异步的方式只能是 **回调函数(callback)**。虽然理论上回调函可以完成一切异步任务，但却不能优雅的应对复杂场景。设想一种有多个回调函数且这些函数之间有嵌套关系的场景：
 
 ```javascript
 function getCountry(name, callback) {
@@ -155,82 +155,68 @@ person = { name: "John" }; // 编译器会报错，const 声明的变量不能 r
 person.name = "John"; // OK, 我们仍然可以改变对象的属性
 ```
 
-### 方便的语法 🙌
+### 字符模版(Template Literals)语法
 
-- 字符模版 (Template Literals)
+```javascript
+let name = "John";
+let age = 10;
+let country = "UK";
+//用字符拼接（String Concatenation）
+console.log(
+  "I am " + name + ", currently " + age + " years old, lives in " + country
+);
+//用字符模板
+console.log(`I am ${name}, currently ${age} years old, lives in ${country}`);
+```
 
-  ```javascript
-  let name = "John";
-  let age = 10;
-  let country = "UK";
-  //用字符拼接（String Concatenation）
-  console.log(
-    "I am " + name + ", currently " + age + " years old, lives in " + country
-  );
-  //用字符模板
-  console.log(`I am ${name}, currently ${age} years old, lives in ${country}`);
-  ```
+### 解构(Destructure)语法
 
-- 解构
+```javascript
+// 对象解构
+const person = { name: "John" };
+const { name } = person;
+console.log(name);
+// 数组解构
+const [first, second] = ["john", "lisa", "mike"];
+console.log(first, second);
+```
 
-1. 对象解构
+### Spread/Rest Operator
 
-   ```javascript
-   const person = { name: "John" };
-   const { name } = person;
-   console.log(name);
-   ```
+用于 **展开** 对象和数组时，叫 **展开运算符(Spread Operator)**
 
-2. 数组解构
+```javascript
+const john = {
+  name: "John",
+  country: "UK",
+  city: "London",
+  street: "Baker Street",
+};
 
-   ```javascript
-   const [first, second] = ["john", "lisa", "mike"];
-   console.log(first, second);
-   ```
+// 展开对象 john 的所有属性
+const lisa = { ...john, name: "lisa" };
 
-- 三点运算符
+//  还可以 spread 数组
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6, 7];
+const all = [...arr1, ...arr2];
+```
 
-1. 用于对象和数组时起展开作用，叫展开运算符（Spread Operator）
+用于表示 **剩余** 的值时，叫 **剩余运算符Rest Operator**
 
-   ```javascript
-   const john = {
-     name: "John",
-     country: "UK",
-     city: "London",
-     street: "Baker Street",
-   };
+```javascript
+function add(num1, num2, ...rest) {
+  // rest 是一个数组，代表剩下的所有参数
+  let restSum = 0;
+  rest.forEach((item) => (restSum += item));
+  return num1 + num2 + restSum;
+}
 
-   // 展开对象 john 的所有属性
-   const lisa = { ...john, name: "lisa" };
+add(1, 2); // 3
 
-   //  还可以 spread 数组
-   const arr1 = [1, 2, 3];
-   const arr2 = [4, 5, 6, 7];
-   const all = [...arr1, ...arr2];
+add(1, 2, 3); // 6
 
-   // 结合解构，实现部分展开 (这里以普通对象说明，数组同理)
-   const { name, street, ...other } = john;
-   ```
+add(1, 2, 3, 4); // 10
+```
 
-2. 用于函数参数时，放到参数最后，代表剩余的参数，叫剩余运算符（Rest Operator）
-
-   ```javascript
-   function add(num1, num2, ...rest) {
-     // rest 是一个数组，代表剩下的所有参数
-     let restSum = 0;
-     rest.forEach((item) => (restSum += item));
-     return num1 + num2 + restSum;
-   }
-
-   add(1, 2); // 3
-
-   add(1, 2, 3); // 6
-
-   add(1, 2, 3, 4); // 10
-   ```
-
-### 错误的决定
-
-遗憾的是，ES6 中还引入了一些差劲的特性，最著名的就是 class。
-
-JavaScript 中继承的实现是原型链，本来没有 class 一说，但 ECMA 内部一些写 Java 的家伙在没有认清原型链的机制之前强行向 JavaScript 中加入了 class 关键字。class 是构造函数的语法糖，然而这种语法糖掩盖了原型链的本质，使得程序难以理解容易出错。关于这个话题我将在以后的博文中说明
+### 未完待续

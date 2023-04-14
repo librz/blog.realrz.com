@@ -16,7 +16,7 @@ export default function RootLayout({
         <main className="flex flex-col items-center my-4">
           {children}
         </main>
-        <footer className="h-14 bg-neutral-900 flex items-center justify-center text-gray-300">
+        <footer className="fixed bottom-0 h-14 w-full bg-neutral-900 flex items-center justify-center text-gray-300">
           Copyright &#169; {(new Date()).getFullYear()} realrz
         </footer>
       </body>
