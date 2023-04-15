@@ -22,7 +22,10 @@ const HomePage: FC = () => {
     });
   // return { props: { blogs } };
   return (
-    <BlogList blogs={blogs} />
+    <div>
+      {/* <h1>Blogs</h1> */}
+      <BlogList blogs={blogs} />
+    </div>
   )
 }
 

@@ -1,4 +1,5 @@
 import "./global.css";
+import Link from "next/link";
 
 export const metadata = {
   title: "blog.realrz.com",
@@ -13,6 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <header className="h-14 px-8 w-full bg-neutral-900 shadow flex items-center text-gray-300">
+          <Link href={"/"}>Home</Link>
+        </header>
         <main className="min-h-screen flex flex-col items-center pt-4 pb-8">{children}</main>
         <footer className="h-14 w-full bg-neutral-900 shadow flex items-center justify-center text-gray-300">
           Copyright &#169; {new Date().getFullYear()} realrz
