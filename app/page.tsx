@@ -5,7 +5,7 @@ import path from 'path'
 import matter from 'gray-matter';
 import BlogList from 'components/BlogList';
 
-const App: FC = () => {
+const HomePage: FC = () => {
   const contentsPath = path.join(process.cwd(), 'contents')
 
   const files: string[] = fs.readdirSync(contentsPath, "utf-8");
@@ -22,11 +22,8 @@ const App: FC = () => {
     });
   // return { props: { blogs } };
   return (
-    <>
-      <h1 className='text-2xl font-bold my-4'>Blog Posts</h1>
-      <BlogList blogs={blogs} />
-    </>
+    <BlogList blogs={blogs} />
   )
 }
 
-export default App;
+export default HomePage;
