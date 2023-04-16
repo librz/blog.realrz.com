@@ -50,10 +50,6 @@ nginx, upon receiving a request will proxy it to port 9001
 pm2 start yarn --name "blog.realrz.com" -- serve
 ```
 
-### upate
+### chores
 
-npm run update
-
-update workflow: get the latest code, build it, kill the old process and start a new one
-
-note: this only works on Ubuntu server, running on mac or windows will throw errors
+font "优设好身体": https://www.fonts.net.cn/font-38877223362.html

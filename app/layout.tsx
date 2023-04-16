@@ -1,5 +1,5 @@
-import "./global.css";
 import Link from "next/link";
+import "./global.css";
 
 export const metadata = {
   title: "blog.realrz.com",

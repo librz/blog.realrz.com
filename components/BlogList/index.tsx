@@ -1,10 +1,16 @@
 import { FC } from "react";
 import Link from "next/link";
+import localFont from "next/font/local"
 import { IBlog } from "interface";
 
 interface IProps {
   blogs: IBlog[];
 }
+
+const myFont = localFont({
+  src: '../../assets/YSHaoShenTi-2.ttf',
+  display: 'swap'
+});
 
 const BlogList: FC<IProps> = ({ blogs }) => {
   const sortedBlogs = (JSON.parse(JSON.stringify(blogs)) as IBlog[]).sort(
@@ -15,7 +21,7 @@ const BlogList: FC<IProps> = ({ blogs }) => {
     }
   );
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className={`grid gap-4 md:grid-cols-2 lg:grid-cols-3 ${myFont.className}`}>
       {sortedBlogs.map((blog, index) => {
         const { slug, title, date } = blog;
         return (
