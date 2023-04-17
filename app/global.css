@@ -2,3 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  /* see: https://www.cnblogs.com/lfri/p/11776320.html */
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
