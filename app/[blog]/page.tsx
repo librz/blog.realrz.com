@@ -6,8 +6,7 @@ import remark2rehype from "remark-rehype"; // bridge between remark and rehype
 import doc from "rehype-document"; // parse to html using rehype
 import html from "rehype-stringify"; // stringify
 import highlight from "rehype-highlight"; // code highlighting by injecting class names into html
-// import theme from hightlight.js
-import "highlight.js/styles/vs2015.css";
+import "highlight.js/styles/vs2015.css"; // import theme from hightlight.js
 
 const Blog = async (props) => {
 
@@ -31,7 +30,7 @@ const Blog = async (props) => {
     .process(content);
 
   return (
-    <article className='prose prose-lg prose-pre:py-1 prose-pre:px-2 my-4'>
+    <article className='prose max-w-full md:max-w-prose lg:prose-lg prose-img:rounded-lg prose-pre:py-1 prose-pre:px-2 my-4'>
       <h2 style={{ textAlign: "center", color: "royalblue" }}>{data["title"]}</h2>
       <section dangerouslySetInnerHTML={{ __html: htmlString as string }} />
     </article>

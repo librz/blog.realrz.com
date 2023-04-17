@@ -10,9 +10,9 @@ html {
 /* global scrollbar style */
 
 /* firefox */
-@supports (scrollbar-color: #8E8E8E #1C1C1F) {
+@supports (scrollbar-color: #8E8E8E transparent) {
   * {
-    scrollbar-color: #8E8E8E #1C1C1F;
+    scrollbar-color: #8E8E8E transparent;
     scrollbar-width: auto;
   }
 }
