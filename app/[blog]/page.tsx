@@ -8,7 +8,6 @@ import html from "rehype-stringify"; // stringify
 import highlight from "rehype-highlight"; // code highlighting by injecting class names into html
 // import theme from hightlight.js
 import "highlight.js/styles/vs2015.css";
-import styles from './page.module.scss'
 
 const Blog = async (props) => {
 

@@ -8,7 +8,6 @@
     "build": "next build",
     "serve": "next build && next start -p 9001",
     "lint": "next lint",
-    "update": "bash update.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
