@@ -112,11 +112,27 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 
 可以看出该段落有 113 个字符使用了 PingFang SC 字体来渲染，46 个字符使用了 Helvetica Neue 来渲染。看到这样的截图，你可以推断出我大概率在使用苹果系统。
 
+### 纪念 Steve Jobs
+
+提起 Steve Jobs 你可能会想到 iPhone/ipad/mac 这些具体的产品，其实他最容易为人忽略的贡献是将字体带进了数码世界。
+
+在 1984 年之前，计算机只提供一种字体(通常还没有粗体和斜体)。当第一台 mac 电脑于 1984 年发布时，Jobs 做了一件史无前例的事情：他为用户提供了众多字体以供选择，其中包括今天为人熟知的 *Helvetica, Time New Roman*。这并不是偶然，Jobs 年轻的时候参加了一门书法课(calligraphy)，从此以后便对手写书法很着迷。在 2005 年 Stanford 大学的毕业演讲中，Steve Jobs 提及这段经历的时候说到:
+
+> I learned baout serif and sans-serif typefaces, about varying the amount of space between different letter combinations, about what makes great typography great. It was beautiful, historical, artistically subtle in the way that science can't capture, and I found it fascinating.
+
+直到今天，苹果系统对字体的支持仍然是所有系统中最好的。在 macOS 上有一个 app 叫做 Font Book, 人们可以通过它轻易管理字体。苹果公司也花了不少钱购买字体的授权作为系统字体，有些时候还会委托字体设计公司为苹果平台设计字体。*苹方* 就是苹果公司委托台湾的 *威锋数位* 所开发的专有字体。
+
+![Steve Jobs and the machine that brought typograph to the masses](/images/steve-jobs-with-first-mac.webp)
+
+上图为: Steve Jobs 和第一台 mac 电脑
+
 ### 参考资料
 
 1. [如何优雅的选择字体](https://www.cnblogs.com/lfri/p/11776320.html)
 
 2. [Web 字体 font-family 浅谈](https://www.cnblogs.com/cangdu/p/14042117.html)
 
-3. [中文有多少个汉字](https://studycli.org/zh-CN/chinese-characters/number-of-characters-in-chinese/)
+3. [Steve Jobs, typographer](https://uxplanet.org/steve-jobs-typographer-2e450a356437)
+
+4. [中文有多少个汉字](https://studycli.org/zh-CN/chinese-characters/number-of-characters-in-chinese/)
 
