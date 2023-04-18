@@ -27,7 +27,7 @@ if (Number.isNaN(a)) {
 ```javascript
 let a; // 没有初始化就是 undefined
 // null 一般是程序员有意设定的值, 表示空值; 
-// 这只是一个 common practice, 因为没人可以阻止你把一个变量显示初始化为 undefined
+// 这只是一个 common practice, 没人可以阻止你把变量显式的初始化为 undefined
 let b = null;
 ```
 
@@ -108,7 +108,7 @@ console.log(isFunction(console.log)); // true
 const name = "John Blake";
 console.log(typeof name); // string
 console.log(name instanceof String); // false
-// name 之所以能够调用 split 方法是因为 name 被 Javascript 隐式转换为了 String 对象！
+// name 之所以能够调用 split 方法是因为 name 被隐式转换为了 String 对象！
 // 这种由基本类型转为对象的操作也被称为装箱(Boxing)
 const firstName = name.split(" ")[0];
 console.log(firstName);

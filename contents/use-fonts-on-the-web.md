@@ -5,11 +5,11 @@ language: zh-CN
 category: other
 ---
 
-> 周末看了 NHK 拍的纪录片《行家本色 - 字体设计师藤田重信》。记者采访鸟海修(とりのうみ・おさむ)先生时提到他是著名字体 Hiragino Sans 的作者, 顿时肃然起敬。正好借着机会整理下在 Web 开发中和字体相关的知识
+周末看了 NHK 拍的纪录片《行家本色 - 字体设计师藤田重信》。记者采访鸟海修(とりのうみ・おさむ)先生时提到他是著名字体 Hiragino Sans 的作者, 顿时肃然起敬。正好借着机会整理下在 Web 开发中和字体相关的知识
 
 ### 字体 - An Overview
 
-简单看，字体是一种映射: 字符 -> 样式。不同的字体格式对样式的定义方式可能不同(你可能听说过 Open Type 和 True Type), 不过他们都是在定义字体样式的矢量信息，就像 svg 图片一样。所以字体设计本质是 graphic design。
+简单看，字体是一种映射: 字符 -> 样式。不同的字体格式对样式的定义方式可能不同(你可能听说过 OpenType 和 TrueType), 不过他们都是在定义字体样式的矢量信息，就像 svg 图片一样。所以字体设计本质是 graphic design。
 
 ### Glyph - 字体的基本组成元素
 
@@ -45,7 +45,7 @@ Menlo, Monaco, Consolas, Courier New 都是常见的 Monospace Font。
 
 - **San Francisco**: 苹果于 2017 年推出一种无衬线字体，也是目前苹果系统的默认西文字体。相比 Helvetica，San Francisco 的风格更加简洁现代。
 
-- **Arial**: 为了与 Helvetica 竞争而设计的无衬线西文字体，表现形式和 Helvetica 类似，在不同系统的浏览器都支持，兼容性非常好。
+- **Arial**: 为了与 Helvetica 竞争而设计的无衬线西文字体，表现形式和 Helvetica 类似，各种系统都对其提供支持所以兼容性非常好。
 
 - **Segoe UI**: Windows 系统下的一种无衬线西文字体，也是 Windows 系统的默认西文字体。
 
@@ -57,7 +57,7 @@ Menlo, Monaco, Consolas, Courier New 都是常见的 Monospace Font。
 
 - **苹方(PingFang SC)**: 苹果专为中文用户打造的字体, SC(Simplified Chinese)代表简体。该字体是苹果系统的默认中文字体，采用无衬线设计。
 
-- **冬青黑体(Hiragino Sans GB)**: 久负盛名的日文字体 Hiragino Sans 的中文变种。Sans 说明它属于无衬线字体，GB(国标)说明它获得了中国国标认证，实际上它是日本第一款获得中国政府国标认证的字体!
+- **冬青黑体(Hiragino Sans GB)**: 久负盛名的日文字体 Hiragino Sans 的中文变种，由日本的鸟海修先生和中国的[汉仪字库](https://www.hanyi.com.cn/home)合作设计。Sans 说明它属于无衬线字体，GB(国标)说明它获得了中国国标认证。
 
 - **微软雅黑(Microsoft YaHei)**: Windows 默认的中文字体，无衬线
 
@@ -91,7 +91,7 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 
 ### 使用 Web Font
 
-由于各个操作系统上面默认支持的字体不会相同(比如 PingFang SC 就只有苹果系统支持，Microsoft YaHei 就只有微软支持)，如何保持文字在不同设备上的一致性就成为了问题。幸运的是浏览器支持使用网站提供的定制字体，你可以使用第三方字体服务(比如 Google Fonts)也可以选择自己托管字体文件。
+由于各大操作系统上面默认支持的字体不同(比如 PingFang SC 就只有苹果系统支持，Microsoft YaHei 就只有微软支持)，如何保持文字在不同设备上的一致性就成为了问题。幸运的是浏览器支持使用网站提供的定制字体，你可以使用第三方字体服务(比如 Google Fonts)也可以选择自己托管字体文件。
 
 定制字体的原理很简单，只要用 CSS 的 **font-face** 定义字体就可以使用了。下面是 Google Fonts 中对一款名为 **Lato** 的字体的定义:
 
@@ -116,17 +116,19 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 
 ### 纪念 Steve Jobs
 
-提起 Steve Jobs 你可能会想到 iPhone/ipad/mac 这些具体的产品，其实他最容易为人忽略的贡献是将字体带进了数码世界。
+提起 Steve Jobs 你可能会想到 iPhone/iPad/Mac 这些具体的产品，其实他最容易为人忽略的贡献是将字体带进了数码世界。
 
-在 1984 年之前，计算机只提供一种字体(通常还没有粗体和斜体)。当第一台 mac 电脑于 1984 年发布时，Jobs 做了一件史无前例的事情：他为用户提供了众多字体以供选择，其中包括今天为人熟知的 *Helvetica, Times New Roman*。这并不是偶然，Jobs 年轻的时候参加了一门书法课(calligraphy)，此后便对手写书法很着迷。在 2005 年 Stanford 大学的毕业演讲中，Steve Jobs 提及这段经历的时候说到:
+在 1984 年之前，计算机只提供一种字体(通常还没有粗体和斜体)。当第一台 mac 电脑于 1984 年发布时，Jobs 做了一件史无前例的事情：为用户提供了众多字体以供选择，其中包括今天为人熟知的 *Helvetica, Times New Roman*。这并不是偶然，Jobs 年轻的时候参加了一门书法课(calligraphy)，此后便对手写书法很着迷。在 2005 年 Stanford 大学的毕业演讲中，Steve Jobs 提及这段经历的时候说到:
 
-> I learned baout serif and sans-serif typefaces, about varying the amount of space between different letter combinations, about what makes great typography great. It was beautiful, historical, artistically subtle in the way that science can't capture, and I found it fascinating.
+> I learned about serif and sans-serif typefaces, about varying the amount of space between different letter combinations, about what makes great typography great. It was beautiful, historical, artistically subtle in the way that science can't capture, and I found it fascinating.
 
-直到今天，苹果系统对字体的支持仍然是所有系统中最好的。在 macOS 上有一个 app 叫做 *Font Book*, 人们可以通过它轻易管理字体。在字体选择方面，苹果公司花了不少钱购买字体授权作为系统字体，有些时候还会委托字体设计公司为苹果平台设计字体, 比如 *苹方* 就是苹果公司委托台湾的 *威锋数位* 所开发的专有字体。
+> None of this had even a hope of any practical application in my life. But ten years later, when we were designing the first Machintosh computer, it all came back to me. And we designed it all into the Mac. It was the first computer with beautiful typograph.
+
+直到今天，苹果系统对字体的支持仍然是所有系统中最好的。在 macOS 上有一个 app 叫做 *Font Book*, 人们可以通过它轻易管理字体。在字体选择方面，苹果公司花了不少钱购买字体授权作为系统字体，有些时候还会委托字体设计公司为苹果平台设计字体, 比如 *苹方* 就是苹果公司委托台湾的 *威锋数位* 开发的专有字体。
 
 ![Steve Jobs and the machine that brought typograph to the masses](/images/steve-jobs-with-first-mac.webp)
 
-图为: Steve Jobs 和第一台 mac 电脑
+图为: Steve Jobs 和第一款 Mac 电脑
 
 ### 参考资料
 
@@ -135,5 +137,7 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 2. [Web 字体 font-family 浅谈](https://www.cnblogs.com/cangdu/p/14042117.html)
 
 3. [Steve Jobs, typographer](https://uxplanet.org/steve-jobs-typographer-2e450a356437)
+
+4. [十年一字 ——TOPYS 专访字游工房鸟海修](https://www.topys.cn/article/20230)
 
 4. [中文有多少个汉字](https://studycli.org/zh-CN/chinese-characters/number-of-characters-in-chinese/)
