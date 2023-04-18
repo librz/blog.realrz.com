@@ -5,7 +5,7 @@ language: zh-CN
 category: other
 ---
 
-> 周末看了 NHK 拍的纪录片《行家本色 - 字体设计师藤田重信》。记者采访鸟海修先生时提到他是著名字体 Hiragino Sans 的作者, 顿时肃然起敬。正好借着机会整理下在 Web 开发中和字体相关的知识
+> 周末看了 NHK 拍的纪录片《行家本色 - 字体设计师藤田重信》。记者采访鸟海修(とりのうみ・おさむ)先生时提到他是著名字体 Hiragino Sans 的作者, 顿时肃然起敬。正好借着机会整理下在 Web 开发中和字体相关的知识
 
 ### 字体 - An Overview
 
@@ -23,7 +23,7 @@ category: other
 
 ### Serif 和 Sans-Serif
 
-字体根据设计风格大体可以分 2 种: **Serif(衬线字体)** 和 **Sans-Serif(无衬字体)**
+字体根据设计风格大体可以分 2 种: **Serif(衬线字体)** 和 **Sans-Serif(无衬线条字体)**
 
 Serif 来自德语，原意为**笔触**; Sans 来自法语，原意为**没有**。Serif 字体在笔画的开始和结束的地方有额外的装饰，而且笔画粗细不同，Sans-Serif 则完全相反:
 
@@ -50,6 +50,8 @@ Menlo, Monaco, Consolas, Courier New 都是常见的 Monospace Font。
 - **Segoe UI**: Windows 系统下的一种无衬线西文字体，也是 Windows 系统的默认西文字体。
 
 - **Roboto**: Android 系统的默认西文字体，也是一种无衬线字体
+
+- **Times New Roman**: 1932 年发布的衬线字体，多用于报纸印刷和创造复古感
 
 ### 常见中文字体
 
@@ -116,15 +118,15 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 
 提起 Steve Jobs 你可能会想到 iPhone/ipad/mac 这些具体的产品，其实他最容易为人忽略的贡献是将字体带进了数码世界。
 
-在 1984 年之前，计算机只提供一种字体(通常还没有粗体和斜体)。当第一台 mac 电脑于 1984 年发布时，Jobs 做了一件史无前例的事情：他为用户提供了众多字体以供选择，其中包括今天为人熟知的 *Helvetica, Time New Roman*。这并不是偶然，Jobs 年轻的时候参加了一门书法课(calligraphy)，从此以后便对手写书法很着迷。在 2005 年 Stanford 大学的毕业演讲中，Steve Jobs 提及这段经历的时候说到:
+在 1984 年之前，计算机只提供一种字体(通常还没有粗体和斜体)。当第一台 mac 电脑于 1984 年发布时，Jobs 做了一件史无前例的事情：他为用户提供了众多字体以供选择，其中包括今天为人熟知的 *Helvetica, Times New Roman*。这并不是偶然，Jobs 年轻的时候参加了一门书法课(calligraphy)，此后便对手写书法很着迷。在 2005 年 Stanford 大学的毕业演讲中，Steve Jobs 提及这段经历的时候说到:
 
 > I learned baout serif and sans-serif typefaces, about varying the amount of space between different letter combinations, about what makes great typography great. It was beautiful, historical, artistically subtle in the way that science can't capture, and I found it fascinating.
 
-直到今天，苹果系统对字体的支持仍然是所有系统中最好的。在 macOS 上有一个 app 叫做 Font Book, 人们可以通过它轻易管理字体。苹果公司也花了不少钱购买字体的授权作为系统字体，有些时候还会委托字体设计公司为苹果平台设计字体。*苹方* 就是苹果公司委托台湾的 *威锋数位* 所开发的专有字体。
+直到今天，苹果系统对字体的支持仍然是所有系统中最好的。在 macOS 上有一个 app 叫做 *Font Book*, 人们可以通过它轻易管理字体。在字体选择方面，苹果公司花了不少钱购买字体授权作为系统字体，有些时候还会委托字体设计公司为苹果平台设计字体, 比如 *苹方* 就是苹果公司委托台湾的 *威锋数位* 所开发的专有字体。
 
 ![Steve Jobs and the machine that brought typograph to the masses](/images/steve-jobs-with-first-mac.webp)
 
-上图为: Steve Jobs 和第一台 mac 电脑
+图为: Steve Jobs 和第一台 mac 电脑
 
 ### 参考资料
 
@@ -135,4 +137,3 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 3. [Steve Jobs, typographer](https://uxplanet.org/steve-jobs-typographer-2e450a356437)
 
 4. [中文有多少个汉字](https://studycli.org/zh-CN/chinese-characters/number-of-characters-in-chinese/)
-
