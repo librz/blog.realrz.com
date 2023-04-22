@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'lxgw-wenkai-webfont/style.css';
+@import '../node_modules/lxgw-wenkai-webfont/style.css';
 
 html {
   /* see: https://www.cnblogs.com/lfri/p/11776320.html */
