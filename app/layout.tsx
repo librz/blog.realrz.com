@@ -1,4 +1,5 @@
 import Link from "next/link";
+import "lxgw-wenkai-webfont/style.css";
 import "./global.css";
 
 export const metadata = {

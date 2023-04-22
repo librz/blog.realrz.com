@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import '../node_modules/lxgw-wenkai-webfont/style.css';
-
 html {
   /* see: https://www.cnblogs.com/lfri/p/11776320.html */
   font-family: "Helvetica Neue", Helvetica, Arial, "LXGW WenKai", "Hiragino Sans GB", "PingFang SC", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
