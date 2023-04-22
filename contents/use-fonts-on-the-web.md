@@ -13,17 +13,17 @@ category: other
 
 ### Glyph - 字体的基本组成元素
 
-每套字体都有一个字符集合，其中是该字体所要支持显示的所有字符。**Glyph** 这个术语用于表示某个字符的特定形状，若干个 Glyph 就组成了一套字体。Wikipedia 对 Glyph 的定义是:
+每套字体都有一个字符集合，其中是该字体所要支持显示的所有字符。Glyph 这个术语用于表示某个字符的特定形状，若干个 Glyph 就组成了一套字体。Wikipedia 对 Glyph 的定义是:
 
 > the specific shape, design, or representation of a character
 
-不同语言的字符集大小不同，拉丁系语言(比如英法德)普遍字符集较小而 CJK (Chinese, Japanese, Korean) 的字符集要大的多。这很容易理解，类似英文这种语言通过对字母表中的 **字母** 进行组合得到单词，而 CJK 系的语言通过对 **字** 的组合得到词。也就是说拉丁系语言的基本组成元素是 **字母** 而 CJK 则是 **字**。字母通常比较少(即使算上大小写) 而 **字** 就比较多了，拿中文举例，在 2016 年出版的《现代汉语词典》中收录了 12,500 个汉字。
+不同语言的字符集大小不同，拉丁系语言(比如英法德)普遍字符集较小而 CJK (Chinese, Japanese, Korean) 的字符集要大的多。这很容易理解，类似英文这种语言通过对字母表中的 **字母** 进行组合得到单词，而 CJK 系的语言通过对 **字** 的组合得到词。也就是说拉丁系语言的基本组成元素是 **字母** 而 CJK 则是 **字**。字母通常比较少(即使算上大小写) 而字就比较多了，拿中文举例，在 2016 年出版的《现代汉语词典》中收录了 12,500 个汉字。
 
 字符集大小其实在某种程度上决定了字体开发的难度。拿英文和中文做对比，完成度高的英文字体一般需要定义 1K+ 个 Glyph（包括大小写拉丁和希腊字母, 数字, 标点符号和各种特殊标记），而中文字体通常要定义上万个 Glyph。这一点也可以从字体文件的大小上看出：英文字体文件通常只有几十 KB 而中文字体通常都在几 MB 和十几 MB 这个级别。
 
 ### Serif 和 Sans-Serif
 
-字体根据设计风格大体可以分 2 种: **Serif(衬线字体)** 和 **Sans-Serif(无衬线条字体)**
+字体根据设计风格大体可以分 2 种: *Serif(衬线字体)* 和 *Sans-Serif(无衬线条字体)*
 
 Serif 来自德语，原意为**笔触**; Sans 来自法语，原意为**没有**。Serif 字体在笔画的开始和结束的地方有额外的装饰，而且笔画粗细不同，Sans-Serif 则完全相反:
 
@@ -33,25 +33,25 @@ Serif 来自德语，原意为**笔触**; Sans 来自法语，原意为**没有*
 
 ### Monospace (等宽字体)
 
-大部分拉丁字体都不是等宽的, 这在大部分情况下不是什么问题。但像阅读代码这种场景等宽字体是更好的选择，代码中含有很多特殊符号，程序员需要能很容易分辨出它们。Menlo, Monaco, Consolas, Courier New 都是常见的等宽字体。
+大部分拉丁字体都不是等宽的, 这在大部分情况下不是什么问题。但像阅读代码这种场景等宽字体是更好的选择，代码中含有很多特殊符号，程序员需要能很容易分辨出它们。*Menlo, Monaco, Consolas, Courier New* 都是常见的等宽字体。
 
 ![使用非等宽字体(Helvetica)渲染代码片段](/images/render-code-with-helvetica-font.png)
 
-上图为：使用非等宽字体(Helvetica)渲染代码片段
+上图为：使用非等宽字体(*Helvetica*)渲染代码片段
 
 ![使用等宽字体(Hack)渲染代码片段](/images/render-code-with-hack-font.png)
 
-上图为：使用等宽字体(Hack)渲染代码片段
+上图为：使用等宽字体(*Hack*)渲染代码片段
 
-注：东亚字体中的方块字(汉字, 日语特有的假名, 韩语特有的谚文)基本上都是等宽的
+注：东亚字体中的方块字(汉字, 日语的假名, 韩语的谚文)基本上都是等宽的
 
 ### 常见西文字体
 
 - **Helvetica**: 苹果系统内置的一种西文无衬线字体。Helvetica Neue 是 Helvetica 字体改善版本，增加了更多不同粗细与宽度的字形。
 
-- **San Francisco**: 苹果于 2017 年推出一种无衬线字体，也是目前苹果系统的默认西文字体。相比 Helvetica，San Francisco 的风格更加简洁现代。
-
 - **Arial**: 为了与 Helvetica 竞争而设计的无衬线西文字体，表现形式和 Helvetica 类似，各种系统都对其提供支持所以兼容性非常好。
+
+- **San Francisco**: 苹果于 2017 年推出一种无衬线字体，也是目前苹果系统的默认西文字体。相比 Helvetica，San Francisco 的风格更加简洁现代。
 
 - **Segoe UI**: Windows 系统下的一种无衬线西文字体，也是 Windows 系统的默认西文字体。
 
@@ -99,7 +99,7 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 
 由于各大操作系统上面默认支持的字体不同(比如 PingFang SC 就只有苹果系统支持，Microsoft YaHei 就只有微软支持)，如何保持文字在不同设备上的一致性就成为了问题。幸运的是浏览器支持使用网站提供的定制字体，你可以使用第三方字体服务(比如 Google Fonts)也可以选择自己托管字体文件。
 
-定制字体的原理很简单，只要用 CSS 的 **font-face** 定义字体就可以使用了。下面是 Google Fonts 中对一款名为 **Lato** 的字体的定义:
+定制字体的原理很简单，只要用 CSS 的 **font-face** 定义字体就可以使用了。下面是 Google Fonts 中对一款名为 *Lato* 的字体的定义:
 
 ```css
 @font-face {
@@ -124,13 +124,13 @@ font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans G
 
 提起 Steve Jobs 你可能会想到 iPhone/iPad/Mac 这些具体的产品，其实他最容易为人忽略的贡献是将字体带进了数码世界。
 
-在 1984 年之前，计算机只提供一种字体(通常还没有粗体和斜体)。当第一台 mac 电脑于 1984 年发布时，Jobs 做了一件史无前例的事情：为用户提供了众多字体以供选择，其中包括今天为人熟知的 *Helvetica, Times New Roman*。这并不是偶然，Jobs 年轻的时候参加了一门书法课(calligraphy)，此后便对手写书法很着迷。在 2005 年 Stanford 大学的毕业演讲中，Steve Jobs 提及这段经历的时候说到:
+在 1984 年之前，计算机只提供一种字体(通常还没有粗体和斜体)。当第一台 mac 电脑年发布时，Jobs 做了一件史无前例的事情：为用户提供了众多字体以供选择，其中包括今天为人熟知的 *Helvetica, Times New Roman*。这并不是偶然，Jobs 年轻的时候参加了一门书法课(calligraphy)，此后便对手写书法很着迷。在 2005 年 Stanford 大学的毕业演讲中，他提及这段经历的时候说到:
 
 > I learned about serif and sans-serif typefaces, about varying the amount of space between different letter combinations, about what makes great typography great. It was beautiful, historical, artistically subtle in the way that science can't capture, and I found it fascinating.
 
 > None of this had even a hope of any practical application in my life. But ten years later, when we were designing the first Machintosh computer, it all came back to me. And we designed it all into the Mac. It was the first computer with beautiful typograph.
 
-直到今天，苹果系统对字体的支持仍然是所有系统中最好的。在 macOS 上有一个 app 叫做 *Font Book*, 人们可以通过它轻易管理字体。在字体选择方面，苹果公司花了不少钱购买字体授权作为系统字体，有些时候还会委托字体设计公司为苹果平台设计字体, 比如 *苹方* 就是苹果公司委托台湾的 *威锋数位* 开发的专有字体。
+直到今天，苹果系统对字体的支持仍然是所有系统中最好的。在 macOS 上有一个应用叫 *Font Book*, 用户可以通过它轻易管理字体。在字体选择方面，苹果公司花了不少钱购买字体授权作为系统字体，有时还会委托字体设计公司为苹果平台设计字体, 比如 *苹方* 就是苹果公司委托台湾的 *威锋数位* 开发的专有字体。
 
 ![Steve Jobs and the machine that brought typograph to the masses](/images/steve-jobs-with-first-mac.webp)
 
