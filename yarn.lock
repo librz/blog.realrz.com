@@ -1856,6 +1856,11 @@ lru-cache@^6.0.0:
   dependencies:
     yallist "^4.0.0"
 
+lxgw-wenkai-webfont@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/lxgw-wenkai-webfont/-/lxgw-wenkai-webfont-1.7.0.tgz#72ef4ef9d00fd185a2ed8898d1a60f73ab732f97"
+  integrity sha512-kVJmT4xMAyOLhG6q0w63wJkVU7RP8UMQRGoAWj9tnpzL7sWFFYiEHBdUQyW9myqBQFa5SQfWfa2VLYF4IJBL5g==
+
 mdast-util-definitions@^5.0.0:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/mdast-util-definitions/-/mdast-util-definitions-5.1.2.tgz#9910abb60ac5d7115d6819b57ae0bcef07a3f7a7"
