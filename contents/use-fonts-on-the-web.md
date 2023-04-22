@@ -33,11 +33,17 @@ Serif 来自德语，原意为**笔触**; Sans 来自法语，原意为**没有*
 
 ### Monospace (等宽字体)
 
-大部分拉丁字体都不是等宽的, 这在大部分情况下不是什么问题。但像阅读代码这种场景等宽字体是更好的选择，代码中含有很多特殊符号，程序员需要能很容易分辨出它们。
+大部分拉丁字体都不是等宽的, 这在大部分情况下不是什么问题。但像阅读代码这种场景等宽字体是更好的选择，代码中含有很多特殊符号，程序员需要能很容易分辨出它们。Menlo, Monaco, Consolas, Courier New 都是常见的等宽字体。
 
-Menlo, Monaco, Consolas, Courier New 都是常见的 Monospace Font。
+![使用非等宽字体(Helvetica)渲染代码片段](/images/render-code-with-helvetica-font.png)
 
-注：中文字体都是等宽的
+上图为：使用非等宽字体(Helvetica)渲染代码片段
+
+![使用等宽字体(Hack)渲染代码片段](/images/render-code-with-hack-font.png)
+
+上图为：使用等宽字体(Hack)渲染代码片段
+
+注：东亚字体中的方块字(汉字, 日语特有的假名, 韩语特有的谚文)基本上都是等宽的
 
 ### 常见西文字体
 
