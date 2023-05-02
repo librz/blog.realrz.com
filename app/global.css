@@ -21,7 +21,7 @@ html {
 ::-webkit-scrollbar {
   background-color: transparent;
   width: 8px; /* only affects width or vertical scrollbar */
-  height: 8px; /* ojnly affects height of horizontal scrollbar */
+  height: 8px; /* only affects height of horizontal scrollbar */
 }
 
 ::-webkit-scrollbar-thumb {
