@@ -4,8 +4,8 @@ import "lxgw-wenkai-webfont/style.css";
 import "./global.css";
 
 export const metadata = {
-  title: "blog.realrz.com",
-  description: "Have Fun Coding",
+  title: "Blog - Realrz",
+  description: "A blog about software development and other things.",
 };
 
 export default function RootLayout({
