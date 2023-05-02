@@ -1,6 +1,5 @@
 import { FC } from "react";
 import Link from "next/link";
-import GithubLogo from "assets/github.svg";
 import Image from "next/image";
 
 const Header: FC = () => {
@@ -12,7 +11,7 @@ const Header: FC = () => {
         target="_blank"
         style={{ textDecoration: "underline" }}
       >
-        <Image priority src={GithubLogo} alt="Github" width={24} />
+        <Image priority src="/images/github.svg" alt="Github" width={24} height={24} />
       </Link>
     </header>
   );
