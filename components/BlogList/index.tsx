@@ -31,7 +31,7 @@ const BlogList: FC<IProps> = ({ blogs }) => {
             <Link
               href={`/${slug}`}
               key={index}
-              className="group cursor-pointer p-4 rounded-md border-2 border-gray-200 hover:bg-gradient-to-r from-violet-500 to-fuchsia-500"
+              className="group cursor-pointer p-4 rounded-md border-2 border-gray-200 hover:bg-gradient-to-r from-violet-600 to-purple-800"
             >
               <span className="text-sm text-gray-600 group-hover:text-gray-200">{date}</span>
               <div className="text-lg text-zinc-700 group-hover:text-white">{title}</div>

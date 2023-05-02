@@ -1,13 +1,12 @@
 import Link from "next/link";
-import { useMDXComponent } from "next-contentlayer/hooks";
-import type { AnchorHTMLAttributes, ComponentType } from "react";
+import type { AnchorHTMLAttributes } from "react";
 
-type CustomLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+type IProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
   children: React.ReactNode;
 };
 
-const CustomLink = (props: CustomLinkProps) => {
+const CustomLink = (props: IProps) => {
   const href = props.href;
 
   // If the href is a relative URL, use Next.js Link component
@@ -24,12 +23,4 @@ const CustomLink = (props: CustomLinkProps) => {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 };
 
-const mdxComponents = {
-  a: CustomLink as ComponentType<AnchorHTMLAttributes<HTMLAnchorElement>>,
-};
-
-export default function Mdx({ code }: { code: string }) {
-  const MDXContent = useMDXComponent(code);
-
-  return <MDXContent components={mdxComponents} />;
-}
+export default CustomLink;

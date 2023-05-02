@@ -5,17 +5,15 @@ language: zh-CN
 category: other
 ---
 
-import Title from "../components/Title"
-
 > UTF-8 为什么能够兼容 ASCII? Emoji 到底是字符还是图片？为什么 Microsoft Yahei 的字体文件远比 Helvetica 的要大的多? 看完这篇博客，获得所有答案！
 
-### <Title id="01_plus_encoding_is_info">/[01]\*/ + Encoding = Information</Title>
+### /[01]\*/ + Encoding = Information
 
 在计算机中数据的最终存储形式是一串 0 和 1, 用正则来表示是 **/[01]*/** 这种排列组合简单却强大，可以表示任意大小的数据量。
 
 但这还不够，毕竟排列组合只是一种数学概念，没有实际意义。就像我们拿到一段源代码，它只是文本而已，需要编译器或者解释器进行处理才能工作。给出一串 0 和 1, 我们需要一套解释(interpret)这串数据的规则才能获取到其中的信息, 这套规则被称为编码(encoding)。简言之: **/[01]\*/ + Encoding = Information**
 
-### <Title id="encoding-an-example">Encoding - An Example</Title>
+### Encoding - An Example
 
 在介绍流行的编码之前，我们先尝试对图片进行编码。
 
@@ -36,13 +34,13 @@ import Title from "../components/Title"
 
 虽然表示实际像素的二进制序列都是 **1101**, 但由于采用了不同的编码，结果解析出的颜色信息完全不同!
 
-### <Title id="character-encoding">Character Encoding</Title>
+### Character Encoding
 
 有了 Encoding 的概念，计算机科学家们就开始对各种信息进行编码，比如图片视频等。由于文本是信息的基本载体之一，自然是优先编码的对象。文本是由字符组成的，为文本制定编码等同于对字符集进行编码。
 
 有趣的是字符存在多个编码标准，你可能听说过 ASCII, Unicode, UTF-8 等名词，下文将依次介绍它们。
 
-### <Title id="ascii">ASCII - Latin Characters Only!</Title>
+### ASCII - Latin Characters Only!
 
 ASCII 码是比较早的一种字符编码, 全称是 Amercian Standard Code for Information Interchange。由于这种编码设计的比较早，当时计算机还没在美国之外流行，所以 ASCII 码只考虑了英文用户, 只包含了一些常见的拉丁字符，这包括:
 
@@ -62,7 +60,7 @@ ASCII 使用一个字节(8 bits)表示一个字符，而 ASCII 只需包含 128 
 
 当时内存那么紧张，为什么还要多占用一个比特？主要有 2 个原因，第一字节是个比较“整”的单位。第二是为了扩展性，万一以后要加什么字符，就可以利用剩下的那个比特了。实际上，人们确实有利用多出来这个比特，利用了这个比特的 ASCII 叫 Extended ASCII, 但这不是本文的讨论话题。
 
-### <Title id="unicode">Unicode - One Standard For All Languages</Title>
+### Unicode - One Standard For All Languages
 
 ASCII 只能为英文用户服务，后来其他语言的 speaker 也开始使用计算机，非英语国家就开始为自己的语言制定编码标准。你可能听说过 GB 18030, 这是中国政府制定的中文编码规范，支持简体和繁体中文。这样只要计算机上装有 GB 18030 就可以显示和输入中文了。日本也有自己的标准，韩国也有自己的标准，中东也有自己的标准...
 
@@ -81,7 +79,7 @@ Unicode 兼容了 ASCII, 所有的 128 个 ASCII 字符在 Unicode 里有和在 
 注意: Unicode 只列出了字符对应的 Code Point, 并没有指明该使用多少个字节表示一个字符。实际上，Unicode 有多种不同的实现，最著名的是 UTF-8
 
 
-### <Title id="utf-8">UTF-8</Title>
+### UTF-8
 
 UTF-8 是 Unicode Transformation Format - 8 bit 的缩写，是一种变长编码，某个字符占用多少个字节取决于该字符的 Unicode Code Point 的值，具体规则如下:
 
@@ -128,7 +126,7 @@ ASCII 中的字符都是比较常用的拉丁字符，出现频率高，用一�
 
 _Dominence: 截止本文发表(2021 年), UTF-8 已经占据了绝对优势, 97% 的 web 页面采用了 UTF-8, Internet Mail Consortium 推荐所有邮件程序都应该支持使用 UTF-8 来显示和编辑邮件。以至于虽然 UTF-8 的地位可以用 Dominence 来形容。_
 
-### <Title id="emoji-rocks">Emoji Rocks 🚀</Title>
+### Emoji Rocks 🚀
 
 2000s 左右，欧美公司开始大批进入日本，发现日本人更喜欢用本国的电子产品。经过调研发现他们选择本国产品的原因之一是这些产品内置了 "絵文字", 日式读音写作英文就是 Emoji。但当时 Emoji 的实现简单粗暴: 直接使用图片。
 
@@ -160,7 +158,7 @@ _Dominence: 截止本文发表(2021 年), UTF-8 已经占据了绝对优势, 97%
 
 微信通过自己设计了一套图标并为其编码，巧妙规避了 UTF-8 编码在不同厂商的设备上显示不一致的问题。
 
-### <Title id="fonts">Fonts</Title>
+### Fonts
 
 引言中的问题只剩下最后一个: 为什么 Microsoft Yahei 的字体文件远比 Helvetica 的要大的多?
 
@@ -170,7 +168,7 @@ Helvetica 是种常见的拉丁字体，只负责 200 多个拉丁字符的样�
 
 为了测试，我下载了这 2 种字体文件，Microsoft Yahei.ttf 大约是 14 MB, 而 Helvetica.ttf 只有 311 KB。之前有在油管看到视频，谈及国内外的 Web 开发有什么区别，其中一点是国内的 Web 开发者没有引入字体文件的习惯，我想中文字体的体积相对较大也是原因之一。
 
-### <Title id="ref-material">参考资料</Title>
+### 参考资料
 
 1. [阮一峰: 字符编码笔记](http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html)
 
