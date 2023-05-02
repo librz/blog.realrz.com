@@ -15,7 +15,7 @@ export default async function BlogPost({
 
   return (
     <article className="prose max-w-full md:max-w-prose lg:prose-lg prose-img:rounded-lg my-4">
-      <h2 style={{ textAlign: "center", color: "royalblue" }}>{post.title}</h2>
+      <h2 className="text-indigo-600 text-center">{post.title}</h2>
       <MDX code={post.body.code} />
     </article>
   );
