@@ -4,15 +4,17 @@
 
 html {
   /* see: https://www.cnblogs.com/lfri/p/11776320.html */
-  font-family: "Helvetica Neue", Helvetica, Arial, "LXGW WenKai", "Hiragino Sans GB", "PingFang SC", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "LXGW WenKai",
+    "Hiragino Sans GB", "PingFang SC", "Heiti SC", "Microsoft YaHei",
+    "WenQuanYi Micro Hei", sans-serif;
 }
 
 /* global scrollbar style */
 
 /* firefox */
-@supports (scrollbar-color: #8E8E8E transparent) {
+@supports (scrollbar-color: #8e8e8e transparent) {
   * {
-    scrollbar-color: #8E8E8E transparent;
+    scrollbar-color: #8e8e8e transparent;
     scrollbar-width: auto;
   }
 }
@@ -25,7 +27,6 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #8E8E8E;
+  background-color: #8e8e8e;
   border-radius: 5px;
 }
-

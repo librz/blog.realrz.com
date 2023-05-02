@@ -6,11 +6,14 @@ interface IProps {
 }
 
 const H2: FC<IProps> = ({ children }) => {
-  const anchor = children.trim()
+  const anchor = children.trim();
   const link = `#${anchor}`;
   return (
     <h2 id={anchor} className="relative group">
-      <a href={link} className="absolute -left-8 h-full flex justify-center align-center opacity-0 group-hover:opacity-100">
+      <a
+        href={link}
+        className="absolute -left-8 h-full flex justify-center align-center opacity-0 group-hover:opacity-100"
+      >
         <Image
           priority
           width={24}

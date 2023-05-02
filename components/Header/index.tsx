@@ -11,7 +11,13 @@ const Header: FC = () => {
         target="_blank"
         style={{ textDecoration: "underline" }}
       >
-        <Image priority src="/images/github.svg" alt="Github" width={24} height={24} />
+        <Image
+          priority
+          src="/images/github.svg"
+          alt="Github"
+          width={24}
+          height={24}
+        />
       </Link>
     </header>
   );
