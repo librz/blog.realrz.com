@@ -1,6 +1,9 @@
 import { defineDocumentType, makeSource } from "contentlayer/source-files";
 import { codeHighlightOptions } from "./lib/codeHighlightOptions";
 import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import toc from "@jsdevtools/rehype-toc";
 
 export const Post = defineDocumentType(() => ({
   name: "Post",
@@ -40,6 +43,11 @@ export default makeSource({
   contentDirPath: "posts",
   documentTypes: [Post],
   mdx: {
-    rehypePlugins: [[rehypePrettyCode, codeHighlightOptions]],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeAutolinkHeadings,
+      toc,
+      [rehypePrettyCode, codeHighlightOptions],
+    ],
   },
 });
