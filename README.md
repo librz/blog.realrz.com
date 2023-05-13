@@ -1,28 +1,12 @@
 ## source code for blog.realrz.com, built with nextjs
 
-### download the code 
+### setup
 
-1. git clone
-
-- using http (if you are not owner of this repo)
-
-```sh
-git clone https://github.com/librz/blog.realrz.com.git
-```
-
-- using ssh (if you are the owner of this repo)
-
-```sh
-git clone git@github.com:librz/blog.realrz.com.git
-```
-
-2. install dependency
+1. install dependency
 
 npm install
 
-note: to use npm, you should have node installed
-
-### run project locally
+2. run project locally
 
 - start dev server: npm run dev
 
