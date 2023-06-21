@@ -15,29 +15,29 @@
   "license": "ISC",
   "dependencies": {
     "@jsdevtools/rehype-toc": "^3.0.2",
-    "contentlayer": "^0.3.2",
+    "contentlayer": "^0.3.3",
     "lxgw-wenkai-webfont": "^1.7.0",
-    "next": "^13.4.2",
-    "next-contentlayer": "^0.3.2",
+    "next": "^13.4.6",
+    "next-contentlayer": "^0.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rehype-autolink-headings": "^6.1.1",
-    "rehype-pretty-code": "^0.9.5",
+    "rehype-pretty-code": "^0.9.9",
     "rehype-slug": "^5.1.0",
     "shiki": "^0.14.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
-    "@types/node": "18.15.11",
+    "@types/node": "20.3.1",
     "@types/react": "18.0.33",
     "@types/react-dom": "^18.0.11",
     "autoprefixer": "^10.4.14",
-    "eslint": "8.37.0",
-    "eslint-config-next": "13.4.2",
-    "postcss": "^8.4.21",
-    "sass": "^1.60.0",
-    "tailwindcss": "^3.3.1",
-    "typescript": "5.0.3"
+    "eslint": "8.43.0",
+    "eslint-config-next": "13.4.6",
+    "postcss": "^8.4.24",
+    "sass": "^1.63.5",
+    "tailwindcss": "^3.3.2",
+    "typescript": "5.1.3"
   }
 }
