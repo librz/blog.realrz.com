@@ -16,7 +16,6 @@
   "dependencies": {
     "@jsdevtools/rehype-toc": "^3.0.2",
     "contentlayer": "^0.3.3",
-    "lxgw-wenkai-webfont": "^1.7.0",
     "next": "^13.4.6",
     "next-contentlayer": "^0.3.3",
     "react": "^18.2.0",
