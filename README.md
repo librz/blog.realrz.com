@@ -33,7 +33,3 @@ nginx, upon receiving a request will proxy it to port 9001
 ```sh
 pm2 start npm --name "blog.realrz.com" -- run serve
 ```
-
-### chores
-
-font "优设好身体": https://www.fonts.net.cn/font-38877223362.html
