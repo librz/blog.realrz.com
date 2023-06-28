@@ -1,20 +1,24 @@
 import { FC } from "react";
+import { AiOutlineSearch } from "react-icons/ai"
 
 interface IProps {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string) => void;
 }
 
 const SearchBar: FC<IProps> = ({ onChange }) => {
   return (
-    <div className="flex w-full space-x-3 mb-4">
+    <div className="relative flex w-full mb-4 h-10">
+      <div className="absolute top-0 left-2 flex items-center h-full">
+        <AiOutlineSearch className="w-6 h-auto text-gray-600" />
+      </div>
       <input
         type="text"
-        className="px-2 flex-1 block border-2 border-gray-300 rounded-md"
-        onChange={onChange}
+        className="pl-8 pr-2 flex-1 block border-2 border-gray-300 rounded-md"
+        onChange={e => {
+          onChange(e.target.value)
+        }}
+        placeholder="Search..."
       />
-      <button className="flex-shrink-0 px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700">
-        Search
-      </button>
     </div>
   );
 };

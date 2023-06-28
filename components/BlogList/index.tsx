@@ -23,13 +23,16 @@ const BlogList: FC<IProps> = ({ blogs }) => {
     });
   }, [blogs, search]);
   return (
-    <div>
-      <SearchBar
-        onChange={(e) => {
-          setSearch(e.target.value);
-        }}
-      />
-      <div className={`grid gap-4 md:grid-cols-2 lg:grid-cols-3`}>
+    <div className="max-w-full md:min-w-[640px] lg:min-w-[960px]">
+      <SearchBar onChange={setSearch} />
+      <div className={`grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
+        {
+          displayBlogs.length === 0 && (
+            <div>
+              没有找到相关文章
+            </div>
+          )
+        }
         {displayBlogs.map((blog, index) => {
           const { slug, title, date } = blog;
           return (
