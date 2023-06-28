@@ -22,7 +22,7 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.10.1",
     "rehype-autolink-headings": "^6.1.1",
-    "rehype-pretty-code": "^0.10.0",
+    "rehype-pretty-code": "^0.9.11",
     "rehype-slug": "^5.1.0",
     "shiki": "^0.14.3",
     "uuid": "^9.0.0"
