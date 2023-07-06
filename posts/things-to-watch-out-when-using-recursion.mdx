@@ -1,0 +1,133 @@
+---
+title: 使用递归时的注意事项
+date: "2020-11-12"
+language: zh-CN
+category: other
+---
+
+> 开发者对递归应该都很熟悉了, 可是在使用递归的时候, 还是需要额外小心一些常见问题, 比如无限循环导致了栈溢出, 算法速度过慢或者太耗内存等
+
+### 防止栈溢出
+
+递归是函数调用自己，这样就会形成一个调用栈，如果递归的层级太深就会导致栈溢出。著名的技术问答网站 [Stack Overflow](https://stackoverflow.com/questions) 就是因为这个原因而得名。常见的栈溢出原因有两个：
+
+一是递归没有 base case 导致无法终止，比如下面阶乘的递归实现:
+
+```js
+function factorial(n) {
+  return n * factorial(n - 1)
+}
+console.log(factorial(10))
+```
+
+这段代码会报错: 
+
+> RangeError: Maximum call stack size exceeded
+
+解决方法也很简单, 把 base case 加上就可以了:
+
+```js
+function factorial(n) {
+  if (n === 1) return 1;
+  return n * factorial(n - 1)
+}
+console.log(factorial(10))
+```
+
+二是递归的参数没有改变导致死循环，比如下面的快排算法的实现:
+
+```js
+function quickSort(arr) {
+  if (arr.length <= 1) return arr;
+  const pivot = arr[0];
+  const lows = [];
+  const highs = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] < pivot) {
+      lows.push(arr[i]);
+    } else {
+      highs.push(arr[i]);
+    }
+  }
+	return quickSort(lows).concat(quickSort(highs))
+}
+const nums = [10, 7, 5]
+console.log(quickSort(nums))
+```
+
+看起来好像没什么问题，但运行时仍然会抛出栈溢出的错误，让我们看下具体发生了什么:
+
+```
+第一次调用 quickSort, 参数为 [10, 7, 5]
+  pivot = 10
+  lows = []
+  highs = [10, 7, 5]
+第二次调用 quickSort(lows) 参数为 [] => 直接返回 []
+第三次调用 quickSort(highs) 参数为 [10, 7, 5] => 无限循环
+```
+
+问题的本质在于递归的过程中参数没有改变，导致无限循环。针对这个例子，我们可以改变 for 循环的起始值，让它从 1 开始，这样就可以确保在 arr 被分为 lows 和 highs 后数组的规模一定是在下降的:
+
+```js
+function quickSort(arr) {
+  if (arr.length <= 1) return arr;
+  const pivot = arr[0];
+  const [lows, highs] = [[], []]
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] < pivot) {
+      lows.push(arr[i]);
+    } else {
+      highs.push(arr[i]);
+    }
+  }
+  return quickSort(lows).concat(pivot).concat(quickSort(highs))
+}
+const nums = [10, 7, 5]
+console.log(quickSort(nums))
+```
+
+### 避免重复计算 (缓存)
+
+下面是斐波那契数列的递归实现:
+
+```js
+function fib(n) {
+  if (n <= 2) return 1;
+  else return fib(n - 1) + fib(n - 2);
+}
+console.log(fib(50));
+```
+
+上面的算法并没有错，但运行后会发现什么也没有被打印而且 CPU 占用一直很高，这说明计算仍然在运行但是迟迟不能给出结果。其核心原因是做了很多重复计算。下面以 fib(6) 的计算作为说明：
+
+```
+                                        fib(6)
+                        fib(5)          +               fib(4)
+        fib(4)      +       fib(3)      +       fib(3)      +       fib(2)
+    fib(3)  +  fib(2) + fib(2) + fib(1) +   fib(2) + fib(1) +       fib(2)
+fib(2)+fib(1)+ fib(2) + fib(2) + fib(1) +   fib(2) + fib(1) +       fib(2)
+1     +  1   +   1    +    1   +   1    +     1    +   1    +       1
+结果: 8
+```
+
+可以看到 fib(4) 计算了 2 次，fib(3) 计算了 3 次。由此可以推算：计算 fib(7) 时，fib(5) 计算了 2 次，fib(4) 计算了 3 次，fib(3) 计算了 4 次...
+
+输入 n 越大，重复的计算越多，给出结果所需的时间会因为计算冗余极速下降。时间复杂度为 O(2^n)。
+
+解决重复计算的方案很简单，只要记录下已经计算过的值，下次碰上同样的输入直接取就可以了。这种缓存小技巧又被称为记忆化(Memorization), 比如可以用一个 Map 来作为记忆化的载体：
+
+```javascript
+const cache = new Map();
+function fib(n) {
+  if (n <= 1) return 1;
+  if (!cache.has(n)) {
+    cache.set(n, fib(n - 1) + fib(n - 2));
+  }
+  return cache.get(n);
+}
+console.log(fib(50)); // 立马打印出结果
+```
+
+### 尾递归优化内存占用
+
+未完待续...
