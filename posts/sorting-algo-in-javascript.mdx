@@ -33,11 +33,36 @@ function quickSort(arr) {
 }
 ```
 
-**pivot** 用作动词是改变方向或转折的意思，用作名词可以译为转折点。那件事情是我人生的转折点可以说: *That event is the pivot of my life*
-
-代码中用 **pivot** 表示选中的基准非常形象，拿数组中的其他元素和其进行比较，结果分到 *lows, equals, highs* 这 3 个数组中去。仔细想想，基准的作用其实就是**转折**。
-
 时间复杂度: **O(n \* log n)**
+
+### 归并排序 (merge sort)
+
+递归型算法。将数组分为两部分，分别对两部分进行排序，然后将两部分合并。和快速排序一样，归并排序也是分而治之(divide and conquer)的思想。
+
+不同于快排的是，归并排序拆分数组的过程比较随意(随便在中间取个数)，而快排在拆分数组的时候保证了左边的元素都小于右边的元素(通过循环把元素和基准进行对比)。所以快排的合并过程只需要做简单的拼接就可以了，而归并排序需要在合并的时候做比较(快排的过程可以简化为: 比较 -> 拆分 -> 合并, 而归并排序则是: 拆分 -> 比较 -> 合并)。
+
+```javascript
+function mergeSort(arr) {
+  if (arr.length <= 1) return arr;
+  const mid = Math.floor(arr.length / 2);
+  const left = mergeSort(arr.slice(0, mid));
+  const right = mergeSort(arr.slice(mid));
+  return merge(left, right);
+}
+
+function merge(arr1, arr2) {
+  const merged = [];
+  while (arr1.length && arr2.length) {
+    if (arr1[0] < arr2[0])
+      merged.push(arr1.shift());
+    else
+      merged.push(arr2.shift());
+  }
+  return merged.concat(arr1, arr2);
+}
+```
+
+时间复杂度：**O(n \* logn)**
 
 ### 插入排序 (insertion sort)
 
@@ -139,7 +164,3 @@ function bubbleSort(arr) {
 ```
 
 时间复杂度：**O(n^2)**
-
-### 归并排序 (merge sort)
-
-> 未完，会再写
