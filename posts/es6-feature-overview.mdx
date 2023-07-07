@@ -1,6 +1,6 @@
 ---
 title: An Overview Of ES6+ Features
-date: "2020-05-23"
+date: "2019-10-01"
 language: zh-CN
 category: javascript
 ---
@@ -222,4 +222,57 @@ console.log(rest);
 
 ### 箭头函数(Arrow Function)
 
+在 ES6 之前，函数既可以是个声明(statement)又可以是表达式(expression)，这主要取决于函数是否被当成变量来使用。
+
+函数声明:
+
+```js
+hello() // 函数声明会被提升，所以可以在声明函数之前的位置使用
+function hello() {
+  console.log("hello")
+}
+```
+
+函数表达式:
+
+```js
+const hello = function() {
+  console.log("hello")
+}
+hello() // 函数表达式和普通变量一样，不会被提升，需要先声明再使用
+```
+
+ES6 新引入的箭头函数只能作为表达式以内联的形式使用，比起传统函数它的语法更加简洁。此外，它没有自己的 this 所以不能被用于那些需要引用 this 的对象方法:
+
+```js
+
+const hello = () => {
+  console.log("hello")
+}
+hello()
+
+const double = num => num * 2;
+console.log(double(3))
+
+console.log([1, 2, 3].filter(item => item > 1)) // 作为高阶函数的参数使用
+
+const pet = {
+  name: "Miya",
+  sayHi: function() {
+    console.log(`Hi, I'm ${this.name}`) // this is OK
+  },
+  sayHello: () => {
+    console.log(`Hello, I'm ${this.name}`) // cannot reference this insde arrow function
+  }
+}
+pet.sayHi()
+pet.sayHello() 
+```
+
+### Class 关键字
+
 未完待续
+
+### 参考资料
+
+1. [ECMAScript 6 - New Features: Overview & Comparison](http://es6-features.org)
