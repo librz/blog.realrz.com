@@ -1,0 +1,209 @@
+---
+title: 使用 axios 封装 API 请求层
+date: "2021-06-01"
+language: zh-CN
+category: other
+---
+
+> [Axios](https://github.com/axios/axios) 是当前 JavaScript 最流行的 HTTP 请求库，即使早在 2017 年所有的主流浏览器都支持了原生的 [fetch api](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)，但至今多数有一定体量的 Web App 仍然选择使用 Axios 来处理 HTTP 请求。
+
+### Axios 的历史和原理
+
+早期(2005年之前)网站发送 HTTP 请求只能通过刷新整个页面的方式，服务器收到请求会返回新的 HTML 页面，之后浏览器再重新构建 DOM 并渲染。人们很快发现这样的交互在很多场景下体验不尽人意，于是发明了 [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX) 的概念来实现局部刷新。它使用 [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) 这个 JavaScript 对象以编程的方式在后台发起 HTTP 请求，收到服务器返回后使用 JavaScript 操纵 DOM 来实现局部刷新。
+
+Axios 正是基于 XMLHttpRequest 的 HTTP 请求库。
+
+在使用了 AJAX 后用户体验得到改善，但开发者却对 XMLHttpRequest 的语法不太满意，它有一堆事件和状态，大体使用方法如下:
+
+```js
+var request = new XMLHttpRequest();
+xhr.onreadystatechange = function () {
+	if (xhr.readyState === 4) { // 4 means request is completed
+		if (xhr.status === 200) {
+			console.log(xhr.responseText);
+		} else {
+			console.log('Error: ' + xhr.status);
+		}
+	}
+};
+request.open("GET", "hello.txt");
+request.send();
+```
+
+随着时代发展, 2015 年 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 被引入语言标准用于处理异步操作。对比纯回调的方式，Promise 通过链式调用的方式避免了回调地狱。HTTP 请求天生就有异步属性，开发者希望能在做 HTTP 请求时使用 Promise 但是 XMLHttpRequest 并没有提供基于 Promise 的 API，于是 Axios 项目正式启动，它的 slogan 就是:
+
+> Promise based HTTP client for the browser and node.js
+
+
+### Axios 的优势(相对于 fetch)
+
+虽然 fetch 也基于 Promise, 并且还是原生的 Web API(这意味着你不需要引入额外的第三方代码), 但为什么开发者仍然会选择 axios 呢? 个人认为是下面这些优势:
+
+1. Axios 允许创建多个实例(instance)
+
+fetch 是典型的单例模式，在任何时候只有一个实例。Axios 也可以作为单例使用，但是它允许创建多个实例以应对复杂的情况。比如一个前端项目可能会对接对接多个不相干的后端服务并且它们对请求格式的要求不同，这时可以创建多个 Axios 实例分别对应这些后端服务。
+
+2. Axios 可以设定默认值
+
+在配置 Axios 的时候可以设定一些默认值，比如 baseURL, headers 之类:
+
+```js
+axios.defaults.baseURL = 'https://api.example.com';
+axios.defaults.headers.common['Authorization'] = 'XXX';
+axios.defaults.headers.post['Content-Type'] = 'application/json'
+```
+
+3. Axios 自带拦截器(interceptor)
+
+拦截器可以拦截 request/response 并做一些通用处理，这在某些情况下非常有用(后文会提到一些用例)。
+
+4. Axios 简化了和 JSON 相关的操作
+
+```js
+
+const url = 'https://jsonplaceholder.typicode.com/posts'
+const data = { a: 10, b: 20 };
+// axios
+axios
+  .post(url, data, { // 自带 post 方法，传参时无须手动序列化
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+  })
+  .then(({data}) => { // 自动 JSON 解析
+    console.log(data);
+  })
+// fetch
+const options = {
+  method: "POST",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json;charset=UTF-8",
+  },
+  body: JSON.stringify(data) // 需要手动序列化以作为 http body
+};
+fetch(url, options)
+  .then((response) => response.json()) // 需要手动做 JSON 解析
+  .then((data) => {
+    console.log(data);
+  });
+```
+
+5. 其他功能：比如自带 timeout, 更简单易用的请求取消机制等
+
+### 简单的 Axios 封装示例
+
+几乎每个项目对请求层的要求都不同，假设项目中对于 HTTP 请求层的需求如下: 
+
+- 所有的 API 都在一个站点下，而且对请求格式的要求相同 (无需使用多个 Axios 实例)
+
+- 大多数 API 是需要认证和授权才能访问(需要设置 Authorization 请求头)，只有少量的 API 是公开的(无需认证和授权)
+
+- API 的请求方法可能会是: GET, POST, PUT, PATCH, DELETE
+
+- 会有一些 API 直接以二进制流的形式返回文件, 客户端拿到后可能需要展示文件内容或者直接下载到用户设备中
+
+针对这样的需求可以用以下的方式来封装 Axios:
+
+首先定义一些类型(types.ts):
+
+```ts
+// 这包括所有的 HTTP 方法(比如没有 HEAD 和 OPTIONS 方法)，但覆盖了大部分场景
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
+
+export interface IRequestOption {
+  method?: HttpMethod
+  data?: any
+  headers?: Record<string, string>
+  skipAuth?: boolean // whether to include auth header
+  requestBinaryData?: {
+    saveAsFile: boolean; // whether to save response data as file
+  }
+}
+```
+
+再定义一些 utils 函数(utils.ts):
+
+```ts
+export function getFilenameFromResponse(contentDisposition: string, fallback = "data"): string {
+  // content disposition example: attachment; filename="abc.pdf"
+  if (!contentDisposition) {
+    console.warn("Content-Disposition header missing in response")
+    return fallback
+  }
+  const filename = contentDisposition
+    .split(";")
+    .find(it => it.trim().startsWith("filename"))
+    ?.split("=")[1]
+    ?.trim()
+    ?.replace(/^['"]|['"]$/g, "");
+  if (!filename) {
+    console.warn(`Failed to parse Content-Disposition header ${contentDisposition}, fallback to ${fallback}`)
+    return fallback
+  }
+  return filename
+}
+
+export function downloadAsFile(
+  blob: Blob, 
+  filename: string // important: filename with suffix
+) {
+  const url = window.URL.createObjectURL(blob);
+  // create an invisible link
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  // release memory
+  window.URL.revokeObjectURL(url)
+}
+```
+
+现在可以开始封装 Axios (request.ts):
+
+```ts
+import axios from 'axios'
+import { IRequestOption } from './types.ts'
+import { getFilenameFromResponse, downloadAsFile } from './utils'
+
+// setup defaults
+axios.defaults.headers.common['Authorization'] = 'XXX';
+
+// request wrapper based on axios
+export async function request<T = any>(url: string, option: IRequestOption = {}): Promise<T> {
+  const { method = 'GET', data, headers = {}, skipAuth = false, requestBinaryData } = option;
+  // make api call
+  const response = await axios.request<T>({
+    method: method.toLowerCase(), // axios uses lowercase for method
+    url: url,
+    headers: headers,
+    data: body,
+    responseType: requestBinaryData ? 'blob' : 'json',
+    transformRequest: (data, headers) => {
+      if (skipAuth) {
+        delete headers.common['Authorization'];
+      }
+      return data
+    }
+  })
+  /* save response data as file if saveAsFile is true */
+  if (requestBinaryData?.saveAsFile) {
+    const contentDisposition = response.headers['content-disposition']
+    const filename = getFilenameFromResponse(contentDisposition)
+    downloadAsFile((response.data as unknown) as Blob, filename)
+  }
+  // return data
+  return response.data
+}
+```
+
+### 稍复杂的 Axios 封装示例
+
+未完待续
+
+### 参考资料
+
+1. [Wikipedia: AJAX](https://en.wikipedia.org/wiki/Ajax_(programming))
