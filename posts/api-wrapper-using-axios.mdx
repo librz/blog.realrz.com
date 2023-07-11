@@ -1,23 +1,27 @@
 ---
 title: 使用 axios 封装 API 请求层
-date: "2021-06-01"
+date: "2022-06-01"
 language: zh-CN
 category: other
 ---
 
-> [Axios](https://github.com/axios/axios) 是当前 JavaScript 最流行的 HTTP 请求库，即使早在 2017 年所有的主流浏览器都支持了原生的 [fetch api](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)，但至今多数有一定体量的 Web App 仍然选择使用 Axios 来处理 HTTP 请求。
+> [Axios](https://github.com/axios/axios) 是当前 JavaScript 生态中最流行的 HTTP 请求库，即便 2017 年左右主流浏览器就都支持了原生的 [fetch api](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)，但 Axios 的语法优势和内置的便捷功能让它在今天仍然是多数开发者的首选。
 
 ### Axios 的历史和原理
 
-早期(2005年之前)网站发送 HTTP 请求只能通过刷新整个页面的方式，服务器收到请求会返回新的 HTML 页面，之后浏览器再重新构建 DOM 并渲染。人们很快发现这样的交互在很多场景下体验不尽人意，于是发明了 [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX) 的概念来实现局部刷新。它使用 [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest) 这个 JavaScript 对象以编程的方式在后台发起 HTTP 请求，收到服务器返回后使用 JavaScript 操纵 DOM 来实现局部刷新。
+早期(2005年之前)网站发送 HTTP 请求只能通过刷新整个页面的方式，服务器收到请求会返回新的 HTML 页面，之后浏览器会重新构建 DOM 并渲染。很快人们发现这样的交互体验不尽人意，于是发明了 [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX) 的概念来实现局部刷新。它使用 [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)(简称XHR) 以编程的方式在后台发起 HTTP 请求，收到服务器返回后通过 JavaScript 操纵 DOM 来实现局部刷新。
 
-Axios 正是基于 XMLHttpRequest 的 HTTP 请求库。
+Axios 正是基于 XHR 的 HTTP 请求库(实际上 Axios 即支持浏览器环境又支持 Node.js 环境，在不同的环境中依靠不同的原生工具来发出 HTTP 请求，在浏览器中使用 XHR 而在 Node.js 中使用内置的 http 模块)。
 
-在使用了 AJAX 后用户体验得到改善，但开发者却对 XMLHttpRequest 的语法不太满意，它有一堆事件和状态，大体使用方法如下:
+![Axios 源代码中使用了 XHR](/images/axios-xhr-adapter.png)
+
+上图为：Axios 源代码中使用了 XHR
+
+在使用了 AJAX 后用户体验得到改善，但开发者却对 XHR 的语法不太满意，它有一堆事件和状态，大体使用方法如下:
 
 ```js
 var request = new XMLHttpRequest();
-xhr.onreadystatechange = function () {
+request.onreadystatechange = function () {
 	if (xhr.readyState === 4) { // 4 means request is completed
 		if (xhr.status === 200) {
 			console.log(xhr.responseText);
@@ -30,20 +34,25 @@ request.open("GET", "hello.txt");
 request.send();
 ```
 
-随着时代发展, 2015 年 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 被引入语言标准用于处理异步操作。对比纯回调的方式，Promise 通过链式调用的方式避免了回调地狱。HTTP 请求天生就有异步属性，开发者希望能在做 HTTP 请求时使用 Promise 但是 XMLHttpRequest 并没有提供基于 Promise 的 API，于是 Axios 项目正式启动，它的 slogan 就是:
+随着时代发展, 2015 年 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 被引入语言标准(ES6)用于处理异步操作。相比纯回调的方式，Promise 通过链式调用的方式避免了回调地狱所以很快受到开发者的青睐(ES2017中引入了 async/await 关键词，不过这只是语法糖，本质还是 Promise)。
+
+HTTP 请求天生就有异步属性，开发者希望能在做 HTTP 请求时使用 Promise 但是 XHR 并没有提供基于 Promise 的 API，于是 Axios 项目正式启动，它的 slogan 是:
 
 > Promise based HTTP client for the browser and node.js
-
 
 ### Axios 的优势(相对于 fetch)
 
 虽然 fetch 也基于 Promise, 并且还是原生的 Web API(这意味着你不需要引入额外的第三方代码), 但为什么开发者仍然会选择 axios 呢? 个人认为是下面这些优势:
 
-1. Axios 允许创建多个实例(instance)
+1. Learn once, use everywhere
 
-fetch 是典型的单例模式，在任何时候只有一个实例。Axios 也可以作为单例使用，但是它允许创建多个实例以应对复杂的情况。比如一个前端项目可能会对接对接多个不相干的后端服务并且它们对请求格式的要求不同，这时可以创建多个 Axios 实例分别对应这些后端服务。
+Axios 既可以在浏览器也可以在 Node.js 环境中使用并且语法一致。这相当于抹平了不同运行时的语法差异，对于全栈开发者或者来说降低了学习和维护难度。
 
-2. Axios 可以设定默认值
+2. Axios 允许创建多个实例(instance)
+
+fetch 是典型的单例模式，在任何时候只有一个实例。Axios 也可以作为单例使用，但是它允许创建多个实例以应对复杂场景。比如一个前端项目可能会对接多个不相干的后端服务并且它们对请求格式的要求不同，这时可以创建多个 Axios 实例分别对应这些后端服务。
+
+3. Axios 可以设定默认值
 
 在配置 Axios 的时候可以设定一些默认值，比如 baseURL, headers 之类:
 
@@ -53,14 +62,13 @@ axios.defaults.headers.common['Authorization'] = 'XXX';
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 ```
 
-3. Axios 自带拦截器(interceptor)
+4. Axios 自带拦截器(interceptor)
 
 拦截器可以拦截 request/response 并做一些通用处理，这在某些情况下非常有用(后文会提到一些用例)。
 
-4. Axios 简化了和 JSON 相关的操作
+5. Axios 简化了和 JSON 相关的操作
 
 ```js
-
 const url = 'https://jsonplaceholder.typicode.com/posts'
 const data = { a: 10, b: 20 };
 // axios
@@ -90,31 +98,37 @@ fetch(url, options)
   });
 ```
 
-5. 其他功能：比如自带 timeout, 更简单易用的请求取消机制等
+6. 其他功能：比如自带 timeout, 更简单易用的请求取消机制等
 
-### 简单的 Axios 封装示例
+### Axios 封装示例
 
-几乎每个项目对请求层的要求都不同，假设项目中对于 HTTP 请求层的需求如下: 
+不同项目对请求层的要求几乎都不同，假设项目中对于 HTTP 请求层的需求如下:
 
 - 所有的 API 都在一个站点下，而且对请求格式的要求相同 (无需使用多个 Axios 实例)
 
-- 大多数 API 是需要认证和授权才能访问(需要设置 Authorization 请求头)，只有少量的 API 是公开的(无需认证和授权)
+- 大多数 API 需要认证和授权才能访问(需要设置 Authorization 请求头)，但有少量的 API 是公开的(无需认证和授权)
 
-- API 的请求方法可能会是: GET, POST, PUT, PATCH, DELETE
+- API 的风格是 RESTful, 请求方法可能会是: GET, POST, PUT, PATCH, DELETE
 
-- 会有一些 API 直接以二进制流的形式返回文件, 客户端拿到后可能需要展示文件内容或者直接下载到用户设备中
+- 关于 Request Payload 的一些约定:
+  1. Request Payload 可能是 URL Query Params 的形式也可能是作为 HTTP Body
+  2. 如果 method 是 GET 并有 payload 的话，那么 payload 只会是 URL Query Params 的形式
+  3. 如果 Request Payload 是 HTTP Body 的形式那么大部分情况请求头 Content-Type 是 application/json 但不排除特殊情况
 
-针对这样的需求可以用以下的方式来封装 Axios:
+- 关于 Response 返回头 Content-Type 的一些约定:
+  1. Content-Type 返回头一般是 application/json 但不排除会有其他情况比如 text/plain 之类
+  2. 如果是文件下载服务 Content-Type 返回头会尽量是文件类型对应的 MIME 类型(比如 application/pdf, application/zip 之类), 对于未知文件类型会返回 application/octet-stream；客户端拿到文件后可能需要展示文件内容也可能需要直接下载保存到用户设备
 
-首先定义一些类型(types.ts):
+有了具体的需求就可以着手封装了。首先定义一些类型(types.ts):
 
 ```ts
-// 这包括所有的 HTTP 方法(比如没有 HEAD 和 OPTIONS 方法)，但覆盖了大部分场景
+// 这不包括所有的 HTTP 方法(比如 HEAD 和 OPTIONS 方法)，但覆盖了大部分场景
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
 
 export interface IRequestOption {
   method?: HttpMethod
-  data?: any
+  params?: Record<string, any> // url query params
+  body?: any
   headers?: Record<string, string>
   skipAuth?: boolean // whether to include auth header
   requestBinaryData?: {
@@ -123,7 +137,7 @@ export interface IRequestOption {
 }
 ```
 
-再定义一些 utils 函数(utils.ts):
+再定义一些 utils 函数来处理文件下载(utils.ts):
 
 ```ts
 export function getFilenameFromResponse(contentDisposition: string, fallback = "data"): string {
@@ -162,7 +176,7 @@ export function downloadAsFile(
 }
 ```
 
-现在可以开始封装 Axios (request.ts):
+现在正式开始封装 axios 以构建 request 函数 (request.ts):
 
 ```ts
 import axios from 'axios'
@@ -174,12 +188,13 @@ axios.defaults.headers.common['Authorization'] = 'XXX';
 
 // request wrapper based on axios
 export async function request<T = any>(url: string, option: IRequestOption = {}): Promise<T> {
-  const { method = 'GET', data, headers = {}, skipAuth = false, requestBinaryData } = option;
+  const { method = 'GET', params, body, headers = {}, skipAuth = false, requestBinaryData } = option;
   // make api call
   const response = await axios.request<T>({
     method: method.toLowerCase(), // axios uses lowercase for method
     url: url,
     headers: headers,
+    params: params,
     data: body,
     responseType: requestBinaryData ? 'blob' : 'json',
     transformRequest: (data, headers) => {
@@ -200,7 +215,62 @@ export async function request<T = any>(url: string, option: IRequestOption = {})
 }
 ```
 
-### 稍复杂的 Axios 封装示例
+最后可以把 method 提取出来作为单独的函数 (index.ts):
+
+```ts
+import { HttpMethod, IRequestOption } from './interface'
+import { request } from './request'
+
+type IShortRequestOption = Omit<IRequestOption, 'method' | 'data' | 'params'>
+
+function constructHandyRequest<T = any>(
+  request: (url: string, options: IRequestOption) => Promise<T>,
+  method: HttpMethod
+) {
+  if (method === 'GET') {
+    return (url: string, params?: Record<string, any>, options?: IShortRequestOption) => {
+      return request(url, { ...options, method, params })
+    }
+  } else {
+    return (url: string, body?: any, options?: IShortRequestOption) => {
+      return request(url, { ...options, method, body })
+    }
+  }
+}
+
+export HttpRequest = {
+  Request: request,
+  Get: constructHandyRequest(request, 'Get'),
+  Post: constructHandyRequest(request, 'Post'),
+  Put: constructHandyRequest(request, 'Put'),
+  Patch: constructHandyRequest(request, 'Patch'),
+  Delete: constructHandyRequest(request, 'Delete'),
+}
+```
+
+实际使用例子:
+
+```ts
+// list todos
+HttpRequest.Get("/todos") 
+// get details of an todo item(whose id is 1)
+HttpRequest.Get("/todos/1") 
+// get list of unfinished todos
+HttpRequest.Get("/todos?done=false") 
+HttpRequest.Get("/todos", { done: false })
+// create todo item
+HttpRequest.Post("/todos", { content: "Walk the dog" })
+// change status of a todo item(whose id is 1)
+HttpRequest.Patch("/todos/1", { done: true })
+// replace a todo item (if todo exist, replace it; if not, create a new todo item)
+HttpRequest.Put("/todos/1", { conent: "Walk the cow", done: true })
+// delete a todo item(whose id is 1)
+HttpRequest.Delete("/todos/1")
+// delete a list of todos by id
+HttpRequest.Delete("/todos", ["1", "2", "3"])
+```
+
+### 使用拦截器
 
 未完待续
 
