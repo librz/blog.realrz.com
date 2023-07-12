@@ -1,6 +1,6 @@
 ---
-title: 使用 axios 封装 API 请求层
-date: "2022-06-01"
+title: 使用 axios 封装 HTTP 请求层
+date: "2022-07-12"
 language: zh-CN
 category: other
 ---
@@ -64,7 +64,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 4. Axios 自带拦截器(interceptor)
 
-拦截器可以拦截 request/response 并做一些通用处理，这在某些情况下非常有用(后文会提到一些用例)。
+拦截器可以拦截 request/response 并做一些通用处理，这在某些情况下非常有用(后文会举例说明)。
 
 5. Axios 简化了和 JSON 相关的操作
 
@@ -110,14 +110,15 @@ fetch(url, options)
 
 - API 的风格是 RESTful, 请求方法可能会是: GET, POST, PUT, PATCH, DELETE
 
-- 关于 Request Payload 的一些约定:
-  1. Request Payload 可能是 URL Query Params 的形式也可能是作为 HTTP Body
-  2. 如果 method 是 GET 并有 payload 的话，那么 payload 只会是 URL Query Params 的形式
-  3. 如果 Request Payload 是 HTTP Body 的形式那么大部分情况请求头 Content-Type 是 application/json 但不排除特殊情况
+- 关于 request payload 的一些约定:
+  1. request 的 payload 可能存在于两个地方: URL 和 HTTP Body
+  2. URL 里的 payload 分为两种: URL Path & URL Query Params
+  3. GET 请求一般不会有 HTTP Body
+  4. 如果 request payload 是 HTTP Body 的形式那么大部分情况 Content-Type 请求头是 application/json 但不排除特殊情况
 
-- 关于 Response 返回头 Content-Type 的一些约定:
+- 关于 response 中 Content-Type 返回头的一些约定:
   1. Content-Type 返回头一般是 application/json 但不排除会有其他情况比如 text/plain 之类
-  2. 如果是文件下载服务 Content-Type 返回头会尽量是文件类型对应的 MIME 类型(比如 application/pdf, application/zip 之类), 对于未知文件类型会返回 application/octet-stream；客户端拿到文件后可能需要展示文件内容也可能需要直接下载保存到用户设备
+  2. 如果是文件下载服务 Content-Type 会尽量是文件类型对应的 MIME 类型(比如 application/pdf, application/zip 之类), 对于未知文件类型会返回 application/octet-stream；客户端拿到文件后可能需要展示文件内容也可能需要直接下载并保存
 
 有了具体的需求就可以着手封装了。首先定义一些类型(types.ts):
 
@@ -183,26 +184,29 @@ import axios from 'axios'
 import { IRequestOption } from './types.ts'
 import { getFilenameFromResponse, downloadAsFile } from './utils'
 
-// setup defaults
-axios.defaults.headers.common['Authorization'] = 'XXX';
+export const LOCAL_STORAGE_KEY = {
+  ACCESS_TOKEN = "access_token",
+  REFRESH_TOKEN = "refresh_token"
+}
+
+// set up base url (if FE & backend happen to be under the same host, skip this)
+axios.defaults.baseURL = 'https://api.example.com';
 
 // request wrapper based on axios
 export async function request<T = any>(url: string, option: IRequestOption = {}): Promise<T> {
   const { method = 'GET', params, body, headers = {}, skipAuth = false, requestBinaryData } = option;
   // make api call
+  const accessToken = localStorage.getItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN);
   const response = await axios.request<T>({
     method: method.toLowerCase(), // axios uses lowercase for method
     url: url,
-    headers: headers,
+    headers: skipAuth ? : headers : {
+      ...headers,
+      ['Authorization']: `Bearer ${accessToken}`
+    },
     params: params,
     data: body,
     responseType: requestBinaryData ? 'blob' : 'json',
-    transformRequest: (data, headers) => {
-      if (skipAuth) {
-        delete headers.common['Authorization'];
-      }
-      return data
-    }
   })
   /* save response data as file if saveAsFile is true */
   if (requestBinaryData?.saveAsFile) {
@@ -270,10 +274,162 @@ HttpRequest.Delete("/todos/1")
 HttpRequest.Delete("/todos", ["1", "2", "3"])
 ```
 
-### 使用拦截器
+### 拦截器用法示例 - Refresh Access
 
-未完待续
+很多项目在用户登录后会返回一个 access token, 在后续需要鉴权的 API 请求中，客户端要将其放在 Authorization 请求头中。
+
+常见的 access token 的格式是 [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) 下面是我用 [JWT Builder](http://jwtbuilder.jamiekurtz.com/) 生成的一个 JWT:
+
+```jwt
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTc1OTcxOTEsImV4cCI6MTY1NzY4MzU5MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.f5Q-NMUITKSAQ7I_JpKhkC48s45tBvR-lx5qMKqgRJc
+```
+
+如果 Auth Scheme 是 Bearer 那么对应的 Authorization 请求头就是:
+
+```http
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTc1OTcxOTEsImV4cCI6MTY1NzY4MzU5MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.f5Q-NMUITKSAQ7I_JpKhkC48s45tBvR-lx5qMKqgRJc
+```
+
+再仔细观察下生成的 JWT, 可以看到 JWT 被两个 . 分成了 3 部分(分别对应 header, payload 和 verify signature)，我们可以使用 [jwt.io](https://jwt.io/) 对其进行解析，下面是解析出来的 payload 部分:
+
+```json
+{
+  "iss": "Online JWT Builder",
+  "iat": 1657597191, // Tue Jul 12 2022 11:39:51 GMT+0800 (中国标准时间)
+  "exp": 1657683591, // Wed Jul 13 2022 11:39:51 GMT+0800 (中国标准时间)
+  "aud": "www.example.com",
+  "sub": "jrocket@example.com",
+  "GivenName": "Johnny",
+  "Surname": "Rocket",
+  "Email": "jrocket@example.com",
+  "Role": [
+    "Manager",
+    "Project Administrator"
+  ]
+}
+```
+
+请注意其中的 iat 和 exp 字段，它们分别代表 token 的颁发(issued at)和失效(expire)时间。那么失效后该怎么办呢? 一种简单粗暴的办法是直接 redirect 到登录页面让用户重新登录，这样就能获取一个新的 access token。但这并不是好的用户体验，因为它可能打断用户的 flow。试想如下场景：用户想连续做两个操作，先将一个待办事项标记为已完成再新建一个待办事项。碰巧的是第一个操作刚做完 access token 就失效了，这时再去做第二个操作就会失败并被 redirect 到登录页面。
+
+很明显我们要有一种自动续签的机制，如果请求因为 token expire 失败那么就自动为用户申请一个新的 access token 并用新的 token 重试请求。
+
+和 access token 一样，refresh token 也需要被缓存起来，一般使用 localStorage，先为其定义 localStorage key:
+
+```ts
+export const LOCAL_STORAGE_KEY = {
+  ACCESS_TOKEN = "access_token",
+  REFRESH_TOKEN = "refresh_token"
+}
+```
+
+自动续签需要有一个 refresh token，一般也可以在用户登录后拿到。Refresh token 通常也是 jwt 的格式且比 access token 的失效时间要长得多。假设下面函数可以 refresh access token:
+
+```ts
+export async function refreshAccess() {
+  const { data: { access_token } } = await axios.post<{ access_token: string }>("/access/refresh",{
+    refresh_token: localStorage.getItem(LOCAL_STORAGE_KEY.REFRESH_TOKEN)
+  });
+  localStorage.setItem(LOCAL_STORAGE_KEY.ACCESS_TOKEN, access_token);
+  return access_token
+}
+```
+
+下面是用 Axios 拦截器实现自动续签的一个基础版本(假设 token expired 那么 API 的 reponse code 是 401, response body 中返回的 reason 是 expired):
+
+```ts
+axios.interceptors.response.use((response) => response, (error) => {
+  const originalRequest = error.config;
+  const errorCode = error.response?.status
+  // handle 401: Unauthorized
+  if (errorCode === 401) {
+    const reason = error.response?.data?.["reason"]
+    if (reason !== "expired" || originalRequest._retry) {
+      redirectToLogin()
+      return Promise.reject(error)
+    }
+    // token expired & not yet retried
+    originalRequest._retry = true;
+    // refresh access token & retry
+    return refreshAccess().then(token => {
+      return axios({
+        ...originalRequest,
+        headers: {
+          ...originalRequest?.headers,
+          Authorization: `Bearer ${token}`,
+        }
+      });
+    });
+  }
+  // nromal cases
+  return Promise.reject(error);
+});
+```
+
+以上代码看起来没什么问题，但如果 expire 之时存在多个并发 API 请求，那么每一个请求都会被 retry，就会造成 refresh token 在短时间内被调用多次的情况。虽然一些后端平台允许并能够承受这样的操作，但前端还是应该做优化尽量避免这样的情况，下面是我的一个解决方案:
+
+```ts
+const refreshStatus: {
+  isRefreshing: boolean,
+  pendingerExecutors: Array<(type: 'retry' | 'reject') => void>
+} = {
+  isRefreshing: false,
+  pendingerExecutors: []
+};
+
+axios.interceptors.response.use((response) => response, (error) => {
+  const originalRequest = error.config;
+  const errorCode = error.response?.status
+  // handle 401: Unauthorized
+  if (errorCode === 401) {
+    const reason = error.response?.data?.["reason"]
+    if (reason !== "expired") {
+      redirectToLogin()
+      return Promise.reject(error)
+    }
+    if (!refreshStatus.isRefreshing) {
+      refreshStatus.isRefreshing = true
+      // token expired, try refresh token
+      refreshAccess()
+        .then(() => {
+          refreshStatus.pendingerExecutors.forEach(fn => fn('retry'))
+        })
+        .catch(err => {
+          // this usually means refresh token itself is expired
+          console.error(err)
+          refreshStatus.pendingerExecutors.forEach(fn => fn('reject'))
+          redirectToLogin()
+        })
+        .finally(() => {
+          refreshStatus.isRefreshing = false
+          refreshStatus.pendingerExecutors = []
+        })
+    }
+    // return a promise that will not resolve by itself
+    return new Promise((resolve, reject) => {
+      const curExecutor = (type: 'retry' | 'reject') => {
+        if (type === 'reject') {
+          reject(error)
+        } else {
+          resolve(
+            axios({
+              ...originalRequest,
+              headers: {
+                ...originalRequest?.headers,
+                Authorization: `Bearer ${retryToken}`,
+              },
+            })
+          )
+        }
+      }
+      refreshStatus.pendingerExecutors.push(curExecutor)
+    })
+  }
+  // normal cases
+  return Promise.reject(error);
+});
+```
 
 ### 参考资料
 
 1. [Wikipedia: AJAX](https://en.wikipedia.org/wiki/Ajax_(programming))
+2. [Wikipedia: JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token)
