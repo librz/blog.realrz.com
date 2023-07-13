@@ -5,7 +5,7 @@ language: zh-CN
 category: other
 ---
 
-> [Axios](https://github.com/axios/axios) 是当前 JavaScript 生态中最流行的 HTTP 请求库，即便 2017 年左右主流浏览器就都支持了原生的 [fetch api](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)，但 Axios 的语法优势和内置的便捷功能让它在今天仍然是多数开发者的首选。
+> [Axios](https://github.com/axios/axios) 是当前 JavaScript 生态中最流行的 HTTP 请求库，即便 2017 年左右主流浏览器就都支持了原生的 [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)，但 Axios 的语法优势和内置的便捷功能让它在今天仍然是多数开发者的首选。
 
 ### Axios 的历史和原理
 
@@ -36,7 +36,7 @@ request.send();
 
 随着时代发展, 2015 年 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 被引入语言标准(ES6)用于处理异步操作。相比纯回调的方式，Promise 通过链式调用的方式避免了回调地狱所以很快受到开发者的青睐(ES2017中引入了 async/await 关键词，不过这只是语法糖，本质还是 Promise)。
 
-HTTP 请求天生就有异步属性，开发者希望能在做 HTTP 请求时使用 Promise 但是 XHR 并没有提供基于 Promise 的 API，于是 Axios 项目正式启动，它的 slogan 是:
+HTTP 请求天生就有异步属性，开发者希望能在做 HTTP 请求时使用 Promise 但是 XHR 并没有提供基于 Promise 的 API，于是 Axios 项目正式启动，它的定位是:
 
 > Promise based HTTP client for the browser and node.js
 
@@ -71,24 +71,20 @@ axios.defaults.headers.post['Content-Type'] = 'application/json'
 ```js
 const url = 'https://jsonplaceholder.typicode.com/posts'
 const data = { a: 10, b: 20 };
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json;charset=UTF-8",
+};
 // axios
 axios
-  .post(url, data, { // 自带 post 方法，传参时无须手动序列化
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json;charset=UTF-8",
-    },
-  })
-  .then(({data}) => { // 自动 JSON 解析
+  .post(url, data, { headers }) // 自带 post 等方法；传参时无须手动序列化
+  .then(({ data }) => { // 自动 JSON 解析
     console.log(data);
   })
 // fetch
 const options = {
   method: "POST",
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json;charset=UTF-8",
-  },
+  headers: headers,
   body: JSON.stringify(data) // 需要手动序列化以作为 http body
 };
 fetch(url, options)
@@ -108,7 +104,15 @@ fetch(url, options)
 
 - 大多数 API 需要认证和授权才能访问(需要设置 Authorization 请求头)，但有少量的 API 是公开的(无需认证和授权)
 
-- API 的风格是 RESTful, 请求方法可能会是: GET, POST, PUT, PATCH, DELETE
+- API 的风格是 RESTful
+
+- 关于请求方法的一些约定:
+  1. 请求方法可能会是: GET, POST, PUT, PATCH, DELETE
+  2. GET 请求只用于获取资源，不应该生成或者修改资源
+  3. POST 的主要用处是 create 新资源，有时获取资源需要传结构化数据给 API 也可以考虑使用 POST
+  4. PUT 用于全量更新(自动生成的字段比如 id 除外), 相当于先删除再创建；
+  5. PATCH 用于部分更新，只会更新 payload 里面有的字段；
+  6. DELETE 用于删除资源
 
 - 关于 request payload 的一些约定:
   1. request 的 payload 可能存在于两个地方: URL 和 HTTP Body
@@ -290,7 +294,7 @@ eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQ
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTc1OTcxOTEsImV4cCI6MTY1NzY4MzU5MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.f5Q-NMUITKSAQ7I_JpKhkC48s45tBvR-lx5qMKqgRJc
 ```
 
-再仔细观察下生成的 JWT, 可以看到 JWT 被两个 . 分成了 3 部分(分别对应 header, payload 和 verify signature)，我们可以使用 [jwt.io](https://jwt.io/) 对其进行解析，下面是解析出来的 payload 部分:
+仔细观察下生成的 JWT, 可以看到 JWT 被两个 . 分成了 3 部分(分别对应 header, payload 和 verify signature)，我们可以使用 [jwt.io](https://jwt.io/) 对其进行解析，下面是解析出来的 payload 部分:
 
 ```json
 {
@@ -309,11 +313,9 @@ Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgS
 }
 ```
 
-请注意其中的 iat 和 exp 字段，它们分别代表 token 的颁发(issued at)和失效(expire)时间。那么失效后该怎么办呢? 一种简单粗暴的办法是直接 redirect 到登录页面让用户重新登录，这样就能获取一个新的 access token。但这并不是好的用户体验，因为它可能打断用户的 flow。试想如下场景：用户想连续做两个操作，先将一个待办事项标记为已完成再新建一个待办事项。碰巧的是第一个操作刚做完 access token 就失效了，这时再去做第二个操作就会失败并被 redirect 到登录页面。
+请注意其中的 iat 和 exp 字段，它们分别代表 token 的颁发(issued at)和失效(expire)时间。那么失效后该怎么办呢? 一种简单粗暴的办法是直接 redirect 到登录页面让用户重新登录，这样就能获取一个新的 access token。但这并不是好的用户体验，因为它可能打断用户的 flow。试想如下场景：用户想连续做两个操作，先将一个待办事项标记为已完成再新建一个待办事项。碰巧的是第一个操作刚做完 access token 就失效了，这时再执行第二个操作就会失败并被 redirect 到登录页面。
 
-很明显我们要有一种自动续签的机制，如果请求因为 token expire 失败那么就自动为用户申请一个新的 access token 并用新的 token 重试请求。
-
-和 access token 一样，refresh token 也需要被缓存起来，一般使用 localStorage，先为其定义 localStorage key:
+很明显我们要有一种自动续签的机制，如果请求因为 token expire 失败那么就自动为用户申请一个新的 access token 并用新的 token 重试请求。自动续签需要有一个 refresh token，一般也可以在用户登录后拿到。Refresh token 通常也是 jwt 的格式且比 access token 的有效时间要长得多。和 access token 一样，refresh token 也需要被缓存起来，一般使用 localStorage，先为其定义 key:
 
 ```ts
 export const LOCAL_STORAGE_KEY = {
@@ -322,7 +324,7 @@ export const LOCAL_STORAGE_KEY = {
 }
 ```
 
-自动续签需要有一个 refresh token，一般也可以在用户登录后拿到。Refresh token 通常也是 jwt 的格式且比 access token 的失效时间要长得多。假设下面函数可以 refresh access token:
+假设下面函数可以 refresh access token:
 
 ```ts
 export async function refreshAccess() {
