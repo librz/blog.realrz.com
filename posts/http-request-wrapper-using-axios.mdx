@@ -9,7 +9,7 @@ category: other
 
 ### Axios 的历史和原理
 
-早期(2005年之前)网站发送 HTTP 请求只能通过刷新整个页面的方式，服务器收到请求会返回新的 HTML 页面，之后浏览器会重新构建 DOM 并渲染。很快人们发现这样的交互体验不尽人意，于是发明了 [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX) 的概念来实现局部刷新。它使用 [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)(简称XHR) 以编程的方式在后台发起 HTTP 请求，收到服务器返回后通过 JavaScript 操纵 DOM 来实现局部刷新。
+早期(2005年之前)网站发送 HTTP 请求到服务器，服务器会返回新的 HTML，之后浏览器需要解析 HTML 重新构建 DOM 并渲染整个页面。很快人们发现这样的交互体验不尽人意，于是发明了 [AJAX](https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX) 这个模式来实现局部刷新。它使用 [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)(简称XHR) 在后台发起 HTTP 请求，收到服务器返回后通过 JavaScript 操纵 DOM 以局部更新页面。
 
 Axios 正是基于 XHR 的 HTTP 请求库(实际上 Axios 即支持浏览器环境又支持 Node.js 环境，在不同的环境中依靠不同的原生工具来发出 HTTP 请求，在浏览器中使用 XHR 而在 Node.js 中使用内置的 http 模块)。
 
@@ -17,7 +17,7 @@ Axios 正是基于 XHR 的 HTTP 请求库(实际上 Axios 即支持浏览器环�
 
 上图为：Axios 源代码中使用了 XHR
 
-在使用了 AJAX 后用户体验得到改善，但开发者却对 XHR 的语法不太满意，它有一堆事件和状态，大体使用方法如下:
+在使用了 AJAX 后用户体验得到改善，但开发者却对 XHR 的语法不太满意，它有一堆事件和状态，大体使用方法如下：
 
 ```js
 var request = new XMLHttpRequest();
@@ -34,7 +34,7 @@ request.open("GET", "hello.txt");
 request.send();
 ```
 
-随着时代发展, 2015 年 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 被引入语言标准(ES6)用于处理异步操作。相比纯回调的方式，Promise 通过链式调用的方式避免了回调地狱所以很快受到开发者的青睐(ES2017中引入了 async/await 关键词，不过这只是语法糖，本质还是 Promise)。
+随着时代发展，2015 年 [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) 被引入语言标准(ES6)用于处理异步操作。相比纯回调的方式，Promise 通过链式调用的方式避免了回调地狱所以很快受到开发者的青睐(ES2017中引入了 async/await 关键词，不过这只是语法糖，本质还是 Promise)。
 
 HTTP 请求天生就有异步属性，开发者希望能在做 HTTP 请求时使用 Promise 但是 XHR 并没有提供基于 Promise 的 API，于是 Axios 项目正式启动，它的定位是:
 
@@ -42,7 +42,7 @@ HTTP 请求天生就有异步属性，开发者希望能在做 HTTP 请求时使
 
 ### Axios 的优势(相对于 fetch)
 
-虽然 fetch 也基于 Promise, 并且还是原生的 Web API(这意味着你不需要引入额外的第三方代码), 但为什么开发者仍然会选择 axios 呢? 个人认为是下面这些优势:
+虽然 fetch 也基于 Promise，并且还是原生的 Web API(这意味着你不需要引入额外的第三方代码)，但为什么开发者仍然会选择 axios 呢? 个人认为是下面这些优势：
 
 1. Learn once, use everywhere
 
@@ -98,7 +98,7 @@ fetch(url, options)
 
 ### Axios 封装示例
 
-不同项目对请求层的要求几乎都不同，假设项目中对于 HTTP 请求层的需求如下:
+不同项目对请求层的要求几乎都不同，假设项目中对于 HTTP 请求层的需求如下：
 
 - 所有的 API 都在一个站点下，而且对请求格式的要求相同 (无需使用多个 Axios 实例)
 
@@ -110,19 +110,19 @@ fetch(url, options)
   1. 请求方法可能会是: GET, POST, PUT, PATCH, DELETE
   2. GET 请求只用于获取资源，不应该生成或者修改资源
   3. POST 的主要用处是 create 新资源，有时获取资源需要传结构化数据给 API 也可以考虑使用 POST
-  4. PUT 用于全量更新(自动生成的字段比如 id 除外), 相当于先删除再创建；
-  5. PATCH 用于部分更新，只会更新 payload 里面有的字段；
+  4. PUT 用于全量更新(自动生成的字段比如 id 除外), 相当于先删除再创建
+  5. PATCH 用于部分更新，只会更新 payload 里面有的字段
   6. DELETE 用于删除资源
 
-- 关于 request payload 的一些约定:
-  1. request 的 payload 可能存在于两个地方: URL 和 HTTP Body
-  2. URL 里的 payload 分为两种: URL Path & URL Query Params
+- 关于 request payload 的一些约定：
+  1. request 的 payload 可能存在于两个地方：URL 和 HTTP Body
+  2. URL 里的 payload 分为两种：URL Path & URL Query Params
   3. GET 请求一般不会有 HTTP Body
   4. 如果 request payload 是 HTTP Body 的形式那么大部分情况 Content-Type 请求头是 application/json 但不排除特殊情况
 
-- 关于 response 中 Content-Type 返回头的一些约定:
+- 关于 response 中 Content-Type 返回头的一些约定：
   1. Content-Type 返回头一般是 application/json 但不排除会有其他情况比如 text/plain 之类
-  2. 如果是文件下载服务 Content-Type 会尽量是文件类型对应的 MIME 类型(比如 application/pdf, application/zip 之类), 对于未知文件类型会返回 application/octet-stream；客户端拿到文件后可能需要展示文件内容也可能需要直接下载并保存
+  2. 如果是文件下载服务 Content-Type 会尽量是文件类型对应的 MIME 类型(比如 application/pdf, application/zip 之类)，对于未知文件类型会返回 application/octet-stream；客户端拿到文件后可能需要展示文件内容也可能需要直接下载并保存
 
 有了具体的需求就可以着手封装了。首先定义一些类型(types.ts):
 
@@ -256,7 +256,7 @@ export HttpRequest = {
 }
 ```
 
-实际使用例子:
+一些具体的例子：
 
 ```ts
 // list todos
@@ -270,7 +270,7 @@ HttpRequest.Get("/todos", { done: false })
 HttpRequest.Post("/todos", { content: "Walk the dog" })
 // change status of a todo item(whose id is 1)
 HttpRequest.Patch("/todos/1", { done: true })
-// replace a todo item (if todo exist, replace it; if not, create a new todo item)
+// replace a todo item(whose id is 1)
 HttpRequest.Put("/todos/1", { conent: "Walk the cow", done: true })
 // delete a todo item(whose id is 1)
 HttpRequest.Delete("/todos/1")
@@ -280,7 +280,7 @@ HttpRequest.Delete("/todos", ["1", "2", "3"])
 
 ### 拦截器用法示例 - Refresh Access
 
-很多项目在用户登录后会返回一个 access token, 在后续需要鉴权的 API 请求中，客户端要将其放在 Authorization 请求头中。
+很多项目在用户登录后会返回一个 access token，在后续需要鉴权的 API 请求中，客户端要将其放在 Authorization 请求头中。
 
 常见的 access token 的格式是 [JWT](https://en.wikipedia.org/wiki/JSON_Web_Token) 下面是我用 [JWT Builder](http://jwtbuilder.jamiekurtz.com/) 生成的一个 JWT:
 
@@ -288,13 +288,13 @@ HttpRequest.Delete("/todos", ["1", "2", "3"])
 eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTc1OTcxOTEsImV4cCI6MTY1NzY4MzU5MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.f5Q-NMUITKSAQ7I_JpKhkC48s45tBvR-lx5qMKqgRJc
 ```
 
-如果 Auth Scheme 是 Bearer 那么对应的 Authorization 请求头就是:
+如果 Auth Scheme 是 Bearer 那么对应的 Authorization 请求头就是：
 
 ```http
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJPbmxpbmUgSldUIEJ1aWxkZXIiLCJpYXQiOjE2NTc1OTcxOTEsImV4cCI6MTY1NzY4MzU5MSwiYXVkIjoid3d3LmV4YW1wbGUuY29tIiwic3ViIjoianJvY2tldEBleGFtcGxlLmNvbSIsIkdpdmVuTmFtZSI6IkpvaG5ueSIsIlN1cm5hbWUiOiJSb2NrZXQiLCJFbWFpbCI6Impyb2NrZXRAZXhhbXBsZS5jb20iLCJSb2xlIjpbIk1hbmFnZXIiLCJQcm9qZWN0IEFkbWluaXN0cmF0b3IiXX0.f5Q-NMUITKSAQ7I_JpKhkC48s45tBvR-lx5qMKqgRJc
 ```
 
-仔细观察下生成的 JWT, 可以看到 JWT 被两个 . 分成了 3 部分(分别对应 header, payload 和 verify signature)，我们可以使用 [jwt.io](https://jwt.io/) 对其进行解析，下面是解析出来的 payload 部分:
+仔细观察下生成的 JWT, 可以看到 JWT 被两个 . 分成了 3 部分(分别对应 header, payload 和 verify signature)，我们可以使用 [jwt.io](https://jwt.io/) 对其进行解析，下面是解析出来的 payload 部分：
 
 ```json
 {
@@ -336,7 +336,7 @@ export async function refreshAccess() {
 }
 ```
 
-下面是用 Axios 拦截器实现自动续签的一个基础版本(假设 token expired 那么 API 的 reponse code 是 401, response body 中返回的 reason 是 expired):
+下面是用 Axios 拦截器实现自动续签的一个基础版本(假设 token expired 那么 API 的 reponse code 是 401，response body 中返回的 reason 是 expired):
 
 ```ts
 axios.interceptors.response.use((response) => response, (error) => {
@@ -367,7 +367,7 @@ axios.interceptors.response.use((response) => response, (error) => {
 });
 ```
 
-以上代码看起来没什么问题，但如果 expire 之时存在多个并发 API 请求，那么每一个请求都会被 retry，就会造成 refresh token 在短时间内被调用多次的情况。虽然一些后端平台允许并能够承受这样的操作，但前端还是应该做优化尽量避免这样的情况，下面是我的一个解决方案:
+以上代码看起来没什么问题，但如果 expire 之时存在多个并发 API 请求（一个典型的例子是由卡片组成的 Dashboard，每个卡片都可能对应一个单独的 HTTP 请求），每一个请求都会被 retry，就会导致 refresh token 在短时间内被调用多次。虽然一些后端平台允许并能够承受这样的操作，但前端还是应该做优化尽量避免这样的情况，下面是我的一个解决方案:
 
 ```ts
 const refreshStatus: {
