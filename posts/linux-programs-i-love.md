@@ -25,6 +25,14 @@ apt 是 Ubuntu 系统下的包管理器（package manager），我喜欢的不�
 
 awk 把输入的文本看成是有行列的表格，并对其进行逐行处理。灵活强大，支持正则表达式，可以声明变量，有条件语句和循环机制以至于你可以把它看成是一个小小的编程语言!
 
+### bc
+
+全称是 Berkeley Calculator，可以用来做简单的数学计算
+
+### termdown
+
+这是一个 Python 生态下的 Package, 可以用 `pip install termdown` 来安装, 很好用的 countdown 计时工具
+
 ### tree
 
 打印目录的树状结构
