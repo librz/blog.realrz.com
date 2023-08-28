@@ -33,6 +33,10 @@ awk 把输入的文本看成是有行列的表格，并对其进行逐行处理�
 
 这是一个 Python 生态下的 Package, 可以用 `pip install termdown` 来安装, 很好用的 countdown 计时工具
 
+### neofetch
+
+漂亮的系统信息显示工具
+
 ### tree
 
 打印目录的树状结构
