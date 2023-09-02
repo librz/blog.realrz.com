@@ -1,46 +1,34 @@
 import { FC } from "react";
-import {
-  AcademicCapIcon,
-  BanknotesIcon,
-  CheckBadgeIcon,
-  ClockIcon,
-  ReceiptRefundIcon,
-  UsersIcon,
-} from "@heroicons/react/24/outline";
+import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
 
 interface GridListItem {
   title: string;
   href: string;
   description: string;
+  icon: typeof ArrowDownCircleIcon;
 }
 
 const icons: Array<{
-  icon: typeof ClockIcon;
   foreground: string;
   background: string;
 }> = [
   {
-    icon: ClockIcon,
     foreground: "text-teal-700",
     background: "bg-teal-50",
   },
   {
-    icon: CheckBadgeIcon,
     foreground: "text-purple-700",
     background: "bg-purple-50",
   },
   {
-    icon: UsersIcon,
     foreground: "text-sky-700",
     background: "bg-sky-50",
   },
   {
-    icon: BanknotesIcon,
     foreground: "text-yellow-700",
     background: "bg-yellow-50",
   },
   {
-    icon: ReceiptRefundIcon,
     foreground: "text-rose-700",
     background: "bg-rose-50",
   },
@@ -81,7 +69,7 @@ const GridList: FC<IProps> = ({ items }) => {
                 "inline-flex rounded-lg p-3 ring-4 ring-white"
               )}
             >
-              <BanknotesIcon className="h-6 w-6" aria-hidden="true" />
+              <item.icon className="h-6 w-6" aria-hidden="true" />
             </span>
           </div>
           <div className="mt-8">
