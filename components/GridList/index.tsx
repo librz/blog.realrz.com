@@ -55,6 +55,7 @@ interface IProps {
 }
 
 const GridList: FC<IProps> = ({ items }) => {
+  const firstIcon = icons[1];
   return (
     <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0">
       {items.map((item, idx) => (
@@ -80,7 +81,7 @@ const GridList: FC<IProps> = ({ items }) => {
                 "inline-flex rounded-lg p-3 ring-4 ring-white"
               )}
             >
-              <ClockIcon className="h-6 w-6" aria-hidden="true" />
+              <BanknotesIcon className="h-6 w-6" aria-hidden="true" />
             </span>
           </div>
           <div className="mt-8">
