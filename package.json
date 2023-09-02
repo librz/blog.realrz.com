@@ -14,6 +14,7 @@
   "author": "librz",
   "license": "ISC",
   "dependencies": {
+    "@heroicons/react": "^2.0.18",
     "@jsdevtools/rehype-toc": "^3.0.2",
     "contentlayer": "^0.3.4",
     "next": "^13.4.19",
