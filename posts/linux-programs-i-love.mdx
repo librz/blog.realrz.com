@@ -5,74 +5,98 @@ language: zh-CN
 category: linux
 ---
 
-> Unix 编程的哲学是 Do One Thing And Do It Well。每个程序的目的都应该很简单明确，不同的程序通过组合就可以完成那些看起来很复杂的工作。以下是一个列表，他们都是我喜欢的 Linux 程序
+Unix 编程的哲学是 Do One Thing And Do It Well。每个程序的目的都应该很简单明确，不同的程序通过组合就可以完成那些看起来很复杂的工作。以下是一个列表，他们都是我喜欢的 Linux 程序
 
-### tldr
+import { GridList } from "../components/GridList";
 
-查找某个命令的用法时常用的做法是使用 man，但有些时候 man 给出的手册太长太详细了，使用者很难找到自己想要的。我就经常查看 man 手册不知不觉睡着了。
-
-[tldr](https://github.com/tldr-pages/tldr) 就用于解决这类问题，它以简洁的方式提供某个命令最常用的用法。比如想要查看 disown 的用法: `tldr disown` 即可
-
-### apt
-
-apt 是 Ubuntu 系统下的包管理器（package manager），我喜欢的不是 apt 本身而是包管理器的概念：以一种中心化的方式获取和管理软件
-
-### vim
-
-从行为层面看，编程是一种密集型的字符编辑活动。如果你使用常规的文本编辑器，那很大一部分时间要浪费在鼠标和键盘间的来回切换上。Vim 解决了这个问题，作为一种行列编辑器，你可以完全使用快捷键来进行定位，而不是鼠标，双手可以一直放在键盘上。它无处不在，浏览器有 vim 插件，甚至命令行都可以配置 vim 模式。
-
-### awk
-
-awk 把输入的文本看成是有行列的表格，并对其进行逐行处理。灵活强大，支持正则表达式，可以声明变量，有条件语句和循环机制以至于你可以把它看成是一个小小的编程语言!
-
-### bc
-
-全称是 Berkeley Calculator，可以用来做简单的数学计算
-
-### termdown
-
-这是一个 Python 生态下的 Package, 可以用 `pip install termdown` 来安装, 很好用的 countdown 计时工具
-
-### neofetch
-
-漂亮的系统信息显示工具
-
-### tree
-
-打印目录的树状结构
-
-### pstree
-
-打印进程的树状结构，可以很方便看出进程之间的层级关系
-
-### cron
-
-执行定时任务，比如隔几天做一次备份，每几个小时执行某个脚本...
-
-### ssh
-
-Secure Shell, 用于登录远程主机。使用 SSH Key 做身份验证的话非常方便，第一次设定完成后，再也不需要输入密码。用 -D 选项，你甚至可以用它做端口转发，这曾经是科学上网的主要方式。
-
-### scp
-
-在本地和远程主机之间传送文件，基于 SSH
-
-### htop
-
-系统使用者应该对对当前使用机器的资源使用情况有基本了解。htop 实时显示 cpu 和内存的使用情况，支持点按排序，让你清晰的了解是那些进程在消耗系统资源。
-
-### curl
-
-灵活强大的网络请求工具，可以用来替换 Postman 还可以用来下载 Web 上的资源。
-
-### shellcheck
-
-如果你写 shell 脚本的话，[shellcheck](https://github.com/koalaman/shellcheck) 会检查脚本的语法和可能的错误并给出提示。官方的介绍很简单: ShellCheck, a static analysis tool for shell scripts
-
-### netstat
-
-如果你需要查看机器上那些端口在运行，使用这些端口的程序是什么，那 netstat 是不错的选择
-
-### youtube-dl
-
-下片必备，懂得都懂
+<GridList
+  items={[
+    {
+      title: "tldr",
+      href: "#",
+      description:
+        "查找命令用法时常用的做法是使用 man，但很多时候 man 给出的手册太长了，使用者很难找到自己想要的那部分信息。tldr 就用于解决这类问题，它以简洁的方式提供某个命令最常用的用法。比如想要查看 disown 的用法: `tldr disown` 即可",
+    },
+    {
+      title: "apt",
+      href: "#",
+      description:
+        "apt 是 Ubuntu 系统下的包管理器（package manager），我喜欢的不是 apt 本身而是包管理器的概念：以一种中心化的方式获取和管理软件",
+    },
+    {
+      title: "vim",
+      href: "#",
+      description:
+        "从行为层面看，编程是一种密集型的字符编辑活动。如果你使用常规的文本编辑器，那很大一部分时间要浪费在鼠标和键盘间的来回切换上。Vim 解决了这个问题，作为一种行列编辑器，你可以完全使用快捷键来进行定位，而不是鼠标，双手可以一直放在键盘上。它无处不在，浏览器有 vim 插件，甚至命令行都可以配置 vim 模式。",
+    },
+    {
+      title: "awk",
+      href: "#",
+      description:
+        "awk 把输入的文本看成是有行列的表格，并对其进行逐行处理。灵活强大，支持正则表达式，可以声明变量，有条件语句和循环机制以至于你可以把它看成是一个小小的编程语言!",
+    },
+    {
+      title: "bc",
+      href: "#",
+      description: "全称是 Berkeley Calculator，可以用来做简单的数学计算",
+    },
+    {
+      title: "termdown",
+      href: "#",
+      description:
+        "这是一个 Python 生态下的 Package, 可以用 `pip install termdown` 来安装, 很好用的 countdown 计时工具",
+    },
+    {
+      title: "neofetch",
+      href: "#",
+      description: "漂亮的系统信息显示工具",
+    },
+    {
+      title: "tree & pstree",
+      href: "#",
+      description:
+        "tree 用于打印目录的树状结构; pstree 用于打印进程的树状结构，可以很方便看出进程之间的层级关系",
+    },
+    {
+      title: "cron",
+      href: "#",
+      description:
+        "执行定时任务，比如隔几天做一次备份，每几个小时执行某个脚本...",
+    },
+    {
+      title: "ssh & scp",
+      href: "#",
+      description:
+        "Secure Shell, 用于登录远程主机。使用 SSH Key 做身份验证的话非常方便，第一次设定完成后，再也不需要输入密码。scp 是基于 ssh 的工具，可以在本地和远程主机之间传送文件",
+    },
+    {
+      title: "htop",
+      href: "#",
+      description:
+        "系统使用者应该对对当前使用机器的资源使用情况有基本了解。htop 实时显示 cpu 和内存的使用情况，支持点按排序，让你清晰的了解是那些进程在消耗系统资源。",
+    },
+    {
+      title: "curl",
+      href: "#",
+      description:
+        "灵活强大的网络请求工具，可以用来替换 Postman 还可以用来下载 Web 上的资源",
+    },
+    {
+      title: "shellcheck",
+      href: "#",
+      description:
+        "如果你写 shell 脚本的话，[shellcheck](https://github.com/koalaman/shellcheck) 会检查脚本的语法和可能的错误并给出提示。官方的介绍很简单: ShellCheck, a static analysis tool for shell scripts",
+    },
+    {
+      title: "netstat",
+      href: "#",
+      description:
+        "如果你需要查看机器上那些端口在运行，使用这些端口的程序是什么，那 netstat 是不错的选择",
+    },
+    {
+      title: "youtube-dl",
+      href: "#",
+      description: "下片必备，懂得都懂",
+    },
+  ]}
+/>
