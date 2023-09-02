@@ -1,4 +1,4 @@
-## source code for blog.realrz.com, built with nextjs
+## My personal blog project
 
 ### setup
 
