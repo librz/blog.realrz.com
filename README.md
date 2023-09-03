@@ -1,18 +1,18 @@
-## source code for blog.realrz.com, built with nextjs
+## My personal blog project
 
-### setup
+### Setup
 
 1. install dependency
 
-npm install
+`npm install`
 
 2. run project locally
 
-- start dev server: npm run dev
+- start dev server: `npm run dev`
 
-- view in browser: http://localhost:9001
+- view in browser: `http://localhost:9001`
 
-### nginx config
+### Nginx config
 
 on the server, nginx config is as follows:
 
@@ -28,7 +28,7 @@ server {
 
 nginx, upon receiving a request will proxy it to port 9001
 
-### deployment 
+### Deployment 
 
 ```sh
 pm2 start npm --name "blog.realrz.com" -- run serve
