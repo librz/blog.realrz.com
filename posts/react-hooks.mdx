@@ -1,0 +1,144 @@
+---
+title: 浅析 React 中的 Hooks
+date: "2024-03-03"
+language: zh-CN
+category: react
+---
+
+转眼间已经使用 React Hooks 好几年，这期间实践了各种灵活且强大的原生 Hook，这篇文章是我用分类法对 hooks 用法的总结。尽管我的出发点是为了自己以后能有一个快速参考(Quick Reference)，但也希望对读者有所帮助。
+
+React 本身足够复杂，所以这篇博客做了以下限制：
+
+- 只包含客户端 API，使用 React 做服务端渲染(SSR, SSG, RSC)将不被提及
+- 太冷门的 Hook 将不被讨论，如: useSyncExternalStore
+
+### 3 个状态 Hook
+
+所有现代 UI 框架的理念都是: **UI = f(state)**, 当状态(state)改变时，UI 会自动做相应的调整。React 中控制组件状态的原生 hook 有以下 3 种:
+
+1. useState
+2. useReducer
+3. useContext
+
+_useState_ 是 React 中最常用的 hook，这里我想突出 2 点：
+
+- setState 是异步的
+
+  ```jsx
+  function Counter() {
+    const [count, setCount] = useState(0);
+    function handleClick() {
+      setCount(count + 1);
+      console.log(count); // 仍然是 set 之前的状态
+    }
+    return (
+      <div>
+        <div>{count}</div>
+        <button onClick={() => }>Increase</button>
+      </div>
+    )
+  }
+  ```
+
+- setState 的参数可以是函数，这样可以保证每次拿到的状态都是最新的
+
+  ```jsx
+  function Countdown() {
+    const [count, setCount] = useState(60);
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setCount(count - 1); // 由于闭包，count 永远是 60，这相当于 setCount(60 - 1)
+        // setCount(count => count - 1); // 正确写法
+      }, 1000);
+      return () => clearInterval(timer);
+    }, []);
+    return <h1>{count}</h1>;
+  }
+  ```
+
+_useReducer_ 是 _useState_ 的高级版本。Reducer 的概念来自于 Redux，它内部封装了 action 具体如何更新 state 的细节，使用者只需要 diapatch 一个 action 即可。对于状态更新来自于多种不同类型事件(比如 Todo List)的场景，_useReducer_ 可以让代码变得简洁优雅。
+
+_context_ 是 React 原生提供的状态容器，可以在跨层级的多个组件间共享状态，解决了著名的属性透传(prop drilling)问题。它使用 Provider 模式，在某一个顶层组件提供 value(通常基于该组件的 state)，然后就可以在被它包裹的任意一个子组件(可跨层级)使用 _useContext_ 来消费(Consume)它。
+
+### 2 个副作用 Hook
+
+effect 是副作用，React 本身只负责 _UI=f(state)_，也就是当状态改变去渲染新 UI。但诸如数据请求，设置定时器，手动操作 DOM 等工作 React 并不关心，React 只提供相关 hook 让用户自己决定做什么，什么时候做，如何做。主要是 2 个 Hook：
+
+1. useEffect
+2. useLayoutEffect
+
+_useEffect_ 是除 _useState_ 外最常被使用的 hook，它有 2 个参数，第一个是函数也就是 effect，第二个是个数组也就是该 effect 的依赖项。当有任何一个依赖项发生改动时，effect 就会被执行。
+
+使用 _useEffect_ 时要注意下面几点:
+
+- React 判断依赖项是否改变的算法是严格相等(===)也就是 [Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is)
+- 依赖项改变后不单单 effect 本身会被执行，若其返回了函数(一般称为 _cleanup_ 函数)，则其也会被立即执行
+- 依赖项是空数组时，可以模拟 mounted 和 unmounted 这两种生命周期
+
+  ```jsx
+  useEffect(() => {
+    console.log("mounted");
+    return () => {
+      console.log("unmounted");
+    };
+  }, []);
+  ```
+
+_useLayoutEffect_ 一般很少用，它和 _useEffect_ 的区别在于 _useEffect_ 在浏览器绘制(Paint)之后执行，而 _useLayoutEffect_ 在浏览器的布局(Layout)之后就执行。利用这个特性，可以在 UI 被绘制出之前做一些处理。一个典型的例子是 _\<Tooltip \/\>_ 组件，由于不知道 Tooltip 被渲染后会不会因为页面空间不足而被截断，可以先调用 _useLayoutEffect_ 判断下，如果发现确实空间不够可以调整 Tooltip 出现的位置。如果在 _useEffect_ 阶段判断再调整的话，用户会先看到被截断的 Tooltip 一闪而过，造成不好的用户体验。
+
+关于浏览器渲染流程可以参考：[浏览器的工作原理](https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work#%E6%B8%B2%E6%9F%93)
+
+### 2 个 Ref 相关 Hook
+
+Ref 是组件内部一种引用(Reference)，能够在多次 render 之间保持引用有效性。它的使用场景有 2 种：
+
+- 作为 DOM 节点的引用，从而可以手动操作 DOM 节点
+
+  ```jsx
+  function App() {
+    const input = useRef(null);
+    return (
+      <div>
+        <input ref={input} />
+        <button onClick={() => input.current?.focus()}>Edit</button>
+      </div>
+    );
+  }
+  ```
+
+- 想要记录某种状态，但又不想因为该状态的变化触发重渲染(rerender)
+
+  ```jsx
+  function Counter() {
+    const ref = useRef(0);
+    function handleClick() {
+      ref.current = ref.current + 1;
+      console.log("You clicked " + ref.current + " times!");
+    }
+    return <button onClick={handleClick}>Click me!</button>;
+  }
+  ```
+
+和 ref 相关的 hook 有 2 个：
+
+1. useRef
+2. useImperativeHandle
+
+_useRef_ 上面已经介绍过。_useImperativeHandle_ 偶尔会被用到，它在能够接收 ref 的子组件里定义并暴露出该 ref 的一些封装好的方法，这样其父组件就能通过 ref 的方式手动调用这些方法从而达到控制子组件的目的。具体用法可以查看 [useImperativeHandle](https://react.dev/reference/react/useImperativeHandle#exposing-your-own-imperative-methods)。
+
+需要注意的是使用 Ref 作为 DOM 引用然后手动控制 DOM 是一种 Escape Patch，应该尽量少用。这样写出来的代码更加的符合 React 的设计哲学：声明式 & 函数式。
+
+### 2 个 Memo 相关 Hook
+
+1. useMemo
+2. useCallback
+
+函数组件本质是个函数，每次组件渲染该函数会直接重新运行一遍。如果组件中含有复杂计算过程，就很可能出现性能问题，造成 UI 卡顿。_useMemo_ 就用于解决这类问题，它的本质是性能优化中常用的技巧之一：使用缓存，也又称记忆化(Memoization)。用法比较简单，也有依赖项，具体可以参考 [React 文档 - useMemo](https://react.dev/reference/react/useMemo)。
+
+_useCallback_ 是为组件内函数做缓存，为什么函数也要做缓存呢？这是因为该函数可能会作为 _useEffect_ 的依赖项，如果不做缓存将会在每一次渲染过程中都产生一个新函数，而 React 判断依赖项是否改变使用的算法是 _Object.is_，这样以来依赖该函数的 _useEffect_ 会在每一次渲染的时候都被执行。_useCallback_ 的用法也是基于依赖项的，具体可以参考 [React 文档 - useCallback](https://react.dev/reference/react/useCallback)。
+
+### 总结和反思
+
+- 上面介绍和不少 Hook，其实最常用的是: _useState_, _useEffect_, _useRef_ 这 3 种
+- 所有 UI 框架的理念都是 _UI = f(state)_，React 用函数组件和 Hook 彻底贯彻了这一点
+- 暴论：React 最大的贡献是推广了函数式编程的思想并用实际证明这是可行的
