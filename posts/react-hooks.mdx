@@ -20,7 +20,7 @@ React 本身足够复杂，所以这篇博客做了以下限制：
 2. useReducer
 3. useContext
 
-_useState_ 是 React 中最常用的 hook，这里我想突出 2 点：
+_useState_ 是 React 中最常用的 hook，这里我想突出 3 点：
 
 - setState 是异步的
 
@@ -55,6 +55,33 @@ _useState_ 是 React 中最常用的 hook，这里我想突出 2 点：
     return <h1>{count}</h1>;
   }
   ```
+
+- React 有批处理(batching)机制，在 v18 之前是半自动的，在 v18 改成了全自动
+
+  ```jsx
+  function Countdown() {
+    const [count, setCount] = useState(0);
+    const [status, setStatus] = useState(false);
+    const [renderCount, setRenderCount] = useState(0);
+    useEffect(() => {
+      setRenderCount(val => val + 1);
+    }, [count, status])
+    function handleUpdate() {
+      // 因为 React 的批处理机制，下面两次 setState 只会触发一次重渲染(re-render)
+      setCount(val => val + 1);
+      setStatus(val => !val);
+    }
+    return (
+      <>
+        <h1>{count} {status}</h1>
+        <h1>Render Count: {renderCount}</h1>
+        <button onClick={handleUpdate}>update</button>;
+      <>
+    )
+  }
+  ```
+
+  关于 automatic batching 机制，详见: https://react.dev/blog/2022/03/08/react-18-upgrade-guide#automatic-batching
 
 _useReducer_ 是 _useState_ 的高级版本。Reducer 的概念来自于 Redux，它内部封装了 action 具体如何更新 state 的细节，使用者只需要 diapatch 一个 action 即可。对于状态更新来自于多种不同类型事件(比如 Todo List)的场景，_useReducer_ 可以让代码变得简洁优雅。
 
@@ -141,4 +168,4 @@ _useCallback_ 是为组件内函数做缓存，为什么函数也要做缓存呢
 
 - 上面介绍和不少 Hook，其实最常用的是: _useState_, _useEffect_, _useRef_ 这 3 种
 - 所有 UI 框架的理念都是 _UI = f(state)_，React 用函数组件和 Hook 彻底贯彻了这一点
-- 暴论：React 最大的贡献是推广了函数式编程的思想并用实际证明这是可行的
+- 个人观点：React 最大的贡献是推广了函数式编程的思想并用实际证明这是可行的
