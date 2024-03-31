@@ -1,0 +1,68 @@
+---
+title: 一个有趣的 React Hook 面试题
+date: "2024-03-28"
+language: zh-CN
+category: react
+---
+
+最近偶尔刷到一个关于 React Hook 的面试题，感觉还挺有趣的：实现一个 `useWillMount` 的 Hook 来替代 `componentWillMount` 的功能
+
+`componentWillMount` 是类组件的一个生命周期函数，它在组件即将挂载(mount)的时候被执行。
+
+既然是生命周期，那自然第一个跳入脑海的是 `useEffect`，但是 `useEffect` 的回调被执行之时组件已经被渲染了，更别提挂载了。
+
+OK，那 `useLayoutEffect` 行吗？也不行，`useLayoutEffect` 的回调被执行是浏览器渲染流程的布局(Layout)阶段，虽然没有渲染，但组件本身肯定是被挂载了。
+
+都不行，只能回到函数组件里看看到底哪里的代码对应“挂载前”这个概念，拿最简单的 Counter 组件举例:
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  console.log('组件即将渲染');
+  return (
+    <>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(val => val + 1)}>Add</button>
+    </>
+  );
+}
+```
+
+可以看出函数组件 return 之前的代码代表着渲染前，注意这里是"渲染"而不是"挂载", 挂载只发生一次: 在第一次渲染前
+
+很明显，需要一个开关来控制是否已经挂载，但又不可以用 state 因为 state 更新会让组件重渲染，如此一来答案只有使用 ref:
+
+```jsx
+function useWillMount(callback) {
+  const mounted = useRef(false);
+  if (!mounted.current) {
+    callback();
+    mounted.current = true;
+  }
+}
+```
+
+最后测试下结果:
+
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  useWillMount(() => {
+    console.log("before mount");
+  });
+  useLayoutEffect(() => {
+    console.log("mounted but not rendered");
+  }, []);
+  useEffect(() => {
+    console.log("mounted & rendered");
+  }, []);
+  return (
+    <>
+      <h1>{count}</h1>
+      <button onClick={() => setCount(val => val + 1)}>Add</button>
+    </>
+  );
+}
+```
+
+
