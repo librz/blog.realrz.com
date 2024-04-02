@@ -1,3 +1,4 @@
+"use client";
 import { useMDXComponent } from "next-contentlayer/hooks";
 import type { MDXComponents } from "mdx/types";
 import CustomLink from "./CustomLink";
