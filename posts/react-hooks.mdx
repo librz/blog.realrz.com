@@ -5,10 +5,12 @@ language: zh-CN
 category: react
 ---
 
+import Collapse from "../components/Collapse";
+
 转眼间已经使用 React Hooks 好几年，这期间实践了各种灵活且强大的原生 Hook，这篇文章是我用分类法对 hooks 用法的总结。React 本身足够复杂，所以这篇博客做了以下限制：
 
-- 只包含客户端 API，使用 React 做服务端渲染(SSR, SSG, RSC)将不被提及
-- 太冷门的 Hook 将不被讨论，如: useSyncExternalStore
+- 只包含客户端 API，使用 React 做服务端渲染(SSR, SSG, RSC)将不被提及 - 太冷门的 Hook 将不被讨论，如:
+  useSyncExternalStore
 
 ### 3 个状态 Hook
 
@@ -20,66 +22,67 @@ category: react
 
 _useState_ 是 React 中最常用的 hook，这里我想突出 3 点：
 
-- setState 是异步的
-
-  ```jsx
-  function Counter() {
-    const [count, setCount] = useState(0);
-    function handleClick() {
-      setCount(count + 1);
-      console.log(count); // 仍然是 set 之前的状态
-    }
-    return (
-      <div>
-        <div>{count}</div>
-        <button onClick={() => }>Increase</button>
-      </div>
-    )
+<Collapse
+  title="1. setState 是异步的"
+>
+```jsx
+function Counter() {
+  const [count, setCount] = useState(0);
+  function handleClick() {
+    setCount(count + 1);
+    console.log(count); // 仍然是 set 之前的状态
   }
-  ```
+  return (
+    <div>
+      <div>{count}</div>
+      <button onClick={() => }>Increase</button>
+    </div>
+  )
+}
+```
+</Collapse>
 
-- setState 的参数可以是函数，这样可以保证每次拿到的状态都是最新的
+<Collapse title="2. setState 的参数可以是函数(可以保证每次拿到的状态都是最新的)">
+```jsx
+function Countdown() {
+  const [count, setCount] = useState(60);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount(count - 1); // 由于闭包，count 永远是 60，这相当于 setCount(60 - 1)
+      // setCount(count => count - 1); // 正确写法
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  return <h1>{count}</h1>;
+}
+```
+</Collapse>
 
-  ```jsx
-  function Countdown() {
-    const [count, setCount] = useState(60);
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setCount(count - 1); // 由于闭包，count 永远是 60，这相当于 setCount(60 - 1)
-        // setCount(count => count - 1); // 正确写法
-      }, 1000);
-      return () => clearInterval(timer);
-    }, []);
-    return <h1>{count}</h1>;
+<Collapse title="3. React 有批处理(batching)机制">
+```jsx
+function Countdown() {
+  const [count, setCount] = useState(0);
+  const [status, setStatus] = useState(false);
+  const [renderCount, setRenderCount] = useState(0);
+  useEffect(() => {
+    setRenderCount(val => val + 1);
+  }, [count, status])
+  function handleUpdate() {
+    // 因为 React 的批处理机制，下面两次 setState 只会触发一次重渲染(re-render)
+    setCount(val => val + 1);
+    setStatus(val => !val);
   }
-  ```
-
-- React 有批处理(batching)机制，在 v18 之前是半自动的，在 v18 改成了全自动
-
-  ```jsx
-  function Countdown() {
-    const [count, setCount] = useState(0);
-    const [status, setStatus] = useState(false);
-    const [renderCount, setRenderCount] = useState(0);
-    useEffect(() => {
-      setRenderCount(val => val + 1);
-    }, [count, status])
-    function handleUpdate() {
-      // 因为 React 的批处理机制，下面两次 setState 只会触发一次重渲染(re-render)
-      setCount(val => val + 1);
-      setStatus(val => !val);
-    }
-    return (
-      <>
-        <h1>{count} {status}</h1>
-        <h1>Render Count: {renderCount}</h1>
-        <button onClick={handleUpdate}>update</button>;
-      <>
-    )
-  }
-  ```
-
-  关于 automatic batching 机制，详见: https://react.dev/blog/2022/03/08/react-18-upgrade-guide#automatic-batching
+  return (
+    <>
+      <h1>{count} {status}</h1>
+      <h1>Render Count: {renderCount}</h1>
+      <button onClick={handleUpdate}>update</button>;
+    <>
+  )
+}
+```
+关于 automatic batching 机制，详见: https://react.dev/blog/2022/03/08/react-18-upgrade-guide#automatic-batching
+</Collapse>
 
 _useReducer_ 是 _useState_ 的高级版本。Reducer 的概念来自于 Redux，它内部封装了动作(action)具体如何更新状态(state)的细节，使用者只需要释放(dispatch)一个动作(action)即可改变状态(state)。对于状态更新来自于多种不同类型事件(比如 Todo List)的场景，_useReducer_ 可以让代码变得简洁优雅。
 
@@ -96,20 +99,11 @@ _useEffect_ 是除 _useState_ 外最常被使用的 hook，它有 2 个参数，
 
 使用 _useEffect_ 时要注意下面几点:
 
-- React 判断依赖项是否改变的算法是严格相等(===)也就是 [Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is)
+- React 判断依赖项是否改变的算法是引用相等也就是 [Object.is](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is)
 - 依赖项改变后不单单 effect 本身会被执行，若其返回了函数(一般称为 _cleanup_ 函数)，则其也会被立即执行
 - 依赖项是空数组时，可以模拟 mounted 和 unmounted 这两种生命周期
 
-  ```jsx
-  useEffect(() => {
-    console.log("mounted");
-    return () => {
-      console.log("unmounted");
-    };
-  }, []);
-  ```
-
-_useLayoutEffect_ 一般很少用，它和 _useEffect_ 的区别在于 _useEffect_ 在浏览器绘制(Paint)之后执行，而 _useLayoutEffect_ 在浏览器的布局(Layout)之后就执行。利用这个特性，可以在 UI 被绘制出之前做一些处理。一个典型的例子是 _\<Tooltip \/\>_ 组件，由于不知道 Tooltip 被渲染后会不会因为页面空间不足而被截断，可以先调用 _useLayoutEffect_ 判断下，如果发现确实空间不够可以调整 Tooltip 出现的位置。如果在 _useEffect_ 阶段判断再调整的话，用户会先看到被截断的 Tooltip 一闪而过，造成不好的用户体验。
+_useLayoutEffect_ 一般很少用，它和 _useEffect_ 的区别在于 _useEffect_ 在浏览器绘制(Paint)之后执行，而 _useLayoutEffect_ 在浏览器的布局(Layout)之后就执行。利用这个特性，可以在 UI 被绘制出之前做一些处理。一个典型的例子是 &lt;Tooltip /&gt; 组件，由于不知道 Tooltip 被渲染后会不会因为页面空间不足而被截断，可以先调用 _useLayoutEffect_ 判断下，如果发现确实空间不够可以调整 Tooltip 出现的位置。如果在 _useEffect_ 阶段判断再调整的话，用户会先看到被截断的 Tooltip 一闪而过，造成不好的用户体验。
 
 关于浏览器渲染流程可以参考：[浏览器的工作原理](https://developer.mozilla.org/zh-CN/docs/Web/Performance/How_browsers_work#%E6%B8%B2%E6%9F%93)
 
@@ -117,32 +111,32 @@ _useLayoutEffect_ 一般很少用，它和 _useEffect_ 的区别在于 _useEffec
 
 Ref 是组件内部一种引用(Reference)，能够在多次 render 之间保持引用有效性。它的使用场景有 2 种：
 
-- 作为 DOM 节点的引用，从而可以手动操作 DOM 节点
+<Collapse title="1. 作为 DOM 节点的引用，从而可以手动操作 DOM 节点">
+```jsx
+function App() {
+  const input = useRef(null);
+  return (
+    <div>
+      <input ref={input} />
+      <button onClick={() => input.current?.focus()}>Edit</button>
+    </div>
+  );
+}
+```
+</Collapse>
 
-  ```jsx
-  function App() {
-    const input = useRef(null);
-    return (
-      <div>
-        <input ref={input} />
-        <button onClick={() => input.current?.focus()}>Edit</button>
-      </div>
-    );
+<Collapse title="2. 想要记录某种状态，但又不想因为该状态的变化触发重渲染(rerender)">
+```jsx
+function Counter() {
+  const ref = useRef(0);
+  function handleClick() {
+    ref.current = ref.current + 1;
+    console.log("You clicked " + ref.current + " times!");
   }
-  ```
-
-- 想要记录某种状态，但又不想因为该状态的变化触发重渲染(rerender)
-
-  ```jsx
-  function Counter() {
-    const ref = useRef(0);
-    function handleClick() {
-      ref.current = ref.current + 1;
-      console.log("You clicked " + ref.current + " times!");
-    }
-    return <button onClick={handleClick}>Click me!</button>;
-  }
-  ```
+  return <button onClick={handleClick}>Click me!</button>;
+}
+```
+</Collapse>
 
 和 ref 相关的 hook 有 2 个：
 
