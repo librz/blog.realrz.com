@@ -1,0 +1,156 @@
+---
+title: 使用自定义 React Hook 处理表单双向联动逻辑
+date: "2024-11-10"
+language: zh-CN
+category: other
+---
+
+### 背景
+
+最近在做业务的时候碰到一个表单项双向联动的需求，还算有趣，记录一下。
+
+表单有 2 个下拉列表，一个代表部门，一个代表职位。部门和职位是一对多的关系，即一个部门可以有多个职位，但一个职位只能属于一个部门。
+
+普通的联动逻辑是：初始不显示职位，当部门选定后，再显示对应的职位，其选项是该部门下的职位列表。这种联动的方向是单向的，即部门决定职位，比较容易实现。
+
+但产品要求做双向联动：
+
+- 初始显示职位，其选项是所有部门的所有职位
+- 当选中职位后，自动设置部门为该职位所属的部门
+- 当选中部门后，有以下几种情况
+  - 如果职位为空，设置职位的选项为该部门下的职位列表
+  - 如果职位不为空且不属于该部门，清空职位，设置职位的选项为该部门下的职位列表
+  - 如果职位不为空且属于该部门，不清空职位，设置职位的选项为该部门下的职位列表
+
+逻辑没那么简单，况且此次需求要求在 2 个不同地方做同样的改动，显然这是把相关逻辑抽象为自定义 Hook 的好时机。
+
+### 数据结构
+
+部门和职位是一对多的关系，可以用以下数据结构表示：
+
+```ts
+type IDepartment = {
+  id: number;
+  name: string;
+  positions: IPosition[];
+};
+
+type IPosition = {
+  id: number;
+  name: string;
+};
+```
+
+假设所有部门和职位的数据如下：
+
+```ts
+const allDepartments = [
+  {
+    id: 1,
+    name: 'CEO办公室',
+    positions: [
+      { id: 1, name: 'CEO' },
+      { id: 2, name: '助理' },
+    ],
+  },
+  {
+    id: 2,
+    name: '技术部',
+    positions: [
+      { id: 3, name: '后端工程师' },
+      { id: 4, name: '前端工程师' },
+    ],
+  },
+  }
+];
+```
+
+### 自定义 Hook 的使用方式
+
+分析可以发现，这种联动关系的结果无非是 2 种数据:
+
+1. 下拉列表的值（通过 onChange 函数来设置）
+2. 下拉列表的选项
+
+我使用的是 Arco Design 里的 Form 组件，表单项的值可以通过 `form.setFieldValue()` 设置。所以对于第一种数据可以通过返回的事件处理函数来设置。预计 Hook 的使用方式如下：
+
+```tsx
+const [form] = useForm(); // Arco Design 的 Form 组件提供的 useForm Hook
+
+const FieldName = {
+  Department: 'Department',
+  Position: 'Position',
+};
+
+const { options, handlers } = useDepartmentPosition(form, departments, {
+  department: FieldName.Department,
+  position: FieldName.Position,
+});
+
+return (
+  <Form form={form}>
+    <Form.Item label="部门" field={FieldName.Department}>
+      <Select
+        placeholder="请选择部门"
+        onChange={handlers.onDepartmentChange}
+        options={options.department}
+        allowClear
+      />
+    </Form.Item>
+    <Form.Item label="职位" field={FieldName.Position}>
+      <Select
+        placeholder="请选择职位"
+        onChange={handlers.onPositionChange}
+        options={options.position}
+        allowClear
+      />
+    </Form.Item>
+  </Form>
+)
+```
+
+### 自定义 Hook 的实现
+
+有了设计思路，实现就是简单的逻辑堆砌了。首先定义 Hook 的函数签名：
+
+```ts
+type IUseDepartmentPositionHook = (
+  form: FormInstance,
+  departments: IDepartment[],
+  fields: {
+    department: string;
+    position: string;
+  },
+) => {
+  options: {
+    department: SelectOption[];
+    position: SelectOption[];
+  };
+  handlers: {
+    onDepartmentChange: (value: string | undefined) => void;
+    onPositionChange: (value: string | undefined) => void;
+  };
+};
+```
+
+然后实现 Hook：
+
+```ts
+const useDepartmentPosition: IUseDepartmentPositionHook = (
+  form,
+  departments,
+  fields,
+) => {
+  // Todo
+  return {
+    options: {
+      department: departmentOptions,
+      position: positionOptions,
+    },
+    handlers: {
+      onDepartmentChange,
+      onPositionChange,
+    },
+  };
+};
+```
