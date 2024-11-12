@@ -16,13 +16,11 @@ category: other
 但产品要求做双向联动：
 
 - 初始显示职位，其选项是所有部门的所有职位
-- 当选中职位后，自动设置部门为该职位所属的部门
-- 当选中部门后，有以下几种情况
-  - 如果职位为空，设置职位的选项为该部门下的职位列表
-  - 如果职位不为空且不属于该部门，清空职位，设置职位的选项为该部门下的职位列表
-  - 如果职位不为空且属于该部门，不清空职位，设置职位的选项为该部门下的职位列表
+- 当职位改变，自动设置部门为该职位所属的部门
+- 当部门改变，清空职位的值(如果有的话)，设置职位的选项为该部门下的职位列表
+- 当清空部门时，职位选项是所有部门的所有职位
 
-逻辑没那么简单，况且此次需求要求在 2 个不同地方做同样的改动，显然这是把相关逻辑抽象为自定义 Hook 的好时机。
+逻辑没那么简单，况且此次需求要求在 2 个不同地方做同样的改动，显然这是把逻辑抽象为自定义 Hook 的好时机。
 
 ### 数据结构
 
@@ -44,7 +42,7 @@ type IPosition = {
 假设所有部门和职位的数据如下：
 
 ```ts
-const allDepartments = [
+const allDepartments: IDepartment = [
   {
     id: 1,
     name: 'CEO办公室',
@@ -61,7 +59,6 @@ const allDepartments = [
       { id: 4, name: '前端工程师' },
     ],
   },
-  }
 ];
 ```
 
@@ -75,38 +72,41 @@ const allDepartments = [
 我使用的是 Arco Design 里的 Form 组件，表单项的值可以通过 `form.setFieldValue()` 设置。所以对于第一种数据可以通过返回的事件处理函数来设置。预计 Hook 的使用方式如下：
 
 ```tsx
-const [form] = useForm(); // Arco Design 的 Form 组件提供的 useForm Hook
+import { Form, Select } from "@arco-design/web-react";
 
-const FieldName = {
-  Department: 'Department',
-  Position: 'Position',
+const DemoForm = () => {
+  const [form] = Form.useForm(); // Arco Design 的 Form 组件提供的 useForm Hook
+
+  const FieldName = {
+    Department: "Department",
+    Position: "Position",
+  };
+
+  const { options, handlers } = useDepartmentPosition(form, allDepartments, {
+    department: FieldName.Department,
+    position: FieldName.Position,
+  });
+  return (
+    <Form form={form} style={{ width: 900 }}>
+      <Form.Item label="部门" field={FieldName.Department}>
+        <Select
+          placeholder="请选择部门"
+          onChange={handlers.onDepartmentChange}
+          options={options.department}
+          allowClear
+        />
+      </Form.Item>
+      <Form.Item label="职位" field={FieldName.Position}>
+        <Select
+          placeholder="请选择职位"
+          onChange={handlers.onPositionChange}
+          options={options.position}
+          allowClear
+        />
+      </Form.Item>
+    </Form>
+  );
 };
-
-const { options, handlers } = useDepartmentPosition(form, departments, {
-  department: FieldName.Department,
-  position: FieldName.Position,
-});
-
-return (
-  <Form form={form}>
-    <Form.Item label="部门" field={FieldName.Department}>
-      <Select
-        placeholder="请选择部门"
-        onChange={handlers.onDepartmentChange}
-        options={options.department}
-        allowClear
-      />
-    </Form.Item>
-    <Form.Item label="职位" field={FieldName.Position}>
-      <Select
-        placeholder="请选择职位"
-        onChange={handlers.onPositionChange}
-        options={options.position}
-        allowClear
-      />
-    </Form.Item>
-  </Form>
-)
 ```
 
 ### 自定义 Hook 的实现
@@ -127,8 +127,8 @@ type IUseDepartmentPositionHook = (
     position: SelectOption[];
   };
   handlers: {
-    onDepartmentChange: (value: string | undefined) => void;
-    onPositionChange: (value: string | undefined) => void;
+    onDepartmentChange: (value: number | undefined) => void;
+    onPositionChange: (value: number | undefined) => void;
   };
 };
 ```
@@ -136,12 +136,81 @@ type IUseDepartmentPositionHook = (
 然后实现 Hook：
 
 ```ts
-const useDepartmentPosition: IUseDepartmentPositionHook = (
+import { useMemo, useCallback, useState } from "react";
+
+interface IOption {
+  value: number;
+  label: string;
+}
+
+export const useDepartmentPosition: IUseDepartmentPositionHook = (
   form,
   departments,
   fields,
 ) => {
-  // Todo
+  const departmentOptions: IOption[] = useMemo(() => {
+    return departments.map((department) => ({
+      value: department.id,
+      label: department.name,
+    }));
+  }, [departments]);
+
+  const allPositionOptions: IOption[] = useMemo(() => {
+    return departments.reduce((acc, cur) => {
+      const curOptions = cur.positions.map((position) => ({
+        value: position.id,
+        label: position.name,
+      }));
+      return acc.concat(curOptions);
+    }, [] as IOption[]);
+  }, [departments]);
+
+  const [positionOptions, setPositionOptions] =
+    useState<IOption[]>(allPositionOptions);
+
+  const onPositionChange = useCallback(
+    (value: number | undefined) => {
+      if (value === undefined) {
+        return;
+      }
+      const department = departments.find((department) =>
+        department.positions.some((position) => position.id === value),
+      );
+      if (!department) {
+        console.error("Cannot find department with position id of", value);
+        return;
+      }
+      form.setFieldValue(fields.department, department.id);
+    },
+    [form, fields.department, departments],
+  );
+
+  const onDepartmentChange = useCallback(
+    (value: number | undefined) => {
+      form.setFieldValue(fields.position, undefined);
+      if (value === undefined) {
+        setPositionOptions(allPositionOptions);
+        return;
+      }
+      const department = departments.find(
+        (department) => department.id === value,
+      );
+      if (!department) {
+        console.error("Cannot find department with id of", value);
+        return;
+      }
+      // find all positions under this department
+      const departmentPositionOptions = department.positions.map(
+        (position) => ({
+          value: position.id,
+          label: position.name,
+        }),
+      );
+      setPositionOptions(departmentPositionOptions);
+    },
+    [form, fields.position, departments, allPositionOptions],
+  );
+
   return {
     options: {
       department: departmentOptions,
