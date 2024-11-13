@@ -20,7 +20,7 @@ category: other
 - 当部门改变，清空职位的值(如果有的话)，设置职位的选项为该部门下的职位列表
 - 当清空部门时，职位选项是所有部门的所有职位
 
-逻辑没那么简单，况且此次需求要求在 2 个不同地方做同样的改动，显然这是把逻辑抽象为自定义 Hook 的好时机。
+逻辑没那么简单，况且此次需求要求在 2 个不同的表单做同样的事情，显然是把逻辑抽象为自定义 Hook 的好时机。
 
 ### 数据结构
 
@@ -42,7 +42,7 @@ type IPosition = {
 假设所有部门和职位的数据如下：
 
 ```ts
-const allDepartments: IDepartment = [
+const allDepartments: IDepartment[] = [
   {
     id: 1,
     name: 'CEO办公室',
