@@ -1,13 +1,11 @@
-import { FC } from "react";
 import BlogList from "components/BlogList";
-import { allPosts } from "contentlayer/generated";
+import { getAllPosts } from "~/lib/posts";
 
-const HomePage: FC = () => {
+export default function HomePage() {
+  const posts = getAllPosts();
   return (
     <div>
-      <BlogList blogs={allPosts} />
+      <BlogList blogs={posts} />
     </div>
   );
-};
-
-export default HomePage;
+}

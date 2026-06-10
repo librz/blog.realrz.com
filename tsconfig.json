@@ -2,8 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
+      "~/*": ["./*"]
     },
     "target": "es6",
     "lib": [
@@ -35,8 +34,7 @@
     "**/*.ts",
     "**/*.tsx",
     "next.config.js",
-    ".next/types/**/*.ts",
-    "contentlayer/generated"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
