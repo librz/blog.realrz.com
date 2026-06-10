@@ -1,0 +1,58 @@
+---
+title: Everyday CLI tools
+date: "2021-01-27"
+language: zh-CN
+category: linux
+---
+
+import {
+    ArrowDownTrayIcon,
+    ChartBarIcon,
+    CodeBracketIcon,
+    CommandLineIcon,
+    EllipsisHorizontalCircleIcon,
+} from "@heroicons/react/24/outline";
+import { GridList } from "~/components/GridList";
+
+Unix 编程的哲学是 Do One Thing And Do It Well。每个程序的目的都应该很简单明确，不同的程序通过组合就可以完成那些看起来很复杂的工作。下面是我日常使用的 CLI 程序:
+
+<GridList
+  items={[
+    {
+      title: "tldr",
+      href: "https://tldr.sh/",
+      description: "以简洁(相较于man)的方式提供命令的常见用法",
+      icon: EllipsisHorizontalCircleIcon,
+    },
+    {
+      title: "z",
+      href: "https://github.com/rupa/z",
+      description: "Jump around with ease",
+      icon: EllipsisHorizontalCircleIcon,
+    },
+    {
+      title: "define",
+      href: "https://github.com/Rican7/define",
+      description: "Dictionary in your terminal",
+      icon: EllipsisHorizontalCircleIcon,
+    },
+    {
+      title: "bat",
+      href: "https://github.com/sharkdp/bat",
+      description: "Like cat, but much better",
+      icon: EllipsisHorizontalCircleIcon,
+    },
+    {
+      title: "neovim",
+      href: "https://neovim.io/",
+      description: "Editor for the cool kids",
+      icon: CodeBracketIcon,
+    },
+    {
+      title: "htop",
+      href: "https://www.man7.org/linux/man-pages/man1/htop.1.html",
+      description: "实时显示 cpu 和 memory 占用，支持点按排序",
+      icon: ChartBarIcon,
+    },
+  ]}
+/>
