@@ -16,30 +16,6 @@ export interface Post extends PostMeta {
 
 const postsDirectory = path.join(process.cwd(), "posts");
 
-function stripImports(content: string): string {
-  const lines = content.split("\n");
-  let insideCodeBlock = false;
-  const result: string[] = [];
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith("```")) {
-      insideCodeBlock = !insideCodeBlock;
-      result.push(line);
-      continue;
-    }
-    if (
-      !insideCodeBlock &&
-      (trimmed.startsWith("import ") || trimmed.startsWith("export "))
-    ) {
-      continue;
-    }
-    result.push(line);
-  }
-
-  return result.join("\n");
-}
-
 export function getAllPosts(): PostMeta[] {
   const fileNames = fs.readdirSync(postsDirectory);
   const posts = fileNames
@@ -80,6 +56,6 @@ export function getPostBySlug(slug: string): Post | undefined {
     date: data.date,
     language: data.language,
     category: data.category,
-    content: stripImports(content),
+    content,
   };
 }
