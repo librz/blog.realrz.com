@@ -28,9 +28,10 @@ const components = {
 export default async function BlogPost({
   params,
 }: {
-  params: { blog: string };
+  params: Promise<{ blog: string }>;
 }) {
-  const post = getPostBySlug(params.blog);
+  const { blog } = await params;
+  const post = getPostBySlug(blog);
 
   if (!post) {
     notFound();
@@ -44,6 +45,8 @@ export default async function BlogPost({
         components={components}
         options={{
           scope: HeroIcons,
+          blockJS: false,
+          blockDangerousJS: false,
           mdxOptions: {
             rehypePlugins: [
               rehypeSlug,
