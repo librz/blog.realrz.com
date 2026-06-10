@@ -4,7 +4,7 @@ import Footer from "~/components/Footer";
 import "./global.css";
 
 export const metadata: Metadata = {
-  title: "Blog - Realrz",
+  title: { default: "Realrz", template: "%s — Realrz" },
   description: "A blog about software development and other things.",
   keywords: ["blog", "software", "development", "realrz"],
 };
@@ -16,9 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className="min-h-screen flex flex-col">
         <Header />
-        <main className="min-h-screen flex flex-col items-center pt-4 pb-8 px-6">
+        <main className="flex-1 w-full max-w-3xl mx-auto px-6 py-12">
           {children}
         </main>
         <Footer />

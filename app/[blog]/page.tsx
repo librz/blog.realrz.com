@@ -38,25 +38,36 @@ export default async function BlogPost({
   }
 
   return (
-    <article className="prose max-w-full md:max-w-prose lg:prose-lg prose-img:rounded-lg my-4">
-      <h2 className="text-indigo-600 text-center">{post.title}</h2>
-      <MDXRemote
-        source={post.content}
-        components={components}
-        options={{
-          scope: HeroIcons,
-          blockJS: false,
-          blockDangerousJS: false,
-          mdxOptions: {
-            rehypePlugins: [
-              rehypeSlug,
-              rehypeAutolinkHeadings,
-              toc,
-              [rehypePrettyCode, codeHighlightOptions],
-            ],
-          },
-        }}
-      />
+    <article>
+      <header className="mb-10 pb-8 border-b border-stone-200">
+        <div className="flex items-center gap-3 text-sm text-stone-400 mb-4">
+          <time>{post.date}</time>
+          <span>·</span>
+          <span className="capitalize">{post.category}</span>
+        </div>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-stone-900">
+          {post.title}
+        </h1>
+      </header>
+      <div className="prose prose-lg max-w-none">
+        <MDXRemote
+          source={post.content}
+          components={components}
+          options={{
+            scope: HeroIcons,
+            blockJS: false,
+            blockDangerousJS: false,
+            mdxOptions: {
+              rehypePlugins: [
+                rehypeSlug,
+                rehypeAutolinkHeadings,
+                toc,
+                [rehypePrettyCode, codeHighlightOptions],
+              ],
+            },
+          }}
+        />
+      </div>
     </article>
   );
 }

@@ -1,55 +1,82 @@
 "use client";
+
 import { FC, useMemo, useState } from "react";
 import Link from "next/link";
-import { IBlog } from "interface";
+import { PostMeta } from "~/lib/posts";
 import SearchBar from "./SearchBar";
 
 interface IProps {
-  blogs: IBlog[];
+  blogs: PostMeta[];
 }
 
 const BlogList: FC<IProps> = ({ blogs }) => {
   const [search, setSearch] = useState("");
+
   const displayBlogs = useMemo(() => {
-    const sortedBlogs = (JSON.parse(JSON.stringify(blogs)) as IBlog[]).sort(
-      (a, b) => {
-        const aTs = new Date(a.date).getTime();
-        const bTs = new Date(b.date).getTime();
-        return bTs - aTs;
-      }
-    );
+    const sortedBlogs = [...blogs].sort((a, b) => {
+      const aTs = new Date(a.date).getTime();
+      const bTs = new Date(b.date).getTime();
+      return bTs - aTs;
+    });
+
+    if (!search.trim()) return sortedBlogs;
+
     return sortedBlogs.filter((blog) => {
       return blog.title.toLowerCase().includes(search.toLowerCase());
     });
   }, [blogs, search]);
+
+  if (displayBlogs.length === 0) {
+    return (
+      <div>
+        <SearchBar onChange={setSearch} />
+        <div className="text-center py-16 text-stone-400">
+          <p className="text-lg mb-1">No articles found</p>
+          <p className="text-sm">Try a different search term</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-full md:min-w-[640px] lg:min-w-[960px]">
+    <div>
       <SearchBar onChange={setSearch} />
-      <div className={`grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3`}>
-        {
-          displayBlogs.length === 0 && (
-            <div>
-              没有找到相关文章
-            </div>
-          )
-        }
-        {displayBlogs.map((blog, index) => {
-          const { slug, title, date } = blog;
-          return (
-            <Link
-              href={`/${slug}`}
-              key={index}
-              className="group cursor-pointer p-4 rounded-md border-2 border-gray-200 hover:bg-gradient-to-r from-violet-600 to-purple-800"
-            >
-              <span className="text-sm text-gray-600 group-hover:text-gray-200">
-                {date}
-              </span>
-              <div className="text-lg text-zinc-700 group-hover:text-white">
-                {title}
+      <div className="flex flex-col gap-3">
+        {displayBlogs.map((blog) => (
+          <Link
+            href={`/${blog.slug}`}
+            key={blog.slug}
+            className="group flex items-center justify-between px-5 py-4 bg-white rounded-xl border border-stone-200 hover:border-stone-300 hover:shadow-sm transition-all"
+          >
+            <div className="min-w-0">
+              <h3 className="text-stone-800 font-medium text-base truncate group-hover:text-indigo-700 transition-colors">
+                {blog.title}
+              </h3>
+              <div className="flex items-center gap-3 mt-1">
+                <time className="text-stone-400 text-sm">
+                  {blog.date}
+                </time>
+                <span className="text-stone-300">·</span>
+                <span className="text-stone-400 text-sm capitalize">
+                  {blog.category}
+                </span>
               </div>
-            </Link>
-          );
-        })}
+            </div>
+            <svg
+              className="w-5 h-5 text-stone-300 group-hover:text-indigo-500 transition-colors flex-shrink-0 ml-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </Link>
+        ))}
       </div>
     </div>
   );

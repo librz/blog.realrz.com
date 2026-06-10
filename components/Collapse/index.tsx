@@ -1,35 +1,34 @@
 "use client";
-import React, { CSSProperties, useState } from "react";
+
+import React, { useState } from "react";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 
 interface CollapseProps {
   title: string;
   children: React.ReactNode;
-  style?: CSSProperties;
-  className?: string;
 }
 
-const Collapse: React.FC<CollapseProps> = ({ title, style, className, children }) => {
+const Collapse: React.FC<CollapseProps> = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div
-      style={{
-        border: "2px solid grey",
-        padding: "4px 16px",
-        borderRadius: 4,
-        marginBottom: 8,
-        cursor: "pointer",
-        ...style,
-      }}
-      className={className}
-    >
-      <header
-        style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}
+    <div className="my-4 rounded-lg border border-stone-200 bg-white overflow-hidden">
+      <button
         onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-stone-50 transition-colors"
       >
-        <div style={{ paddingRight: 24 }}>{title}</div>
-        <div>点击{isOpen ? "折叠" : "展开"}</div>
-      </header>
-      {isOpen && <div>{children}</div>}
+        <span className="font-medium text-stone-700 text-sm">{title}</span>
+        <ChevronDownIcon
+          className={`w-4 h-4 text-stone-400 transition-transform duration-200 ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      {isOpen && (
+        <div className="px-5 pb-4 border-t border-stone-100 pt-3">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

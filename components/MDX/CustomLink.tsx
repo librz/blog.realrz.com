@@ -7,20 +7,25 @@ type IProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 const CustomLink = (props: IProps) => {
-  const href = props.href;
+  const { href, children, ...rest } = props;
 
-  // If the href is a relative URL, use Next.js Link component
   if (href.startsWith("/")) {
-    return <Link {...props}>{props.children}</Link>;
+    return (
+      <Link href={href} {...rest}>
+        {children}
+      </Link>
+    );
   }
 
-  // If the href is a page anchor, use a regular anchor tag
   if (href.startsWith("#")) {
-    return <a {...props} />;
+    return <a href={href} {...rest}>{children}</a>;
   }
 
-  // Otherwise, assume the href is an external link and add target and rel attribute
-  return <a target="_blank" rel="noopener noreferrer" {...props} />;
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" {...rest}>
+      {children}
+    </a>
+  );
 };
 
 export default CustomLink;
