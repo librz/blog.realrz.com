@@ -11,9 +11,10 @@ export const codeHighlightOptions: Partial<Options> = {
     }
   },
   onVisitHighlightedLine(node) {
+    node.properties.className ??= [];
     node.properties.className.push("highlighted");
   },
-  onVisitHighlightedWord(node) {
+  onVisitHighlightedChars(node) {
     node.properties.className = ["word"];
   },
 };
